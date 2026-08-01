@@ -212,7 +212,9 @@
             $birth=strtotime($BirthDay);
             $today=strtotime(date("Y-m-d"));
 
-            $age=($today-$birth)/(365*24*60*60);
+            $age=(int)(($today-$birth)/60/60/24/365);
+
+            $_SESSION['Age']=$age;
             if($age<18 && $HaveDriverLicense==1){
                 $message="You must be at least 18 years old to have a driver license.";
             }
@@ -459,7 +461,7 @@
                     </div>
                     <div>
                         <label>Birth Day:</label>
-                        <input type="date" name="BirthDay" >
+                        <input type="date" name="BirthDay" max="<?php echo date("Y-m-d") ?>">
                     </div>
                     <div>
                         <label>Phone Number:</label>

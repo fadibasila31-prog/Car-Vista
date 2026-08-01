@@ -3,7 +3,7 @@
     $con=OpenCon();
     if(isset($_POST['MoreDetails'])){// true false
         $_SESSION['UserDetails']=$_POST['UserId'];
-        header("Location: PrivateUserInformations");
+        header("Location: UserInformations.php");
         exit();
     }
     $message1="";

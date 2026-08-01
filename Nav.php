@@ -116,20 +116,20 @@
             <?php 
             if(isset($_SESSION['Role'])){// true false
                 if($_SESSION['Role']=="Manager"){
-                    echo "<a href='UserRental.php'>My Profile</a>
+                    echo "<a href='Profile.php'>My Profile</a>
                     <a href='UserDetails.php'>Users Details</a>
                     <a href='VehiclesManagement.php'>Vehicles Details</a>
                     <a href='CustomerService.php'>Customer Service</a>
-                    <a href='ManagerVehicleManagement.php'>Add Vehicle</a>
+                    <a href='ManagerVehicleManagement.php'>Vehicle Managment</a>
                     <a href='VehicleRentalHistory.php'>Vehicle Rental History</a>
                     <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
                 }else if($_SESSION['Role']=="Worker"){// true false
-                    echo"<a href='UserRental.php'>My Profile</a>
+                    echo"<a href='Profile.php'>My Profile</a>
                     <a href='VehiclesManagement.php'>Vehicles Details</a>
                     <a href='CustomerService.php'>Customer Service</a>
                     <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
                 }else{
-                      echo"<a href='UserRental.php'>My Profile</a>
+                      echo"<a href='Profile.php'>My Profile</a>
                       <a href='ContactPage.php'>Customer Supprot</a>
                     <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
                 }

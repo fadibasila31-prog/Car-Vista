@@ -510,7 +510,7 @@
                         </label>
                     </div>
                 </div>
-                <button id="RecentSearchViewAll" type="submit" name="Recent">Recen Messages</button>
+                <button id="RecentSearchViewAll" type="submit" name="Recent">Recent Messages</button>
                 <button id="RecentSearchViewAll" type="submit" name="Search">Search</button>
                 <?php if(isset($Role)){// for Manager only true false
                     if($Role=="Manager"){
