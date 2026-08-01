@@ -4,7 +4,7 @@
     $CustomerId=$_SESSION['UserId'];
     $message="";
     
-    if(isset($_POST['Cancel'])){// true false
+    if(isset($_POST['Cancel'])){
         $BookingId=$_POST['BookingId'];
         mysqli_query($con,"UPDATE Booking SET Status='Canceled' Where BookingId='$BookingId'");
     }
@@ -491,12 +491,12 @@
                 $found=false;
                 $Booking=mysqli_query($con,"SELECT * FROM Booking");
                 while($b=mysqli_fetch_array($Booking)){
-                    if($b['CustomerId']==$CustomerId){// true false
+                    if($b['CustomerId']==$CustomerId){
                         $found=true;
                         $CarId=$b['VehicleId'];
                         $Cars=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($c=mysqli_fetch_array($Cars)){
-                            if($c['Id']==$CarId){// true false
+                            if($c['Id']==$CarId){
                                 echo "<tr><td><h1>".$c['VehicleName']."</h1></td>";
                                 break;
                             }
@@ -508,7 +508,7 @@
                         <td><h1>".$b['UpdatedAt']."</h1></td>
                         <td><h1>".$b['TotalPrice']."</h1></td>
                         <td><h1>";
-                        if($b['Status']=='Confirmed'){// true false
+                        if($b['Status']=='Confirmed'){
                             echo "<form method='post'><input type='hidden' name='BookingId' value='".$b['BookingId']."'><button type='submit' name='Cancel'>Cancel</button></form>";
                         }else{
                             echo "-";
@@ -519,7 +519,7 @@
             ?>
         </table>
         <?php                  
-            if(!$found){// ture false
+            if(!$found){
                 echo "<div class='Cssp'><p>You haven't rented a vehicle yet.</p></div>";
             }
         ?>

@@ -25,7 +25,6 @@
         }else if($now>$End){
             mysqli_query($con,"UPDATE Booking SET Status='Finished' WHERE BookingId='$BookingId' AND EndDate<'$now2'");                    
         }
-        break;
     }
 
     $RandomPassTimer=mysqli_query($con,"SELECT * FROM Users");

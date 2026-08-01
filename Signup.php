@@ -2,7 +2,7 @@
     include "Nav.php";
     $con=OpenCon();
     $message="";
-    if(isset($_POST['Signup'])){// false true
+    if(isset($_POST['Signup'])){
         $Fname=$_POST['Fname'];
         $Lname=$_POST['Lname'];
         $email=$_POST['Gmail'];
@@ -18,10 +18,10 @@
         $digits=0;
 
         for($i=0;$i<strlen($PhoneNumber);$i++){
-            if(($i==0 && $PhoneNumber[$i]!='0') || ($i==1 && $PhoneNumber[$i]!='5') || ($i==2 && ($PhoneNumber[$i]=='9' || $PhoneNumber[$i]=='6'))){// true false
+            if(($i==0 && $PhoneNumber[$i]!='0') || ($i==1 && $PhoneNumber[$i]!='5') || ($i==2 && ($PhoneNumber[$i]=='9' || $PhoneNumber[$i]=='6'))){
                 $isValid=false;
                 break;
-            }else if(!($PhoneNumber[$i]>='0' && $PhoneNumber[$i]<='9')){// true false
+            }else if(!($PhoneNumber[$i]>='0' && $PhoneNumber[$i]<='9')){
                 $isValid=false;
                 break;                    
             }
@@ -37,29 +37,29 @@
             }
         }
 
-        if($_POST['HaveDriverLicense']=="Yes"){// true false
+        if($_POST['HaveDriverLicense']=="Yes"){
             $HaveDriverLicense=1;
         }else{
             $HaveDriverLicense=0;
         }
 
         for($i=0;$i<strlen($pass1);$i++){
-            if($pass1[$i]>='A' && $pass1[$i]<='Z'){// false true
+            if($pass1[$i]>='A' && $pass1[$i]<='Z'){
                 $caps++;
-            }else if($pass1[$i]>='0' && $pass1[$i]<='9'){// false true
+            }else if($pass1[$i]>='0' && $pass1[$i]<='9'){
                 $digits++;
             }
         }
 
-        if(trim($Fname)=="" || trim($Lname)==""){//true false
+        if(trim($Fname)=="" || trim($Lname)==""){
             $message="Please Enter Your Name.";
         }else if(!$isValid2 || trim(strlen($IdNumber))!=9){
             $message="Please Enter Your ID Number Again.";
-        }else if(trim(strlen($pass1))<6 || trim(strlen($pass2))<6){//true false
+        }else if(trim(strlen($pass1))<6 || trim(strlen($pass2))<6){
             $message="Your Password must be at least 6 chars/digits.";
-        }else if($pass1 != $pass2){//ture false
+        }else if($pass1 != $pass2){
             $message="Confirm your Password again.";
-        }else if($caps==0 || $digits<2){//ture false
+        }else if($caps==0 || $digits<2){
             $message="your password must have at least 1 Big char and 2 digits number";
         }else if(!$isValid || strlen($PhoneNumber)!=10){
             $message="Write a Number 10 digits start with 050/051/052/053/054/055/057/058";
@@ -69,11 +69,11 @@
             $created=false;
             $acc=mysqli_query($con,"SELECT * FROM Users");
             while($a=mysqli_fetch_array($acc)){
-                if(strtolower($Lname)==strtolower($a['LastName']) && strtolower($Fname)==strtolower($a['FirstName'])){//true false
+                if(strtolower($Lname)==strtolower($a['LastName']) && strtolower($Fname)==strtolower($a['FirstName'])){
                     $message="This User Name is already exist.";
                     $created=true;
                     break;
-                }else if($email==$a['Gmail']){// true false
+                }else if($email==$a['Gmail']){
                     $message="This Gmail is already exist.";
                     $created=true;
                     break;
@@ -87,7 +87,7 @@
                     break;                    
                 }
             }   
-            if(!$created){// ture false
+            if(!$created){
                 mysqli_query($con,"INSERT INTO Users (FirstName,LastName,Gmail,IdNumber,Password,Password1,HaveDriverLicense,Blocked,FailedTimes,BirthDay,PhoneNumber,Role) 
                 VALUE ('$Fname','$Lname','$email','$IdNumber','$pass1','$pass1','$HaveDriverLicense',0,0,'$BirthDay','$PhoneNumber','Customer')");
                 header("Location:Index.php");
@@ -172,7 +172,7 @@
         <div class="css1">
             <h1>Sign UP</h1>
             <?php 
-            if($message!=""){// ture false
+            if($message!=""){
                 echo "<h2>".$message."</h2>";
             }
             ?>

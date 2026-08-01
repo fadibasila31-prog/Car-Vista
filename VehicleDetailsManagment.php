@@ -127,11 +127,11 @@
     </head>
     <body>
         <?php
-            if(isset($_SESSION['VehicleId'])){// true false
+            if(isset($_SESSION['VehicleId'])){
                 $VehicleId=$_SESSION['VehicleId'];
                 $Vehicle=mysqli_query($con,"SELECT * FROM Vehicle");
                 while($v=mysqli_fetch_array($Vehicle)){
-                    if($VehicleId==$v['Id']){// true false              
+                    if($VehicleId==$v['Id']){           
                         echo "<div>
                                 <div class='Css1'>
                                     <img id='logo' src='Pictures/".$v['VehicleLogo']."'>
@@ -222,7 +222,7 @@
                                                     <div class='Css2'>
                                                         <span>Air Conditioner</span>
                                                         <span>";
-                                                            if($v['AirConditioner']==1){// true false
+                                                            if($v['AirConditioner']==1){
                                                                 echo "Available";
                                                             }else{
                                                                 echo "Not Available";
@@ -237,7 +237,7 @@
                                                     <div class='Css2'>
                                                         <span>Drive Style</span>
                                                         <span>";
-                                                            if($v['DriveStyle']==1){// true false
+                                                            if($v['DriveStyle']==1){
                                                                 echo "On Road";
                                                             }else{
                                                                 echo "Off Road";
@@ -286,7 +286,7 @@
                                                     <div class='Css2'>
                                                         <span>Convertible</span>
                                                         <span>";
-                                                            if($v['Convertible']==1){// true false
+                                                            if($v['Convertible']==1){
                                                                 echo "Available";
                                                             }else{
                                                                 echo "Not Available";

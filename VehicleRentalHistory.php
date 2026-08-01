@@ -9,21 +9,21 @@
     $Search="";
     $Search2="";
     $found=false;
-    if(isset($_POST['Search'])){// true false
+    if(isset($_POST['Search'])){
 
-        if(isset($_POST['VehicleType'])){// true false
+        if(isset($_POST['VehicleType'])){
             $Vehicle=$_POST['VehicleType'];
             $Search="WHERE VehicleType='$Vehicle'";
         }
         
-        if(isset($_POST['StartDate']) && $_POST['StartDate']!=""){// true false
+        if(isset($_POST['StartDate']) && $_POST['StartDate']!=""){
             $StartDate=$_POST['StartDate'];
         }
 
-        if(isset($_POST['EndDate']) && $_POST['EndDate']!=""){// true false
+        if(isset($_POST['EndDate']) && $_POST['EndDate']!=""){
             $EndDate=$_POST['EndDate'];
-            if($StartDate!=""){// true false
-                if(strtotime($StartDate)>=strtotime($EndDate)){// true false
+            if($StartDate!=""){
+                if(strtotime($StartDate)>=strtotime($EndDate)){
                     $message.="The end date must be after the start date.";
                 }
             }else{
@@ -31,13 +31,13 @@
             }
         }
 
-        if($StartDate!="" && $EndDate==""){// true false
+        if($StartDate!="" && $EndDate==""){
             $message.="Please select an end date.";
-        }else if($StartDate!="" && $EndDate!=""){// true false
+        }else if($StartDate!="" && $EndDate!=""){
             $Search2="WHERE StartDate>='$StartDate' AND EndDate<='$EndDate'";
         }
 
-        if($message!=""){// true false
+        if($message!=""){
             $_SESSION['Message3']=$message;
         }
     }
@@ -133,6 +133,15 @@
                 font-size:15px;
                 text-align: center;
             }
+            h2{
+                color:red;
+                border-radius: 10px;
+                border:2px solid red;
+                background-color: #ffc5c5;
+                display:flex;
+                justify-self: center;
+                padding:5px 10px 5px 10px;
+            }
             #DateCss{
                 display:block;
                 font-size: 20px;
@@ -172,7 +181,7 @@
             </form>
         </nav>
         <?php 
-            if(isset($_SESSION['Message3'])){// true false
+            if(isset($_SESSION['Message3'])){
                 echo $_SESSION['Message3'];
                 unset($_SESSION['Message3']);
             }else{
@@ -191,7 +200,7 @@
                     echo "<tr>";
                         $VehiclesRentalHistory=mysqli_query($con,"SELECT * FROM Vehicle $Search");
                         while($v=mysqli_fetch_array($VehiclesRentalHistory)){
-                            if($v['Id']==$b['VehicleId']){// true false
+                            if($v['Id']==$b['VehicleId']){
                                 $found=true;
                                 echo"<td><h1>".$v['Id']."</h1></td>
                                 <td><h1>".$v['VehicleType']."</h1></td>
@@ -209,8 +218,8 @@
             ?>
         </table>
         <?php
-            if(!$found){// true false
-                echo "<br>Vehicle Not Found";
+            if(!$found){
+                echo "<br><h2>Vehicle Not Found</h2>";
             }
         ?>
     </body>

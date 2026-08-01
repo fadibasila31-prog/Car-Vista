@@ -1,7 +1,7 @@
 <?php
     include "Nav.php";
     $con=OpenCon();
-    if(isset($_POST['VehicleDetaild'])){// false true
+    if(isset($_POST['VehicleDetaild'])){
         $_SESSION['VehicleId']=$_POST['VehicleId'];
         header("Location: VehicleDetailsManagment.php");
         exit();
@@ -133,20 +133,20 @@
                 $branch="";
 
    
-                if(isset($_POST['search'])){// false true
+                if(isset($_POST['search'])){
                     
-                    if(isset($_POST['Type'])){// true false
+                    if(isset($_POST['Type'])){
                         $Type=$_POST['Type'];
-                        if($Type!=""){// true false
+                        if($Type!=""){
                             $search="WHERE VehicleType='$Type'";
                             $cnt=1;
                         }
                     }
 
-                    if(isset($_POST['NumberPlate'])){// false true
+                    if(isset($_POST['NumberPlate'])){
                         $NP=trim($_POST['NumberPlate']);
-                        if($NP!=""){// true false
-                            if($cnt==0){//true false
+                        if($NP!=""){
+                            if($cnt==0){
                                 $search="WHERE NumberPlate='$NP'";
                                 $cnt=1;
                             }else{
@@ -155,10 +155,10 @@
                         }
                     }
 
-                    if(isset($_POST['Brand'])){// false true
+                    if(isset($_POST['Brand'])){
                         $brand=$_POST['Brand'];
-                        if($brand!=""){// true false
-                            if($cnt==0){// true false
+                        if($brand!=""){
+                            if($cnt==0){
                                 $search="WHERE VehicleBrand='$brand'";
                                 $cnt=1;
                             }else{
@@ -167,10 +167,10 @@
                         }
                     }
 
-                    if(isset($_POST['GearBox'])){// true false
+                    if(isset($_POST['GearBox'])){
                         $GB=$_POST['GearBox'];
-                        if($GB!=""){// true false
-                            if($cnt==0){// true false
+                        if($GB!=""){
+                            if($cnt==0){
                                 $search="WHERE GearBox='$GB'";
                                 $cnt=1;
                             }else{
@@ -179,10 +179,10 @@
                         }
                     }
 
-                    if(isset($_POST['Branch'])){// true false
+                    if(isset($_POST['Branch'])){
                         $branch=$_POST['Branch'];
-                        if($branch!=""){// true false
-                            if($cnt==0){// true false
+                        if($branch!=""){
+                            if($cnt==0){
                                 $search="WHERE Branch='$branch'";
                                 $cnt=1;
                             }else{
@@ -205,7 +205,7 @@
                     </div>
                     <div class="Css3">
                         <label>Number Plate:</label>
-                        <input type="text" name="NumberPlate" placeholder="Number Plate...." <?php if($NP!=""){echo "value='$NP'";}// true false?>>
+                        <input type="text" name="NumberPlate" placeholder="Number Plate...." <?php if($NP!=""){echo "value='$NP'";}?>>
                     </div>
                     <div class="Css3">
                         <label>Vehicle Brand:</label>
@@ -217,15 +217,15 @@
                                 while($brand2=mysqli_fetch_array($brands)){
                                     $found2=false;
                                     for($i=0;$i<count($arrbrand);$i++){
-                                        if($arrbrand[$i]==$brand2['VehicleBrand']){// true false
+                                        if($arrbrand[$i]==$brand2['VehicleBrand']){
                                             $found2=true;
                                         }
                                     }
 
-                                    if(!$found2){// true false
+                                    if(!$found2){
                                         $arrbrand[]=$brand2['VehicleBrand'];
                                         echo "<option value='".$brand2['VehicleBrand']."'";
-                                        if($brand==$brand2['VehicleBrand']){// true false
+                                        if($brand==$brand2['VehicleBrand']){
                                             echo "selected";
                                         }
                                         echo ">".$brand2['VehicleBrand']."</option>";
@@ -254,14 +254,14 @@
                                 while($b=mysqli_fetch_array($branches)){
                                     $found2=false;
                                     for($i=0;$i<count($arrbranch);$i++){
-                                        if($b['Branch']==$arrbranch[$i]){// true false
+                                        if($b['Branch']==$arrbranch[$i]){
                                             $found2=true;                                        
                                         }
                                     }
-                                    if(!$found2){// true false
+                                    if(!$found2){
                                         $arrbranch[]=$b['Branch'];
                                         echo "<option value='".$b['Branch']."'";
-                                        if($branch==$b['Branch']){// true false
+                                        if($branch==$b['Branch']){
                                             echo "selected";
                                         }
                                         echo ">".$b['Branch']."</option>";
@@ -288,8 +288,8 @@
                         $found=true;
                         echo "<td>
                                 <img src='Pictures/".$v['Image']."'>";
-                                if(isset($_SESSION['Role'])){// true false for worker and manager
-                                    if($_SESSION['Role']=="Manager"){// true false for worker and manager
+                                if(isset($_SESSION['Role'])){
+                                    if($_SESSION['Role']=="Manager"){
                                         echo "<h2>Vehicle Id: ".$v['Id']."</h2><br><br>";
                                     }
                                 }
@@ -302,13 +302,13 @@
                                 <form method='post'><input type='hidden' name='VehicleId' value='".$v['Id']."'><button id='MoreDetails' type='submit' name='VehicleDetaild'>More Details</button></form>
                         </td>";
                         $colums++;
-                        if($colums==4){// true false
+                        if($colums==4){
                             echo "</tr><tr>";
                             $colums=0;
                         }
                     }     
                     
-                    if(!$found){// true false
+                    if(!$found){
                         echo "<h3>We dont have this Vehicle.</h3>";
                     }
                 ?>

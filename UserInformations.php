@@ -77,11 +77,11 @@
                 <tr>
                     <?php
                         
-                        if(isset($_SESSION['UserDetails'])){// true false
+                        if(isset($_SESSION['UserDetails'])){
                             $UD=$_SESSION['UserDetails'];
                             $Inf=mysqli_query($con,"SELECT * FROM Users");
                             while($i=mysqli_fetch_array($Inf)){
-                                if($UD==$i['Id']){// true false
+                                if($UD==$i['Id']){
                                     echo "<tr><td>".$i['FirstName']." ".$i['LastName']."</td>
                                     <td>".$i['IdNumber']."</td>
                                     <td>".$i['Gmail']."</td><td>";
@@ -115,10 +115,10 @@
                     $found=false; 
                     $Booked=mysqli_query($con,"SELECT * FROM Booking");
                     while($b=mysqli_fetch_array($Booked)){
-                        if($b['CustomerId']==$UD){// true false
+                        if($b['CustomerId']==$UD){
                             $Vehicle=mysqli_query($con,"SELECT * FROM Vehicle");
                             while($v=mysqli_fetch_array($Vehicle)){
-                                if($b['VehicleId']==$v['Id']){// true false
+                                if($b['VehicleId']==$v['Id']){
                                     $found=true;
                                     echo "<tr><td>".$v['VehicleName']."</td>
                                     <td>".$v['NumberPlate']."</td>";

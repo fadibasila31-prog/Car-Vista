@@ -1,7 +1,7 @@
 <?php
     include "Nav.php";
     $con=OpenCon();
-    if(isset($_POST['MoreDetails'])){// true false
+    if(isset($_POST['MoreDetails'])){
         $_SESSION['UserDetails']=$_POST['UserId'];
         header("Location: UserInformations.php");
         exit();
@@ -11,18 +11,18 @@
     $message3="";
 
 
-    if(isset($_POST['AddManager'])){// true false
-        if(trim($_POST['Fname'])==""){// true false
+    if(isset($_POST['AddManager'])){
+        if(trim($_POST['Fname'])==""){
             $message1="Please Write Manager First Name Again.";
-        }else if(trim($_POST['Lname'])==""){// true false
+        }else if(trim($_POST['Lname'])==""){
             $message1="Please Write Manager Last Name Again.";
-        }else if(trim($_POST['IdNumber'])==""){// true false
+        }else if(trim($_POST['IdNumber'])==""){
             $message1="Please Write Manager ID Number";
-        }else if(trim($_POST['Pass1'])==""){// true false
+        }else if(trim($_POST['Pass1'])==""){
             $message1="Please Write Manager Password.";
-        }else if(trim($_POST['Pass2'])==""){// true false
+        }else if(trim($_POST['Pass2'])==""){
             $message1="Please Confirm Manager Password.";
-        }else if(trim($_POST['PhoneNum'])==""){// true false
+        }else if(trim($_POST['PhoneNum'])==""){
             $message1="Please Write Manager Phone Number.";
         }else{
             $Fname=$_POST['Fname'];
@@ -39,19 +39,19 @@
             $digits=0;  
             $users=mysqli_query($con,"SELECT * FROM Users");
             while($u=mysqli_fetch_array($users)){
-                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){// true false
+                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){
                     $flag=false;
                     $message1="This User is Arleady exist.";
                     break;
-                }else if($u['IdNumber']==$IdNumber){// true false
+                }else if($u['IdNumber']==$IdNumber){
                     $flag=false;
                     $message1="Check you'r ID Number Again.";
                     break;
-                }else if($u['Gmail']==$Gmail){// true false
+                }else if($u['Gmail']==$Gmail){
                     $flag=false;
                     $message1="This Gmail is Already exist.";
                     break;
-                }else if($u['PhoneNumber']==$PN){// true false
+                }else if($u['PhoneNumber']==$PN){
                     $flag=false;
                     $message1="This Phone Number is Already exist.";
                     break;                                
@@ -59,11 +59,11 @@
             }
 
             for($i=0;$i<strlen($Gmail);$i++){
-                if($Gmail[$i]=='@'){// true false
+                if($Gmail[$i]=='@'){
                     for($j=$i;$j<strlen($Gmail);$j++){
                         $email.=$Gmail[$j];
                     }
-                    if($email!="@gmail.com"){// true false
+                    if($email!="@gmail.com"){
                         $flag=false;
                         $message1.="<br>Please Check you'r Gmail Again.";
                     }
@@ -72,7 +72,7 @@
             }
 
             for($i=0;$i<strlen($IdNumber);$i++){
-                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){// true false
+                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){
                     $flag=false;
                     $message1.="<br>Please Check you'r ID Number Again.";
                     break;
@@ -80,11 +80,11 @@
             }
             
             for($i=0;$i<strlen($PN);$i++){
-                if($PN[$i]>'9' || $PN[$i]<'0'){// true false
+                if($PN[$i]>'9' || $PN[$i]<'0'){
                     $flag=false;
                     $message1.="<br>Pleas Check you'r Phone Number Again.";
                     break;
-                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){// true false
+                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){
                     $flag=false;
                     $message1.="<br>you'r Phone Number must start with 050/051/052/053/054/055/057/058";
                     break;
@@ -92,20 +92,20 @@
             }
             
             for($i=0;$i<strlen($Pass1);$i++){
-                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){// true false
+                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){
                     $caps++;
-                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){// true false
+                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){
                     $digits++;
                 }
             }
             
-            if($caps==0 || $digits<2){// true false
+            if($caps==0 || $digits<2){
                 $message1.="<br>your password must have at least 1 Big char and 2 digits number and be more than 6 characters.";
-            }else if($Pass1!=$Pass2){// true false
+            }else if($Pass1!=$Pass2){
                 $message1.="<br>Please Confirm you'r Password Again.";
-            }else if(strlen($PN)!=10){// true false
+            }else if(strlen($PN)!=10){
                 $message1.="<br>Phone Number must be 10 digits.";
-            }else if($flag){// true false
+            }else if($flag){
                 mysqli_query($con,"INSERT INTO Users (FirstName,LastName,Gmail,IdNumber,Password,Password1,HaveDriverLicense,Blocked,FailedTimes,BirthDay,PhoneNumber,Role)
                 values ('$Fname','$Lname','$Gmail','$IdNumber','$Pass1','$Pass1',1,0,0,'$BD','$PN','Manager')");
             }
@@ -113,18 +113,18 @@
     }
 
 
-    if(isset($_POST['AddWorker'])){// true false
-        if(trim($_POST['Fname'])==""){// true false
+    if(isset($_POST['AddWorker'])){
+        if(trim($_POST['Fname'])==""){
             $message2="Please Write Worker First Name Again.";
-        }else if(trim($_POST['Lname'])==""){// true false
+        }else if(trim($_POST['Lname'])==""){
             $message2="Please Write Worker Last Name Again.";
-        }else if(trim($_POST['IdNumber'])==""){// true false
+        }else if(trim($_POST['IdNumber'])==""){
             $message2="Please Write Worker ID Number";
-        }else if(trim($_POST['Pass1'])==""){// true false
+        }else if(trim($_POST['Pass1'])==""){
             $message2="Please Write Worker Password.";
-        }else if(trim($_POST['Pass2'])==""){// true false
+        }else if(trim($_POST['Pass2'])==""){
             $message2="Please Confirm Worker Password.";
-        }else if(trim($_POST['PhoneNum'])==""){// true false
+        }else if(trim($_POST['PhoneNum'])==""){
             $message2="Please Write Worker Phone Number.";
         }else{
             $Fname=$_POST['Fname'];
@@ -141,19 +141,19 @@
             $digits=0;  
             $users=mysqli_query($con,"SELECT * FROM Users");
             while($u=mysqli_fetch_array($users)){
-                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){// true false
+                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){
                     $flag=false;
                     $message2="This User is Arleady exist.";
                     break;
-                }else if($u['IdNumber']==$IdNumber){// true false
+                }else if($u['IdNumber']==$IdNumber){
                     $flag=false;
                     $message2="Check you'r ID Number Again.";
                     break;
-                }else if($u['Gmail']==$Gmail){// true false
+                }else if($u['Gmail']==$Gmail){
                     $flag=false;
                     $message2="This Gmail is Already exist.";
                     break;
-                }else if($u['PhoneNumber']==$PN){// true false
+                }else if($u['PhoneNumber']==$PN){
                     $flag=false;
                     $message2="This Phone Number is Already exist.";
                     break;                                
@@ -161,11 +161,11 @@
             } 
 
             for($i=0;$i<strlen($Gmail);$i++){
-                if($Gmail[$i]=='@'){// true false
+                if($Gmail[$i]=='@'){
                     for($j=$i;$j<strlen($Gmail);$j++){
                         $email.=$Gmail[$j];
                     }
-                    if($email!="@gmail.com"){// true false
+                    if($email!="@gmail.com"){
                         $flag=false;
                         $message2.="<br>Please Check you'r Gmail Again.";
                     }
@@ -174,7 +174,7 @@
             }
 
             for($i=0;$i<strlen($IdNumber);$i++){
-                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){// true false
+                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){
                     $flag=false;
                     $message2.="<br>Please Check you'r ID Number Again.";
                     break;
@@ -182,11 +182,11 @@
             }
             
             for($i=0;$i<strlen($PN);$i++){
-                if($PN[$i]>'9' || $PN[$i]<'0'){// true false
+                if($PN[$i]>'9' || $PN[$i]<'0'){
                     $flag=false;
                     $message2.="<br>Pleas Check you'r Phone Number Again.";
                     break;
-                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){// true false
+                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){
                     $flag=false;
                     $message2.="<br>you'r Phone Number must start with 050/051/052/053/054/055/057/058";
                     break;
@@ -194,24 +194,24 @@
             }
             
             for($i=0;$i<strlen($Pass1);$i++){
-                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){// true false
+                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){
                     $caps++;
-                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){// true false
+                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){
                     $digits++;
                 }
             }
             
-            if($_POST['HaveDriverLicense']=="Yes"){// true false
+            if($_POST['HaveDriverLicense']=="Yes"){
                 $HaveDriverLicense=1;
             }else{
                 $HaveDriverLicense=0;
             }
 
-            if($caps==0 || $digits<2){// true false
+            if($caps==0 || $digits<2){
                 $message2.="<br>your password must have at least 1 Big char and 2 digits number and be more than 6 characters.";
-            }else if($Pass1!=$Pass2){// true false
+            }else if($Pass1!=$Pass2){
                 $message2.="<br>Please Confirm you'r Password Again.";
-            }else if(strlen($PN)!=10){// true false
+            }else if(strlen($PN)!=10){
                 $message2.="<br>Phone Number must be 10 digits.";
             }elseif($flag){
                 mysqli_query($con,"INSERT INTO Users (FirstName,LastName,Gmail,IdNumber,Password,Password1,HaveDriverLicense,Blocked,FailedTimes,BirthDay,PhoneNumber,Role)
@@ -221,18 +221,18 @@
     }
 
 
-    if(isset($_POST['AddCustomer'])){// true false
-        if(trim($_POST['Fname'])==""){// true false
+    if(isset($_POST['AddCustomer'])){
+        if(trim($_POST['Fname'])==""){
             $message3="Please Write Customer First Name Again.";
-        }else if(trim($_POST['Lname'])==""){// true false
+        }else if(trim($_POST['Lname'])==""){
             $message3="Please Write Customer Last Name Again.";
-        }else if(trim($_POST['IdNumber'])==""){// true false
+        }else if(trim($_POST['IdNumber'])==""){
             $message3="Please Write Customer ID Number";
-        }else if(trim($_POST['Pass1'])==""){// true false
+        }else if(trim($_POST['Pass1'])==""){
             $message3="Please Write Customer Password.";
-        }else if(trim($_POST['Pass2'])==""){// true false
+        }else if(trim($_POST['Pass2'])==""){
             $message3="Please Confirm Customer Password.";
-        }else if(trim($_POST['PhoneNum'])==""){// true false
+        }else if(trim($_POST['PhoneNum'])==""){
             $message3="Please Write Customer Phone Number.";
         }else{
             $Fname=$_POST['Fname'];
@@ -249,19 +249,19 @@
             $digits=0;  
             $users=mysqli_query($con,"SELECT * FROM Users");
             while($u=mysqli_fetch_array($users)){
-                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){// true false
+                if((strtolower(trim($u['FirstName']))==strtolower(trim($Fname))) && (strtolower(trim($u['LastName']))==strtolower(trim($Lname)))){
                     $flag=false;
                     $message3="This User is Arleady exist.";
                     break;
-                }else if($u['IdNumber']==$IdNumber){// true false
+                }else if($u['IdNumber']==$IdNumber){
                     $flag=false;
                     $message3="Check you'r ID Number Again.";
                     break;
-                }else if($u['Gmail']==$Gmail){// true false
+                }else if($u['Gmail']==$Gmail){
                     $flag=false;
                     $message3="This Gmail is Already exist.";
                     break;
-                }else if($u['PhoneNumber']==$PN){// true false
+                }else if($u['PhoneNumber']==$PN){
                     $flag=false;
                     $message3="This Phone Number is Already exist.";
                     break;                                
@@ -269,11 +269,11 @@
             }
 
             for($i=0;$i<strlen($Gmail);$i++){
-                if($Gmail[$i]=='@'){// true false
+                if($Gmail[$i]=='@'){
                     for($j=$i;$j<strlen($Gmail);$j++){
                         $email.=$Gmail[$j];
                     }
-                    if($email!="@gmail.com"){// true false
+                    if($email!="@gmail.com"){
                         $flag=false;
                         $message3.="<br>Please Check you'r Gmail Again.";
                     }
@@ -282,7 +282,7 @@
             }
 
             for($i=0;$i<strlen($IdNumber);$i++){
-                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){// true false
+                if($IdNumber[$i]>'9' || $IdNumber[$i]<'0'){
                     $flag=false;
                     $message3.="<br>Please Check you'r ID Number Again.";
                     break;
@@ -290,11 +290,11 @@
             }
             
             for($i=0;$i<strlen($PN);$i++){
-                if($PN[$i]>'9' || $PN[$i]<'0'){// true false
+                if($PN[$i]>'9' || $PN[$i]<'0'){
                     $flag=false;
                     $message3.="<br>Pleas Check you'r Phone Number Again.";
                     break;
-                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){// true false
+                }else if(($i==0 && $PN[$i]!=0) || ($i==1 && $PN[$i]!=5) || ($i==2 && ($PN[$i]==9 || $PN[$i]==6))){
                     $flag=false;
                     $message3.="<br>you'r Phone Number must start with 050/051/052/053/054/055/057/058";
                     break;
@@ -302,26 +302,26 @@
             }
             
             for($i=0;$i<strlen($Pass1);$i++){
-                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){// true false
+                if($Pass1[$i]>='A' && $Pass1[$i]<='Z'){
                     $caps++;
-                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){// true false
+                }else if($Pass1[$i]>='0' && $Pass1[$i]<='9'){
                     $digits++;
                 }
             }
             
-            if($_POST['HaveDriverLicense']=="Yes"){// true false
+            if($_POST['HaveDriverLicense']=="Yes"){
                 $HaveDriverLicense=1;
             }else{
                 $HaveDriverLicense=0;
             }
 
-            if($caps==0 || $digits<2){// true false
+            if($caps==0 || $digits<2){
                 $message3.="<br>your password must have at least 1 Big char and 2 digits number and be more than 6 characters.";
-            }else if($Pass1!=$Pass2){// true false
+            }else if($Pass1!=$Pass2){
                 $message3.="<br>Please Confirm you'r Password Again.";
-            }else if(strlen($PN)!=10){// true false
+            }else if(strlen($PN)!=10){
                 $message3.="<br>Phone Number must be 10 digits.";
-            }elseif($flag){// true false
+            }elseif($flag){
                 mysqli_query($con,"INSERT INTO Users (FirstName,LastName,Gmail,IdNumber,Password,Password1,HaveDriverLicense,Blocked,FailedTimes,BirthDay,PhoneNumber,Role)
                 values ('$Fname','$Lname','$Gmail','$IdNumber','$Pass1','$Pass1',$HaveDriverLicense,0,0,'$BD','$PN','Customer')");
             }
@@ -470,7 +470,7 @@
             <div id="addManager"></div><br>
             <h1>Add Manager 
                 <?php 
-                    if($message1!="")echo "<h2>".$message1."</h2>";// true false
+                    if($message1!="")echo "<h2>".$message1."</h2>";
                 ?>
             </h1>
 
@@ -490,7 +490,7 @@
             <div id="addWorker"></div><br>
             <h1>Add Worker 
                 <?php 
-                    if($message2!="")echo "<h2>".$message2."</h2>";// true false
+                    if($message2!="")echo "<h2>".$message2."</h2>";
                 ?>
             </h1>
             <form method="POST">
@@ -514,7 +514,7 @@
             <div id="addCustomer"></div><br>
             <h1>Add Customer 
                 <?php 
-                    if($message3!="")echo "<h2>".$message3."</h2>";// true false
+                    if($message3!="")echo "<h2>".$message3."</h2>";
                 ?>
             </h1>
             <form method="POST">
@@ -549,7 +549,7 @@
                 <?php
                     $customers=mysqli_query($con,"SELECT * FROM Users");
                     while($c=mysqli_fetch_array($customers)){
-                        if($c['Role']=="Manager"){// true false
+                        if($c['Role']=="Manager"){
                             echo "<tr><td><h3>".$c['FirstName']." ".$c['LastName']."</h3></td>
                             <td><h3>".$c['Gmail']."</h3></td>
                             <td><h3>".$c['IdNumber']."</h3></td>
@@ -575,7 +575,7 @@
                 <?php
                     $Workers=mysqli_query($con,"SELECT * FROM Users");
                     while($w=mysqli_fetch_array($Workers)){
-                        if($w['Role']=="Worker"){// true false
+                        if($w['Role']=="Worker"){
                             echo "<tr><td><h3>".$w['FirstName']." ".$w['LastName']."</td>
                             <td><h3>".$w['Gmail']."</h3></td>
                             <td><h3>".$w['IdNumber']."</h3></td>
@@ -601,7 +601,7 @@
                 <?php
                     $Managers=mysqli_query($con,"SELECT * FROM Users");
                     while($m=mysqli_fetch_array($Managers)){
-                        if($m['Role']=="Customer"){// true false
+                        if($m['Role']=="Customer"){
                             echo "<tr><td><h3>".$m['FirstName']." ".$m['LastName']."</td>
                             <td><h3>".$m['Gmail']."</h3></td>
                             <td><h3>".$m['IdNumber']."</h3></td>

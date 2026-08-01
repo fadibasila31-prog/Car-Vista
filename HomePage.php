@@ -4,23 +4,21 @@
     include "Nav.php";
     $con=OpenCon();
     
-    if(isset($_SESSION['Age'])){// true false
+    if(isset($_SESSION['Age'])){
         $age=$_SESSION['Age'];
-    }else{
-        $age="";
     }
-    $message="";
-    if(isset($_POST['Search'])){// true false
-        if(isset($_SESSION['Gmail'])){// false true
-            if(isset($_POST['Type'])){//false true
+    
+    if(isset($_POST['Search'])){
+        if(isset($_SESSION['Gmail'])){
+            if(isset($_POST['Type'])){
                 $location=$_POST['location'];
                 $_SESSION['VehicleType']=$_POST['Type'];
                 $pickup=strtotime($_POST['pickup']);
                 $return=strtotime($_POST['return']);
                 $gmail=$_SESSION['Gmail'];
-                if($age>=18){// false true
-                    if($location!=""){ // false true
-                        if($return>$pickup){// true false
+                if($age>=18){
+                    if($location!=""){ 
+                        if($return>$pickup){
                             $_SESSION['Branch']=$location;
                             $_SESSION['StartUse']=$_POST['pickup'];
                             $_SESSION['EndUse']=$_POST['return'];
@@ -169,7 +167,7 @@
                             <img src="Pictures/Van.jpg" class="Van">
                         </label>
                         <?php         
-                            if($message!=""){echo "<h2>".$message."</h2>";}// true false
+                            if($message!=""){echo "<h2>".$message."</h2>";}
                         ?>
                     </div>
                     <div class="Css4">
@@ -183,11 +181,11 @@
                             while($L=mysqli_fetch_array($locations)){
                                 $found=false;
                                 for($i=0;$i<count($arrlocations);$i++){
-                                    if($arrlocations[$i]==$L['Branch']){//true false
+                                    if($arrlocations[$i]==$L['Branch']){
                                         $found=true;
                                     }
                                 }
-                                if(!$found){// true false
+                                if(!$found){
                                     $arrlocations[]=$L['Branch'];
                                     echo "<option value='".$L['Branch']."'>".$L['Branch']."</option>";
                                 }

@@ -6,10 +6,10 @@
     }else{
         $CarId=-1;
     }
-    if(isset($_POST['Rent'])){// true false
+    if(isset($_POST['Rent'])){
         header("Location: Payment.php");
         exit();
-    }else if(isset($_POST['GoBack'])){// true false
+    }else if(isset($_POST['GoBack'])){
         unset($_SESSION['VehicleId']);
         unset($_SESSION['Branch']);
         header("Location: VehiclesPage.php");
@@ -153,7 +153,7 @@
                 <?php
                     $cars=mysqli_query($con,"SELECT * FROM Vehicle");
                     while($c=mysqli_fetch_array($cars)){
-                        if($c['Id']==$CarId){// true false
+                        if($c['Id']==$CarId){
                             echo "<div class='Css4'>
                                     <img src='Pictures/".$c['Image']."'>
                                     <div class='Css3'>
@@ -176,14 +176,14 @@
                                         <div class='CarDetails'><div><p>".$c['Seats']."</p></div><img src='Pictures/Seats'></div>
                                         <div class='CarDetails'><div><p>".$c['Doors']."</p></div><img src='Pictures/Doors'></div>
                                         <div class='CarDetails'><div><p>".$c['EnergyType']."</p></div><img src='Pictures/EnergyType'></div>";
-                                        if($c['AirConditioner']==1){// true false
+                                        if($c['AirConditioner']==1){
                                             echo "<div class='CarDetails'><div><p>A/C </p></div><img src='Pictures/AC'></div>";
                                         }
                                     echO"
                                     </div>
                                     <div class='Css12'>
                                     <div><p>";
-                                        if($c['DriveStyle']==1){// true false
+                                        if($c['DriveStyle']==1){
                                             echo "OnRoad";
                                         }else{  
                                             echo "OffRoad";
@@ -192,7 +192,7 @@
                                         <div><p>Miles ".$c['Miles']."</p></div>
                                         <div><p>".$c['DriveType']."</p></div>
                                         <div><p>HP ".$c['HorsePower']."</p></div>";
-                                        if($c['Convertible']==1){// true false
+                                        if($c['Convertible']==1){
                                             echo "<div><p>Convertible</p></div>";
                                         }
                                         echo "

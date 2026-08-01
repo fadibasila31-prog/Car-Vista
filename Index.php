@@ -8,7 +8,7 @@
         $Fname="";
         $Lname="";
         for($i=0;$i<strlen($FullName);$i++){
-            if($FullName[$i]==" "){// true false
+            if($FullName[$i]==" "){
                 for($j=$i+1;$j<strlen($FullName);$j++){
                     $Lname.=$FullName[$j];
                 }
@@ -19,15 +19,15 @@
             }
         }
 
-        if(trim($pass)!="" && trim($Fname)!="" && trim($Lname)!=""){//false  true
+        if(trim($pass)!="" && trim($Fname)!="" && trim($Lname)!=""){
             $found=false;
             $acc=mysqli_query($con,"SELECT * FROM Users");
             while($a=mysqli_fetch_array($acc)){
-                if(strtolower(trim($Fname))==strtolower(trim($a['FirstName'])) && strtolower(trim($Lname))==strtolower(trim($a['LastName']))){// false true
+                if(strtolower(trim($Fname))==strtolower(trim($a['FirstName'])) && strtolower(trim($Lname))==strtolower(trim($a['LastName']))){
                     $found=true;
-                    if($a['Blocked']==0 && $a['FailedTimes']<3){// true false
+                    if($a['Blocked']==0 && $a['FailedTimes']<3){
                         $Gmail=$a['Gmail'];
-                        if($pass==$a['Password1']){// false true
+                        if($pass==$a['Password1']){
                             mysqli_query($con,"UPDATE Users SET FailedTimes=0,Blocked=0 Where Gmail='$Gmail'");
                             $_SESSION['Gmail']=$Gmail;
                             $_SESSION['UserId']=$a['Id'];
@@ -44,7 +44,7 @@
                             $message="Wrong password. You have ".$FailedTimes." attempts left";
                             mysqli_query($con,"UPDATE Users SET FailedTimes=FailedTimes+1 Where Gmail='$Gmail'");
                             $a['FailedTimes']++;
-                            if($a['FailedTimes']==3){// false ture
+                            if($a['FailedTimes']==3){
                                 $message="Your Account ".$a['FirstName']." ".$a['LastName']." locked after 3 failed attempts. Reset your password to continue.";
                                 mysqli_query($con,"UPDATE Users SET Blocked=1 Where Gmail='$Gmail'");
                             }
@@ -55,7 +55,7 @@
                     break;
                 }
             }
-            if(!$found){// false true
+            if(!$found){
                 $message="User Name not found.";
             }
         }else{
@@ -63,7 +63,7 @@
         }
     }
 
-    if($message!=""){ // true false
+    if($message!=""){ 
         $_SESSION['LoginMessage']=$message;
     }
 ?>
@@ -140,7 +140,7 @@
                 <h1>Login</h1>
                 <center>
                     <?php
-                        if(isset($_SESSION['LoginMessage'])){ // true false
+                        if(isset($_SESSION['LoginMessage'])){ 
                             echo "<h2>".$_SESSION['LoginMessage']."</h2>";
                             unset($_SESSION['LoginMessage']);
                         }

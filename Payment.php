@@ -245,6 +245,15 @@
                margin-top: 5px;
                display:inline-block;
             }
+            h4{
+                color:red;
+                border-radius: 10px;
+                border:2px solid red;
+                background-color: #fda0a0;
+                display: flex;
+                justify-self: center;
+                padding:5px 10px 5px 10px;
+            }
             input{
                 border-radius: 5px;
             }
@@ -287,7 +296,7 @@
                 </div>
                 <div class="Css3">
                     <form method="post">
-                        <?php if($message!=""){echo $message;}// true false ?>
+                        <?php if($message!=""){echo "<h4>".$message."</h4>";}// true false ?>
                         <h1>Payment & Booking</h1><br>
                         <label><input type="tel" name="PhoneNumber" placeholder="Phone Number...." required></label>
                         <label><input type="text" name="CardNumber" placeholder="Card Number...." required></label>

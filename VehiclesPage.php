@@ -1,10 +1,10 @@
 <?php
     include "Nav.php";    
     $con=OpenCon();
-    if(isset($_POST['select'])){//true false
+    if(isset($_POST['select'])){
         $CarLocation=mysqli_query($con,"SELECT * FROM Vehicle");
         while($CL=mysqli_fetch_array($CarLocation)){
-            if($CL['Id']==$_POST['Id']){// true false
+            if($CL['Id']==$_POST['Id']){
                 $_SESSION['Branch']=$CL['Branch'];
                 break;  
             }
@@ -126,8 +126,8 @@
                 font-size: 20px;
                 font-weight: bold;
             }
-            /* .Css11{
-                background-color: cyan;
+             .Css11{
+                background-color: #c8c8cc;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -135,12 +135,12 @@
             }
             .Css11 p{
                 border-radius: 10px;
-                /* background-color: lightgray; */
+                background-color: lightgray;
                 padding: 10px;
                 font-size: 30px;
                 font-weight: bold;
                 border: 3px black solid;
-            } */
+            } 
             select{
                 margin-top: 15px;
             }
@@ -218,7 +218,7 @@
             $VT="";
             $select=0;
             $arr=[];
-            if(isset($_SESSION['Branch'])){// true false
+            if(isset($_SESSION['Branch'])){
                 $location=$_SESSION['Branch'];
                 $searching="WHERE Branch='$location'";
                 $select++;
@@ -226,9 +226,9 @@
                 $location="";
             }
 
-            if(isset($_SESSION['VehicleType'])){// true false
+            if(isset($_SESSION['VehicleType'])){
                 $VT=$_SESSION['VehicleType'];
-                if($select==0){// true false
+                if($select==0){
                     $searching="WHERE VehicleType='$VT'";
                     $select++;
                 }else{
@@ -238,7 +238,7 @@
                 $VT="";
             }
 
-            if(isset($_POST['resetall'])){// true false
+            if(isset($_POST['resetall'])){
                 unset($_SESSION['Branch']);
                 unset($_SESSION['VehicleType']);
                 $searching="";
@@ -253,22 +253,22 @@
             }
                 
 
-            if(isset($_POST['search'])){ // true false
+            if(isset($_POST['search'])){
                 $searching="";
                 $select=0;
 
-                if(isset($_POST['GearBox'])){// true false
+                if(isset($_POST['GearBox'])){
                     $GB=$_POST['GearBox'];
-                    if($GB!="Both1"){// true false   
+                    if($GB!="Both1"){ 
                         $searching="WHERE GearBox='$GB'";
                         $select++;         
                     }
                 }   
 
-                if(isset($_POST['VehicleType'])){// true false
+                if(isset($_POST['VehicleType'])){
                     $VT=$_POST['VehicleType'];
-                    if($VT!="Both2"){// true false
-                        if($select==0){// true false
+                    if($VT!="Both2"){
+                        if($select==0){
                             $searching="WHERE VehicleType='$VT'";
                             $select++;
                         }else{
@@ -277,18 +277,18 @@
                     }
                 }
 
-                if(isset($_POST['DriveStyle'])){//true false
+                if(isset($_POST['DriveStyle'])){
                     $R=$_POST['DriveStyle'];
-                    if($R!="Both3"){// true false
-                        if($R=="OffRoad"){// true false
-                            if($select==0){// true false
+                    if($R!="Both3"){
+                        if($R=="OffRoad"){
+                            if($select==0){
                                 $searching="WHERE DriveStyle=0";
                                 $select++;
                             }else{
                                 $searching.=" AND DriveStyle=0";
                             }
                         }else{
-                            if($select==0){// true false
+                            if($select==0){
                                 $searching="WHERE DriveStyle=1";
                                 $select++;
                             }else{
@@ -298,10 +298,10 @@
                     }
                 }
 
-                if(isset($_POST['Fuel'])){// ture false
+                if(isset($_POST['Fuel'])){
                     $F=$_POST['Fuel'];
-                    if($F!="AllFuelTypes"){// true false
-                        if($select==0){// true false
+                    if($F!="AllFuelTypes"){
+                        if($select==0){
                             $searching="WHERE EnergyType='$F'";    
                             $select++;
                         }else{
@@ -310,31 +310,31 @@
                     }
                 }
                 
-                if(isset($_POST['seats'])){// true false
+                if(isset($_POST['seats'])){
                     $seats=$_POST['seats'];
-                    if($seats=='2'){// true false
-                        if($select==0){// true false
+                    if($seats=='2'){
+                        if($select==0){
                             $searching="WHERE Seats>=2";
                             $select++;
                         }else{
                             $searching.=" AND Seats>=2";
                         }
-                    }else if($seats=='4'){// true false
-                        if($select==0){// true false
+                    }else if($seats=='4'){
+                        if($select==0){
                             $searching="WHERE Seats>=4";
                             $select++;
                         }else{
                             $searching.=" AND Seats>=4";
                         }
-                    }else if($seats=='6'){// true false
-                        if($select==0){// true false
+                    }else if($seats=='6'){
+                        if($select==0){
                             $searching="WHERE Seats>=6";
                             $select++;
                         }else{
                             $searching.=" AND Seats>=6";
                         }
                     }else{
-                        if($select==0){// true false
+                        if($select==0){
                             $searching="WHERE Seats>=8";
                             $select++;
                         }else{
@@ -343,10 +343,10 @@
                     }
                 }
                 
-                if(isset($_POST['Brand'])){// true false
+                if(isset($_POST['Brand'])){
                     $B=$_POST['Brand'];
-                    if($B!=""){// true false
-                        if($select==0){// true false
+                    if($B!=""){
+                        if($select==0){
                             $searching="WHERE VehicleBrand='$B'";
                             $select++;
                         }else{
@@ -355,10 +355,10 @@
                     }
                 }
                 
-                if(isset($_POST['Branch'])){// true false
+                if(isset($_POST['Branch'])){
                     $location=$_POST['Branch'];
-                    if($location!=""){// true false
-                        if($select==0){// true false
+                    if($location!=""){
+                        if($select==0){
                             $searching="WHERE Branch='$location'";
                             $select++;
                         }else{
@@ -369,14 +369,14 @@
                     $Price=$_POST['Price'];
                     $search=mysqli_query($con,"SELECT * FROM Vehicle $searching");   
                     $arr=[];
-                    if($Price=="LOW"){// ture false
+                    if($Price=="LOW"){
                         $temp=[];
                         while($s=mysqli_fetch_array($search)){
                             $temp[]=$s;
                         }
                         for($i=0;$i<count($temp)-1;$i++){
                             for($j=0;$j<count($temp)-$i-1;$j++){
-                                if($temp[$j]['PricePerDay']>$temp[$j+1]['PricePerDay']){// true false
+                                if($temp[$j]['PricePerDay']>$temp[$j+1]['PricePerDay']){
                                     $swamp=$temp[$j];
                                     $temp[$j]=$temp[$j+1];
                                     $temp[$j+1]=$swamp;
@@ -384,14 +384,14 @@
                             }
                         }
                         $arr=$temp;
-                    }else if($Price=="HIGH"){// true false
+                    }else if($Price=="HIGH"){
                         $temp=[];
                         while($s=mysqli_fetch_array($search)){
                             $temp[]=$s;
                         }
                         for($i=0;$i<count($temp)-1;$i++){
                             for($j=0;$j<count($temp)-$i-1;$j++){
-                                if($temp[$j]['PricePerDay']<$temp[$j+1]['PricePerDay']){// true false
+                                if($temp[$j]['PricePerDay']<$temp[$j+1]['PricePerDay']){
                                     $swamp=$temp[$j];
                                     $temp[$j]=$temp[$j+1];
                                     $temp[$j+1]=$swamp;
@@ -458,14 +458,14 @@
                         while($b=mysqli_fetch_array($brands)){
                             $found1=false;
                             for($i=0;$i<count($arrbrand);$i++){
-                                if($arrbrand[$i]==$b['VehicleBrand']){// true false
+                                if($arrbrand[$i]==$b['VehicleBrand']){
                                     $found1=true;
                                 }
                             }
-                            if(!$found1){// true false
+                            if(!$found1){
                                 $arrbrand[]=$b['VehicleBrand'];
                                 echo "<option value='".$b['VehicleBrand']."'";
-                                if($b['VehicleBrand']==$B){// true false
+                                if($b['VehicleBrand']==$B){
                                     echo "selected";
                                 }
                                 echo ">".$b['VehicleBrand']."</option>";
@@ -488,14 +488,14 @@
                         while($L=mysqli_fetch_array($locations)){
                             $found2=false;
                             for($i=0;$i<count($arrbracn);$i++){
-                                if($arrbracn[$i]==$L['Branch']){// true false
+                                if($arrbracn[$i]==$L['Branch']){
                                     $found2=true;
                                 }
                             }
-                            if(!$found2){// true false
+                            if(!$found2){
                                 $arrbracn[]=$L['Branch'];
                                 echo "<option value='".$L['Branch']."'";
-                                if($location==$L['Branch']){// true false
+                                if($location==$L['Branch']){
                                     echo "selected";
                                 }
                                 echo ">".$L['Branch']."</option>";
@@ -508,7 +508,7 @@
             </div>
             <div class="Css3"><?php 
                 echo "<table>";
-                if(count($arr)!=0){// true false
+                if(count($arr)!=0){
                     foreach ($arr as $c){
                         echo "<tr><td><img src='Pictures/".$c['Image']."'> 
                         <div class='Css7'><div class='Css9'><div><h2>".$c['VehicleBrand']."</h2></div><img src='Pictures/".$c['VehicleLogo']."'></div>
@@ -519,8 +519,8 @@
                         <div>";
                         $Booked=mysqli_query($con,"SELECT * FROM Booking");
                         while($InUse=mysqli_fetch_array($Booked)){
-                            if($c['Id']==$InUse['VehicleId']){// true false
-                                if($InUse['Status']=='active'){// true false
+                            if($c['Id']==$InUse['VehicleId']){
+                                if($InUse['Status']=='active'){
                                     echo "<h4>In Use</h4>";
                                 }
                                 break;
@@ -528,7 +528,7 @@
                         }
                         echo"</div></div>
                         <div class='Css10'><div><p>Miles ".$c['Miles']."</p></div><div><p>";
-                        if($c['DriveStyle']==0){// ture false
+                        if($c['DriveStyle']==0){
                             echo "OffRoad";
                         }else{
                             echo "OnRoad";
@@ -537,7 +537,7 @@
                         <div><p>HP ".$c['HorsePower']."</p></div></div></div>
                         <div class='Css8'><h3>$".$c['PricePerDay']."/day</h3>";
                         $CarId2=$c['Id'];
-                        if(isset($_SESSION['UserId'])){// ture false
+                        if(isset($_SESSION['UserId'])){
                             echo"<form method='post'>
                                 <input type='hidden' name='Id' value='".$c['Id']."'>
                                 <button type='submit' name='select'>select</button>

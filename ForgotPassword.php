@@ -1,14 +1,14 @@
 <?php 
     include "Nav.php";
     $message="";
-    if(isset($_POST['Submit'])){// true false
-        if(trim($_POST['FullName']) != ""){// true false
+    if(isset($_POST['Submit'])){
+        if(trim($_POST['FullName']) != ""){
             $FullName=$_POST['FullName'];
             $gmail=$_POST['Gmail'];
             $Fname="";
             $Lname="";
             for($i=0;$i<strlen($FullName);$i++){
-                if($FullName[$i]==" "){// true false
+                if($FullName[$i]==" "){
                     for($j=$i+1;$j<strlen($FullName);$j++){
                         $Lname.=$FullName[$j];
                     }
@@ -21,14 +21,14 @@
             $users=mysqli_query($con,"SELECT * FROM Users");
             $found=false;
             while($u = mysqli_fetch_array($users)){
-                if(strtolower(trim($Fname))==strtolower($u['FirstName']) && strtolower(trim($Lname))==strtolower($u['LastName'])){// false true
+                if(strtolower(trim($Fname))==strtolower($u['FirstName']) && strtolower(trim($Lname))==strtolower($u['LastName'])){
                     $found=true;
-                    if($gmail==$u['Gmail']){// false true
+                    if($gmail==$u['Gmail']){
                         $RandPass="";
                         $str1="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         for($i=0;$i<6;$i++){
                             $x=rand(0,1);
-                            if($x==0){// true false
+                            if($x==0){
                                 $z=rand(0,51);
                                 $RandPass.=$str1[$z];
                             }else{
@@ -41,7 +41,7 @@
                         $subject="Reset Password.";
                         $header="From: fadibasila31@gmail.com";
                         $result=mail($to,$subject,$message2,$header);
-                        if($result){// ture false
+                        if($result){
                             $message="<h3>You can receive the Random Password in your Gmail.</h3>";
                             $_SESSION['RandomPassMessage']=$message;
                             $_SESSION['SaveGmail']=$gmail;
@@ -58,7 +58,7 @@
                     break;
                 }
             }
-            if(!$found){// true false
+            if(!$found){
                 $message="<h2>User Name not found.</h2>";
             }
         }else{

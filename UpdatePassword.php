@@ -1,34 +1,34 @@
 <?php 
     include "Nav.php";
-    if(isset($_SESSION['SaveGmail'])){// true false
+    if(isset($_SESSION['SaveGmail'])){
         $message="";
         if(isset($_POST['Submit'])){
             $rand=$_POST['Random'];
             $pass1=$_POST['Pass1'];
             $pass2=$_POST['Pass2'];
             $gmail=$_SESSION['SaveGmail'];
-            if(trim($rand)!=""){// true false       
+            if(trim($rand)!=""){      
                 while($p= mysqli_fetch_array(mysqli_query($con,"SELECT * FROM Users"))){
                     if($p['Gmail']==$gmail){
-                        if($rand==$p['Password']){// false true
-                            if(trim($pass1)!=""){// false true
+                        if($rand==$p['Password']){
+                            if(trim($pass1)!=""){
                                 $count=0;
                                 $caps=false;
                                 $number=false;
                                 for($i=0;$i<strlen($pass1);$i++){
-                                    if($pass1[$i]>='A' && $pass1[$i]<='Z'){// true false
+                                    if($pass1[$i]>='A' && $pass1[$i]<='Z'){
                                         $caps=true;
-                                    }else if($pass1[$i]>='0' && $pass1[$i]<='9'){// true false
+                                    }else if($pass1[$i]>='0' && $pass1[$i]<='9'){
                                         $number=true;
                                     }
                                     $count++;
                                 }
-                                if($count<6 || !$caps || !$number){ // true false
+                                if($count<6 || !$caps || !$number){ 
                                     $message="<h2>Password must be at least 6 characters and include a capital letter and a number.</h2>";
                                 }else{
-                                    if($pass1==$pass2){// false true
-                                        if($pass1!=$p['Password1'] && $pass1!=$p['Password2'] && $pass1!=$p['Password3']){// true false
-                                            if($p['StartTimeExpired'] < $p['EndTimeExpired']){// true false
+                                    if($pass1==$pass2){
+                                        if($pass1!=$p['Password1'] && $pass1!=$p['Password2'] && $pass1!=$p['Password3']){
+                                            if($p['StartTimeExpired'] < $p['EndTimeExpired']){
                                                 mysqli_query($con,"UPDATE Users SET Password3=Password2,Password2=Password1,Password1='$pass1',Password='$pass1',Blocked=0,FailedTimes=0 WHERE Gmail='$gmail'");
                                                 unset($_SESSION['SaveGmail']);
                                                 header("Location: UpdatePassword.php");
@@ -120,7 +120,7 @@
             <form method="post">
                 <h1>Write your New password here</h1>
                 <?php 
-                    if(isset($_SESSION['RandomPassMessage'])){//true false
+                    if(isset($_SESSION['RandomPassMessage'])){
                         echo $_SESSION['RandomPassMessage'];
                         unset($_SESSION['RandomPassMessage']);
                     }else{

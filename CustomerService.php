@@ -3,31 +3,29 @@
     $con=OpenCon();
     
     $Searched=false;
-    $message="";
     $Fname="";        
     $Lname="";
     $Status="";
-    $message11="";
     $arr=[];
     $Role="Worker";
-    if(isset($_SESSION['Role'])){// true false
+    if(isset($_SESSION['Role'])){
         $Role=$_SESSION['Role'];
     
-    if(isset($_POST['Search'])){// true false
+    if(isset($_POST['Search'])){
 
-        if(isset($_POST['Status'])){// true false
-            if($_POST['Status']=="ON"){// true false
+        if(isset($_POST['Status'])){
+            if($_POST['Status']=="ON"){
                 $Status=1;
-            }else if($_POST['Status']=="OFF"){// true false
+            }else if($_POST['Status']=="OFF"){
                 $Status=0;
             }
         }
 
-        if(isset($_POST['FirstName'])){// true false
+        if(isset($_POST['FirstName'])){
             $Fname=trim($_POST['FirstName']);
         }   
 
-        if(isset($_POST['LastName'])){// true false
+        if(isset($_POST['LastName'])){
             $Lname=$_POST['LastName'];
         }
 
@@ -36,16 +34,16 @@
         while($c=mysqli_fetch_array($Customers)){
             $Referense=mysqli_query($con,"SELECT * From Referense WHERE HandledBy='$Role'");
             while($R=mysqli_fetch_array($Referense)){
-                if((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))){// true false
-                    if(isset($Status) && $Status!=""){// true false 
-                        if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status']==$Status && $c['Id']==$R['CustomerId']){// true false
+                if((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))){
+                    if(isset($Status) && $Status!=""){ 
+                        if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status']==$Status && $c['Id']==$R['CustomerId']){
                             $arr2[]=$R;
                         }
-                    }else if(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))) && $c['Id']==$R['CustomerId']){// true false
+                    }else if(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))) && $c['Id']==$R['CustomerId']){
                         $arr2[]=$R;                        
                     }
-                }else if($Status!="" && $Fname=="" && $Lname==""){// true false
-                    if($R['Status']==$Status){// true false
+                }else if($Status!="" && $Fname=="" && $Lname==""){
+                    if($R['Status']==$Status){
                         $arr2[]=$R;                            
                     }
                 }
@@ -55,38 +53,38 @@
         for($i=0;$i<count($arr2);$i++){
             $found=false;
             for($j=0;$j<count($arr);$j++){
-                if($arr[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){// true false
+                if($arr[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){
                     $found=true;
                 }
             }
             
-            if(!$found){// true false
+            if(!$found){
                 $arr[]=$arr2[$i];
             }
         }
         $Searched=true;
-    }else if(isset($_POST['Recent'])){// true false
-        if(isset($_POST['Status'])){// true false
-            if($_POST['Status']=="ON"){// true false
+    }else if(isset($_POST['Recent'])){
+        if(isset($_POST['Status'])){
+            if($_POST['Status']=="ON"){
                 $Status=1;
-            }else if($_POST['Status']=="OFF"){// true false
+            }else if($_POST['Status']=="OFF"){
                 $Status=0;
             }
         }                    
         
-        if(isset($_POST['FirstName'])){// true false
+        if(isset($_POST['FirstName'])){
             $Fname=trim($_POST['FirstName']);
         }   
 
-        if(isset($_POST['LastName'])){// true false
+        if(isset($_POST['LastName'])){
             $Lname=trim($_POST['LastName']);
         }
         
         $arr=[];
         $arr2=[];
         $arr3=[];
-        if($Fname != "" || $Lname != "" || (isset($Status) && $Status!="")){// true false
-            if(isset($Status) && $Status!=""){// true false
+        if($Fname != "" || $Lname != "" || (isset($Status) && $Status!="")){
+            if(isset($Status) && $Status!=""){
                 $Referense=mysqli_query($con,"SELECT * From Referense WHERE HandledBy='$Role' AND Status='$Status'");
             }else{
                 $Referense=mysqli_query($con,"SELECT * From Referense WHERE HandledBy='$Role'");
@@ -95,16 +93,16 @@
             while($R=mysqli_fetch_array($Referense)){
                 $Customers=mysqli_query($con,"SELECT * FROM Users");
                 while($c=mysqli_fetch_array($Customers)){
-                    if(strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)){// true false
-                        if($Status!=""){// true false
-                            if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status'] ==$Status && $c['Id']==$R['CustomerId']){// true faslse
+                    if(strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)){
+                        if($Status!=""){
+                            if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status'] ==$Status && $c['Id']==$R['CustomerId']){
                                 $arr2[]=$R;
                             }
-                        }elseif(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))) && $c['Id']==$R['CustomerId']){// true false
+                        }elseif(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname))) && $c['Id']==$R['CustomerId']){
                             $arr2[]=$R;
                         }
-                    }else if($Status!=""  && $Fname=="" && $Lname==""){// true false
-                        if($R['Status']==$Status){// true false
+                    }else if($Status!=""  && $Fname=="" && $Lname==""){
+                        if($R['Status']==$Status){
                             $arr2[]=$R;
                         }
                     }
@@ -120,12 +118,12 @@
         for($i=0;$i<count($arr2);$i++){
             $found=false;
             for($j=0;$j<count($arr3);$j++){
-                if($arr3[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){// true false
+                if($arr3[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){
                     $found=true;
                 }
             }
             
-            if(!$found){// true false
+            if(!$found){
                 $arr3[]=$arr2[$i];
             }
         }
@@ -138,27 +136,27 @@
             $_SESSION['Message']="<h2>No messages found.</h2>";
         }
         $Searched=true;
-    }else if(isset($_POST['Close'])){// true false
+    }else if(isset($_POST['Close'])){
         $RId=$_POST['ReferenceId'];
         mysqli_query($con,"UPDATE Referense SET Status=0 WHERE ReferenceId=$RId");
-    }else if(isset($_POST['Escalate'])){// true false
+    }else if(isset($_POST['Escalate'])){
         $RId=$_POST['ReferenceId'];
         mysqli_query($con,"UPDATE Referense SET HandledBy='Manager' WHERE ReferenceId=$RId");
-    }else if(isset($_POST['AllMessages'])){// for Manager only // true false
+    }else if(isset($_POST['AllMessages'])){
 
-        if(isset($_POST['Status'])){// true false
-            if($_POST['Status']=="ON"){// true false
+        if(isset($_POST['Status'])){
+            if($_POST['Status']=="ON"){
                 $Status=1;
-            }else if($_POST['Status']=="OFF"){// true false
+            }else if($_POST['Status']=="OFF"){
                 $Status=0;
             }
         }
         
-        if(isset($_POST['FirstName']) && trim($_POST['FirstName'])!=""){// true false
+        if(isset($_POST['FirstName']) && trim($_POST['FirstName'])!=""){
             $Fname=$_POST['FirstName'];
         }   
 
-        if(isset($_POST['LastName']) && trim($_POST['LastName'])!=""){// true false
+        if(isset($_POST['LastName']) && trim($_POST['LastName'])!=""){
             $Lname=$_POST['LastName'];
         }
         
@@ -167,17 +165,17 @@
         while($c=mysqli_fetch_array($Customers)){
             $Referense=mysqli_query($con,"SELECT * From Referense");
             while($R=mysqli_fetch_array($Referense)){
-                if(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname)))){// true false
+                if(((strtolower($c['FirstName'])==strtolower($Fname)) || (strtolower($c['LastName'])==strtolower($Lname)))){
                     
-                    if($Status!=""){// true false
-                        if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status']==$Status && $c['Id']==$R['CustomerId']){// true false
+                    if($Status!=""){
+                        if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $R['Status']==$Status && $c['Id']==$R['CustomerId']){
                             $arr2[]=$R;
                         }
-                    }else if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $c['Id']==$R['CustomerId']){// true false
+                    }else if((strtolower($c['FirstName'])==strtolower($Fname) || strtolower($c['LastName'])==strtolower($Lname)) && $c['Id']==$R['CustomerId']){
                         $arr2[]=$R;                            
                     }
-                }else if($Status!=""  && $Fname=="" && $Lname==""){// true false
-                    if($R['Status']==$Status){// true false
+                }else if($Status!=""  && $Fname=="" && $Lname==""){
+                    if($R['Status']==$Status){
                         $arr2[]=$R;                            
                     }
                 }
@@ -187,16 +185,15 @@
         for($i=0;$i<count($arr2);$i++){
             $found=false;
             for($j=0;$j<count($arr);$j++){
-                if($arr[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){// true false
+                if($arr[$j]['ReferenceId']==$arr2[$i]['ReferenceId']){
                     $found=true;
                 }
             }
-            if(!$found){// true false
+            if(!$found){
                 $arr[]=$arr2[$i];
             }
         }
-        $message11=count($arr)." ".$Status." ".$Fname." ".$Lname;
-        if(count($arr)==0 && $Status=="" && $Fname=="" && $Lname==""){// true false
+        if(count($arr)==0 && $Status=="" && $Fname=="" && $Lname==""){
             $Referense=mysqli_query($con,"SELECT * FROM Referense");
             while($R=mysqli_fetch_array($Referense)){
                 $arr[]=$R;
@@ -205,9 +202,9 @@
             $_SESSION['Message']="<h2>No messages found.</h2>";
         }
         $Searched=true;
-    }else if(isset($_POST['SendReply'])){// true false
+    }else if(isset($_POST['SendReply'])){
         $text=$_POST['MessageReplay'];
-        if(trim($text)!=""){// true false
+        if(trim($text)!=""){
             $ReferenseId=$_POST['ReferenceId'];
             $email="";
             $RId="";
@@ -215,7 +212,7 @@
             $fullConv="";
             $Referenses=mysqli_query($con,"SELECT * FROM Referense");
             while($R=mysqli_fetch_array($Referenses)){
-                if($R['ReferenceId']==$ReferenseId){// true false
+                if($R['ReferenceId']==$ReferenseId){
                     $CId=$R['CustomerId'];
                     $RId=$R['ReferenseId'];
                     $fullConv=$R['Conversation'];
@@ -223,10 +220,10 @@
                 }
             }
         
-            if($CId!=""){// true false
+            if($CId!=""){
                 $Customer=mysqli_query($con,"SELECT * FROM Users");
                 while($c=mysqli_fetch_array($Customer)){
-                    if($c['Id']==$CId){// true false
+                    if($c['Id']==$CId){
                         $email=$c['Gmail'];
                         break;
                     }
@@ -239,7 +236,7 @@
                 
                 $retval=mail($to,$subject,$message2,$header);
 
-                if($retval){// true false
+                if($retval){
                     mysqli_query($con,"UPDATE Referense SET Conversation='$message2' WHERE ReferenceId='$ReferenseId'");
                     $_SESSION['Message']="<h3>Message sent successfully.</h3>";
                     header("Location: CustomerService.php");
@@ -487,7 +484,7 @@
                 <a href="#CloseMasseges">Close Messages</a>
             </nav>
             <h1 id="Search">Search Messages</h1>
-            <?php if(isset($_SESSION['Message'])){echo $_SESSION['Message']; unset($_SESSION['Message']);}// true false ?>
+            <?php if(isset($_SESSION['Message'])){echo $_SESSION['Message']; unset($_SESSION['Message']);} ?>
             <form method="POST">
                 <div>
                     <label style="display: block;">Customer First Name:</label>
@@ -512,7 +509,7 @@
                 </div>
                 <button id="RecentSearchViewAll" type="submit" name="Recent">Recent Messages</button>
                 <button id="RecentSearchViewAll" type="submit" name="Search">Search</button>
-                <?php if(isset($Role)){// for Manager only true false
+                <?php if(isset($Role)){
                     if($Role=="Manager"){
                         echo "<button id='RecentSearchViewAll' type='submit' name='AllMessages'>View All Messages</button>";
                     }
@@ -521,7 +518,6 @@
             </form>
             <?php
                 if($Searched){
-                    echo $message11;
             ?>
             <table>
                 <tr>
@@ -531,7 +527,7 @@
                     <th>Reply</th>
                     <th <?php if(isset($_SESSION['Role']) && $_SESSION['Role']=="Manager"){?>id="thRight" <?php }?>>Close</th>
                     <?php 
-                        if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){// true false
+                        if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){
                             echo "<th id='thRight'>Escalate to Manager</th>";
                         } 
                     ?>
@@ -542,7 +538,7 @@
                             <td id='text'>";
                             $Customers=mysqli_query($con,"SELECT * FROM Users");
                             while($c=mysqli_fetch_array($Customers)){
-                                if($arr[$i]['CustomerId']==$c['Id']){// true false
+                                if($arr[$i]['CustomerId']==$c['Id']){
                                     echo $c['FirstName']." ".$c['LastName'];
                                     break;
                                 }
@@ -551,20 +547,20 @@
                             <td id='text'>".$arr[$i]['Subject']."</td>
                             <td id='Conversation'><textarea>".$arr[$i]['Conversation']."</textarea></td>
                             <td id='Textarea'>";
-                            if($arr[$i]['Status']==1){// true false
+                            if($arr[$i]['Status']==1){
                                 echo "<form method='POST'><div class='Css2'><textarea name='MessageReplay'></textarea><input type='hidden' name='ReferenceId' value='".$arr[$i]['ReferenceId']."'><button type='submit' name='SendReply'>Send Reply</button></div></form>";
                             }else{
                                 echo "<div class='CssClosed'>Closed</div>";
                             }
                             echo "</td><td id='Close'>";
-                            if($arr[$i]['Status']==1){// true false
+                            if($arr[$i]['Status']==1){
                                 echo "<form method='POST'><input type='hidden' name='ReferenceId' value='".$arr[$i]['ReferenceId']."'><button type='submit' name='Close'>Close</button></form>";
                             }else{
                                 echo "<div class='CssClosed'>Closed</div>";
                             }
                             echo "</td>";
-                            if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){// true false
-                                if($arr[$i]['Status']==1){// true false
+                            if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){
+                                if($arr[$i]['Status']==1){
                                     echo "<td id='Escalate'>
                                         <form method='POST'>
                                             <input type='hidden' name='ReferenceId' value='".$arr[$i]['ReferenceId']."'>
@@ -590,7 +586,7 @@
                     <th>Reply</th>
                     <th <?php if(isset($_SESSION['Role']) && $_SESSION['Role']=="Manager"){?>id="thRight" <?php }?>>Close</th>
                     <?php 
-                        if(isset($Role)){// true false
+                        if(isset($Role)){
                             if($Role=="Worker"){
                                 echo "<th id='thRight'>Escalate to Manager</th>";
                             }
@@ -600,11 +596,11 @@
                     <?php
                         $OpenReferense=mysqli_query($con,"SELECT * FROM Referense WHERE HandledBy='$Role' AND Status=1");
                         while($OR=mysqli_fetch_array($OpenReferense)){
-                            if($OR['Status']==1){// true false
+                            if($OR['Status']==1){
                                 echo "<tr><td>";
                                     $Customers2=mysqli_query($con,"SELECT * FROM Users");
                                     while($c2=mysqli_fetch_array($Customers2)){
-                                        if($c2['Id']==$OR['CustomerId']){// true false
+                                        if($c2['Id']==$OR['CustomerId']){
                                             echo $c2['FirstName']." ".$c2['LastName'];
                                             break;
                                         }
@@ -614,7 +610,7 @@
                                 <td id='Conversation'><div class='Css4'><textarea>".$OR['Conversation']."</textarea></div></td>
                                 <td id='Textarea'><div class='Css4'><form method='POST'><div class='Css2'><textarea name='MessageReplay'></textarea><input type='hidden' name='ReferenceId' value='".$OR['ReferenceId']."'><button id='SendReply' type='submit' name='SendReply'>Send Reply</button></div></form></td>
                                 <td id='Close'><form method='POST'><input type='hidden' name='ReferenceId' value='".$OR['ReferenceId']."'><button type='submit' name='Close'>Close</button></form></div></td>";
-                                if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){// true false
+                                if(isset($_SESSION['Role']) && $_SESSION['Role']=="Worker"){
                                     echo "<td id='Escalate'><form method='POST'><input type='hidden' name='ReferenceId' value='".$OR['ReferenceId']."'><button type='submit' name='Escalate'>Escalate</button></form></td>";
                                 }echo"
                                 </tr>";
@@ -633,11 +629,11 @@
                 <?php
                     $CloseReferense=mysqli_query($con,"SELECT * FROM Referense WHERE Handledby='$Role' AND Status=0");
                     while($CR=mysqli_fetch_array($CloseReferense)){
-                        if($CR['Status']==0){// true false
+                        if($CR['Status']==0){
                             echo "<tr><td>";
                                 $Customers3=mysqli_query($con,"SELECT * FROM Users");
                                 while($c3=mysqli_fetch_array($Customers3)){
-                                    if($c3['Id']==$CR['CustomerId']){// true false
+                                    if($c3['Id']==$CR['CustomerId']){
                                         echo $c3['FirstName']." ".$c3['LastName'];
                                         break;
                                     }
