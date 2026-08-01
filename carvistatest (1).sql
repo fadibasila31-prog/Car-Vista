@@ -1,0 +1,201 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Aug 01, 2026 at 12:47 PM
+-- Server version: 8.4.7
+-- PHP Version: 8.3.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `carvistatest`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+DROP TABLE IF EXISTS `booking`;
+CREATE TABLE IF NOT EXISTS `booking` (
+  `BookingId` int NOT NULL AUTO_INCREMENT,
+  `CustomerId` int NOT NULL,
+  `VehicleId` int NOT NULL,
+  `StartDate` datetime NOT NULL,
+  `EndDate` datetime NOT NULL,
+  `Status` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `UpdatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `TotalPrice` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`BookingId`),
+  KEY `CustomerId` (`CustomerId`),
+  KEY `CarId` (`VehicleId`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`BookingId`, `CustomerId`, `VehicleId`, `StartDate`, `EndDate`, `Status`, `CreatedAt`, `UpdatedAt`, `TotalPrice`) VALUES
+(1, 1, 1, '2026-05-01 00:00:00', '2026-05-08 00:00:00', 'Finished', '2026-04-20 08:10:47', '2026-04-20 08:10:47', 960.00),
+(2, 1, 2, '2026-05-01 00:00:00', '2026-05-08 00:00:00', 'Canceled', '2026-04-20 08:11:09', '2026-04-20 08:11:09', 55.00),
+(3, 1, 3, '2026-04-02 00:00:00', '2026-04-09 00:00:00', 'Finished', '2026-04-24 10:31:31', '2026-04-24 10:31:31', 123.00),
+(4, 1, 4, '2026-05-06 00:00:00', '2026-05-19 00:00:00', 'confirmed', '2026-05-01 06:24:17', '2026-05-01 06:24:17', 1.00),
+(5, 1, 4, '2026-05-06 00:00:00', '2026-05-19 00:00:00', 'confirmed', '2026-05-01 07:26:52', '2026-05-01 07:26:52', 1.00),
+(6, 1, 1, '2026-05-07 00:00:00', '2026-05-13 00:00:00', 'confirmed', '2026-05-01 07:28:46', '2026-05-01 07:28:46', 1.00),
+(7, 1, 1, '2026-05-07 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:43:46', '2026-05-01 07:43:46', 1.00),
+(8, 1, 1, '2026-05-07 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:52:56', '2026-05-01 07:52:56', 1.00),
+(9, 1, 1, '2026-05-02 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:54:38', '2026-05-01 07:54:38', 1.00),
+(10, 1, 1, '2026-05-02 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:54:40', '2026-05-01 07:54:40', 1.00),
+(11, 1, 1, '2026-05-02 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:54:42', '2026-05-01 07:54:42', 1.00),
+(12, 1, 1, '2026-05-02 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 07:54:44', '2026-05-01 07:54:44', 1.00),
+(13, 1, 1, '2026-05-07 00:00:00', '2026-05-14 00:00:00', 'confirmed', '2026-05-01 07:56:53', '2026-05-01 07:56:53', 1.00),
+(14, 1, 1, '2026-05-07 00:00:00', '2026-05-12 00:00:00', 'confirmed', '2026-05-01 08:05:58', '2026-05-01 08:05:58', 1.00),
+(15, 1, 1, '2026-05-08 00:00:00', '2026-05-13 00:00:00', 'confirmed', '2026-05-01 08:07:55', '2026-05-01 08:07:55', 1.00),
+(16, 1, 1, '2026-05-14 00:00:00', '2026-05-21 00:00:00', 'confirmed', '2026-05-07 09:45:14', '2026-05-07 09:45:14', 1.00),
+(17, 1, 1, '2026-06-09 21:00:00', '2026-06-10 21:00:00', 'Canceled', '2026-06-08 17:40:32', '2026-06-08 17:40:32', 1.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `referense`
+--
+
+DROP TABLE IF EXISTS `referense`;
+CREATE TABLE IF NOT EXISTS `referense` (
+  `ReferenceId` int NOT NULL AUTO_INCREMENT,
+  `CustomerId` int NOT NULL,
+  `Subject` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Conversation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Status` tinyint(1) NOT NULL DEFAULT '1',
+  `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastUpdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `HandledBy` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`ReferenceId`),
+  KEY `CustomerId` (`CustomerId`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `referense`
+--
+
+INSERT INTO `referense` (`ReferenceId`, `CustomerId`, `Subject`, `Conversation`, `Status`, `Created`, `LastUpdated`, `HandledBy`) VALUES
+(1, 3, 'test', 'test1\n[29/07/2026 20:40] fadi basila: ddd\n[29/07/2026 20:40] fadi basila: ddd', 0, '2026-05-01 16:18:25', '2026-05-01 16:18:25', 'Manager'),
+(2, 2, 'test 2', 'hi\n[13/07/2026 17:57] Bahaa Bader: test\n[13/07/2026 17:57] Bahaa Bader: test', 0, '2026-05-30 12:47:39', '2026-05-30 12:47:39', 'Worker'),
+(3, 3, 'test3', '$$$hi\n[01/06/2026 15:02] fadi basila: asdad\n[01/06/2026 15:02] fadi basila: asdadad\n[01/06/2026 15:17] fadi basila: sad\n[01/06/2026 15:17] fadi basila: sad\n[01/06/2026 15:24] fadi basila: fdf\n[01/06/2026 18:32] fadi basila: ada', 0, '2026-05-30 23:40:51', '2026-05-30 23:40:51', 'Manager'),
+(4, 3, 'tes4', 'l\n[05-06-2026 11:35]fadi2 basila2:  dadsa\n[05-06-2026 11:35]fadi2 basila2: adad', 0, '2026-06-05 09:05:22', '2026-06-05 11:35:57', 'Worker'),
+(5, 3, 'Css', 'CSS', 0, '2026-07-29 20:37:36', '2026-07-29 20:37:36', 'Worker');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `LastName` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Gmail` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `IdNumber` varchar(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password1` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password2` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Password3` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `HaveDriverLicense` tinyint(1) NOT NULL DEFAULT '0',
+  `Blocked` tinyint(1) NOT NULL DEFAULT '0',
+  `FailedTimes` int NOT NULL DEFAULT '0',
+  `BirthDay` date NOT NULL,
+  `PhoneNumber` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Role` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `StartTimeExpired` datetime DEFAULT NULL,
+  `EndTimeExpired` datetime DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`Id`, `FirstName`, `LastName`, `Gmail`, `IdNumber`, `Password`, `Password1`, `Password2`, `Password3`, `HaveDriverLicense`, `Blocked`, `FailedTimes`, `BirthDay`, `PhoneNumber`, `Role`, `StartTimeExpired`, `EndTimeExpired`) VALUES
+(1, 'fadi', 'basila', 'fadibasila31@gmail.com', '987654321', 'n8DcUw', '123', 'w', 'Fadi12', 1, 0, 0, '2005-08-31', '0524785968', 'Manager', '2026-08-01 11:05:37', '2026-08-01 11:02:02'),
+(2, 'Bahaa', 'Bader', 'fadibasila31@gmail.com', '123456789', 'n8DcUw', '123', '123', NULL, 0, 0, 0, '2000-01-01', '0501478569', 'Worker', '2026-08-01 11:05:37', '2026-08-01 11:02:02'),
+(3, 'fadi2', 'basila2', 'fadibasila31@gmail.com', '123456789', 'n8DcUw', '123', 'Fadi111', 'Fadi12', 1, 0, 0, '2000-01-01', '2323232', 'Customer', '2026-08-01 11:05:37', '2026-08-01 11:02:02'),
+(4, 'test', 'test', 'test@gmail.com', '', '123123A', '123', NULL, NULL, 0, 0, 0, '2026-07-10', NULL, '', '2026-08-01 11:05:37', NULL),
+(6, '‪fadi', 'basila‬‏', 'asa@gmail.com', '', 'Fadi123', '123', NULL, NULL, 1, 0, 0, '0000-00-00', '0505773735', '', '2026-08-01 11:05:37', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle`
+--
+
+DROP TABLE IF EXISTS `vehicle`;
+CREATE TABLE IF NOT EXISTS `vehicle` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `VehicleType` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `NumberPlate` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `VehicleBrand` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Image` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `PricePerDay` decimal(10,2) NOT NULL,
+  `GearBox` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Seats` int NOT NULL,
+  `Doors` int NOT NULL,
+  `DriveStyle` tinyint(1) NOT NULL DEFAULT '0',
+  `Miles` decimal(10,3) NOT NULL,
+  `Color` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Convertible` tinyint(1) NOT NULL DEFAULT '0',
+  `EnergyType` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `HorsePower` int NOT NULL,
+  `VehicleName` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `MaxSpeed` int NOT NULL,
+  `DriveType` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TankSize` int NOT NULL,
+  `AirConditioner` tinyint(1) NOT NULL DEFAULT '0',
+  `VehicleInside1` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `VehicleInside2` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `VehicleInside3` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `VehicleInside4` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Branch` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `VehicleLogo` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vehicle`
+--
+
+INSERT INTO `vehicle` (`Id`, `VehicleType`, `NumberPlate`, `VehicleBrand`, `Image`, `PricePerDay`, `GearBox`, `Seats`, `Doors`, `DriveStyle`, `Miles`, `Color`, `Convertible`, `EnergyType`, `HorsePower`, `VehicleName`, `MaxSpeed`, `DriveType`, `TankSize`, `AirConditioner`, `VehicleInside1`, `VehicleInside2`, `VehicleInside3`, `VehicleInside4`, `Branch`, `VehicleLogo`) VALUES
+(1, 'Car', 'asa', 'asa', 'Car1', 50.00, 'Automatic', 5, 4, 0, 12000.000, 'asa', 1, 'Electric', 150, 'asa', 0, 'FWD', 100, 1, '', '', '', '', 'Haifa', ''),
+(2, 'Van', 'XY456YZ', 'Nissan', 'Car2', 70.00, 'Manual', 5, 5, 1, 30000.500, 'Blue', 0, 'Hybrid', 200, 'Car2', 0, 'RWD', 101, 0, '', '', '', '', 'Tel-Aviv', ''),
+(3, 'Car', 'GH789IJ', 'BMW', 'Car3', 120.00, 'Automatic', 2, 2, 0, 5000.750, 'Black', 1, 'Hybrid', 250, 'Car3', 120, 'AWD', 102, 1, 'Car3.1', 'Car3.2', 'Car3.3', 'Car3.4', 'Rama', '1785328643_Screenshot 2026-03-27 143905.png'),
+(4, 'Car', 'KL012MN', 'Ford', 'Car4', 90.00, 'Manual', 3, 4, 0, 15000.000, 'White', 1, 'Gas', 180, 'Car4', 0, '4WD', 103, 1, '', '', '', '', 'Rama', ''),
+(5, 'Van', 'OP345QR', 'Mercedes', 'Car5', 200.00, 'Automatic', 2, 2, 1, 40000.250, 'Grey', 0, 'Electric', 400, 'Car5', 0, '4WD', 104, 0, '', '', '', '', 'Rama', ''),
+(20, 'Car', 'www', 'ww', '1780914001_Car2.png', 222.00, 'Automatic', 222, 222, 0, 22.000, 'ww', 1, 'Hybrid', 22, 'www', 22, 'FWD', 22, 0, '1780914001_Car3.1.png', '1780914001_Car3.2.png', '1780914001_Car3.3.png', '1780914001_Car3.4.png', 'haifa', '1780914001_ww');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `n1` FOREIGN KEY (`Id`) REFERENCES `booking` (`BookingId`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
