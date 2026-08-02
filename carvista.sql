@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 01, 2026 at 11:21 PM
+-- Generation Time: Aug 02, 2026 at 09:37 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -195,6 +195,23 @@ INSERT INTO `vehicle` (`Id`, `VehicleType`, `NumberPlate`, `VehicleBrand`, `Imag
 (18, 'Van', '100-01-018', 'Audi', 'Van8.png', 500.00, 'Automatic', 8, 3, 1, 20000.000, 'Black', 0, 'Gasoline', 350, 'Land Audi', 280, 'AWD', 90, 1, 'Van8.1.png', 'Van8.2.png', 'Van8.3.png', 'Van8.4.png', 'Tel Aviv', 'Audi.png'),
 (19, 'Van', '100-01-019', 'BMW', 'Van9.png', 210.00, 'Manual', 17, 3, 0, 80000.000, 'Black', 0, 'Diesel', 120, 'BMW', 170, 'FWD', 100, 1, 'Van9.1.png', 'Van9.2.png', 'Van9.3.png', 'Van9.4.png', 'Nazareth', 'BMW.png'),
 (20, 'Van', '100-01-020', 'Ford', 'Van10.png', 700.00, 'Automatic', 10, 2, 0, 10000.000, 'White', 1, 'Gasoline', 450, 'Ford', 320, 'RWD', 67, 1, 'Van10.1.png', 'Van10.2.png', 'Van10.3.png', 'Van10.4.png', 'Jerusalem', 'Ford.png');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `FK_Booking_Users` FOREIGN KEY (`CustomerId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_Booking_Vehicles` FOREIGN KEY (`VehicleId`) REFERENCES `vehicle` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `referense`
+--
+ALTER TABLE `referense`
+  ADD CONSTRAINT `FK_Referense_Users` FOREIGN KEY (`CustomerId`) REFERENCES `users` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
