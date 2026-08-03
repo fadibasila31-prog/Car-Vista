@@ -160,7 +160,7 @@
                     <div class="Css3">
                         <label>
                             <input type="radio" name="Type" value="Car"> 
-                            <img src="Pictures/Car.webp" class="Car">
+                            <img src="Pictures/Car.png" class="Car">
                         </label>
                         <label>
                             <input type="radio" name="Type" value="Van" >
