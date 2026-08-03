@@ -765,7 +765,7 @@
                                 <label>Branch:</label>
                                 <input type="radio" name="Branch" value="Haifa" >Haifa
                                 <input type="radio" name="Branch" value="Tel-Aviv">Tel-Aviv
-                                <input type="radio" name="Branch" value="Rama">Rama
+                                <input type="radio" name="Branch" value="Rama">Jerusalem
                             </div>                                    
                         </div>
                         <div class="Css5">

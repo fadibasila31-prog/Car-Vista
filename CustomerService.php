@@ -232,7 +232,7 @@
                 $to=$email;
                 $subject = "Reply to your message";
                 $message2=$fullConv;
-                $header="From: minimarket@example.com\r\n";
+                $header="From: fadibasila31@gmail.com\r\n";
                 
                 $retval=mail($to,$subject,$message2,$header);
 

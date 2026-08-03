@@ -5,23 +5,35 @@
     $CustomerId=$_SESSION['UserId'];
     $gmail=$_SESSION['Gmail'];
     $branch=$_SESSION['Branch'];
-    if(isset($_SESSION['StartUse'])){// true false
+    $return2="";
+    $pickup2="";
+
+    if(isset($_SESSION['StartUse'])){
         $pickup=$_SESSION['StartUse'];
     }else{
         $pickup="";
     }
     
-    if(isset($_SESSION['StartUse'])){// true false
+    if(isset($_SESSION['EndUse'])){
         $return=$_SESSION['EndUse'];
     }else{
         $return="";
     }
+
     $message="";
     $TotalPrice=1;
     $HaveDriverLicense="";
 
-    if(isset($_POST['ChangeDates'])){// true false
-        if($return2 > $pickup2){// true false
+    if(isset($_POST['ChangeDates'])){
+        if(isset($_POST['pickup'])){
+            $pickup2=strtotime($_POST['pickup']);
+        }
+
+        if(isset($_POST['return'])){
+            $return2=strtotime($_POST['return']);
+        }
+
+        if($return2 > $pickup2){
             $_SESSION['StartUse']=$_POST['pickup'];
             $_SESSION['EndUse']=$_POST['return'];
         }else{
@@ -29,7 +41,7 @@
         }
     }
 
-    if(isset($_POST['Pay'])){// true false
+    if(isset($_POST['Pay'])){
         if(isset($_SESSION['HaveDriverLicense'])){  
             if($_SESSION['HaveDriverLicense']==0){
                 $message="You Cant Rent a Vehicle, You Dont Have Driver License.";
@@ -45,12 +57,12 @@
 
                 $Booking=mysqli_query($con,"SELECT * FROM Booking");
                 while($b=mysqli_fetch_array($Booking)){
-                    if($b['VehicleId']==$VehicleId){// true false
-                        if(($pickup2>=strtotime($b['StartDate']) && $pickup2<=strtotime($b['EndDate'])) || ($return2>=strtotime($b['StartDate']) && $return2<=strtotime($b['EndDate']))){// true false
+                    if($b['VehicleId']==$VehicleId){
+                        if(($pickup2>=strtotime($b['StartDate']) && $pickup2<=strtotime($b['EndDate'])) || ($return2>=strtotime($b['StartDate']) && $return2<=strtotime($b['EndDate']))){
                             $InUse=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
-                        }else if($pickup2<strtotime($b['StartDate']) && $return2>strtotime($b['EndDate'])){// true false
+                        }else if($pickup2<strtotime($b['StartDate']) && $return2>strtotime($b['EndDate'])){
                             $InUse=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
@@ -58,7 +70,7 @@
                     }
                 }
 
-                if(!$InUse){// true false
+                if(!$InUse){
                    $Users=mysqli_query($con,"SELECT * FROM Users");
                    while($u=mysqli_fetch_array($Users)){
                         if($u['Id']==$CustomerId){
@@ -70,7 +82,7 @@
                    }
 
                     for($i=0;$i<strlen($CN);$i++){
-                        if(!($CN[$i]>=0 && $CN[$i]<=9)){// true false
+                        if(!($CN[$i]>=0 && $CN[$i]<=9)){
                             $InvalCardNumber=true;
                             break;
                         }
@@ -78,9 +90,9 @@
                     
                     
 
-                    if($isSameNumber==false){// true false
+                    if($isSameNumber==false){
                         $message="Check You'r Number Again.";
-                    }else if($InvalCardNumber || strlen($CN)!=16){// true false
+                    }else if($InvalCardNumber || strlen($CN)!=16){
                         $message="Write your Card Number Again.";
                     }else{
                         $to=$gmail;
@@ -94,7 +106,7 @@
                         $diff=(($return2-$pickup2)/60/60/24)+1;
                         $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($v=mysqli_fetch_array($Vehicles)){
-                            if($v['Id']==$VehicleId){// true false
+                            if($v['Id']==$VehicleId){
                                 $TotalPrice=$diff * $v['PricePerDay'];
                                 break;
                             }
@@ -104,7 +116,7 @@
                         $return2="";
                     
                         for($i=0;$i<strlen($pickup);$i++){
-                            if($pickup[$i]=='T'){// true false
+                            if($pickup[$i]=='T'){
                                 $pickup2.=" ";
                             }else{
                                 $pickup2.=$pickup[$i];
@@ -112,7 +124,7 @@
                         }
 
                         for($i=0;$i<strlen($return);$i++){
-                            if($return[$i]=='T'){// true false
+                            if($return[$i]=='T'){
                                 $return2.=" ";
                             }else{
                                 $return2.=$return[$i];
@@ -121,10 +133,10 @@
 
                         $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($v=mysqli_fetch_array($Vehicles)){
-                            if($v['Id']==$VehicleId){// true false
+                            if($v['Id']==$VehicleId){
                                 $Customers=mysqli_query($con,"SELECT * FROM Users");
                                 while($c=mysqli_fetch_array($Customers)){
-                                    if($c['Id']==$CustomerId){// true false
+                                    if($c['Id']==$CustomerId){
                                         $message2 = "
                                         Thank you for choosing our Car Rental Service.
 
@@ -159,10 +171,9 @@
 
                         $header="From: fadibasila31@gmail.com";
                         $retval=mail($to,$subject,$message2,$header);
-                        if($retval){// true false
+                        if($retval){
                             mysqli_query($con,"INSERT INTO Booking (CustomerId,	VehicleId,StartDate,EndDate,Status,CreatedAt,UpdatedAt,TotalPrice) 
                             value ($CustomerId,$VehicleId,'$pickup','$return','Confirmed',NOW(),NOW(),$TotalPrice)");
-                            $_SESSION['PaymentSuccecfully']="Payment Succecfully";
                             header("Location: HomePage.php");
                             exit();
                         }else{
@@ -267,7 +278,7 @@
                     <?php 
                         $cars=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($car=mysqli_fetch_array($cars)){
-                            if($car['Id']==$VehicleId){// true false
+                            if($car['Id']==$VehicleId){
                                 echo "Vehicle Type: ".$car['VehicleType']."<br>
                                 Vehicle Brand: ".$car['VehicleBrand']."<br>
                                 Vehicle Name:".$car['VehicleName']."<br>
@@ -282,10 +293,10 @@
                                 Max Speed: ".$car['MaxSpeed']."<br>
                                 Drive Type: ".$car['DriveType']."<br>
                                 Tank Size: ".$car['TankSize']."<br>";
-                                if($car['AirConditioner']==1){// true false
+                                if($car['AirConditioner']==1){
                                     echo "A/C <br>";
                                 }
-                                if($car['Convertible']==1){// true false
+                                if($car['Convertible']==1){
                                     echo "Convertible <br>";
                                 }
                                 echo "Pickup from: ".$branch;
@@ -296,7 +307,7 @@
                 </div>
                 <div class="Css3">
                     <form method="post">
-                        <?php if($message!=""){echo "<h4>".$message."</h4>";}// true false ?>
+                        <?php if($message!=""){echo "<h4>".$message."</h4>";} ?>
                         <h1>Payment & Booking</h1><br>
                         <label><input type="tel" name="PhoneNumber" placeholder="Phone Number...." required></label>
                         <label><input type="text" name="CardNumber" placeholder="Card Number...." required></label>
@@ -320,13 +331,13 @@
                         $return2="";
                         $customers=mysqli_query($con,"SELECT * FROM Users");
                         while($c=mysqli_fetch_array($customers)){
-                            if($c['Gmail']==$gmail){// true false
+                            if($c['Gmail']==$gmail){
                                 echo "<h3>Full Name: ".$c['FirstName']." ".$c['LastName']."</h3><br>
                                 <h3>Gmail: ".$c['Gmail']."</h3><br>
                                 <h3>Birth Day: ".$c['BirthDay']."</h3><br>";
 
                                 for($i=0;$i<strlen($pickup);$i++){
-                                    if($pickup[$i]=='T'){// true false
+                                    if($pickup[$i]=='T'){
                                         $pickup2.=" ";
                                     }else{
                                         $pickup2.=$pickup[$i];
@@ -334,7 +345,7 @@
                                 }
 
                                 for($i=0;$i<strlen($return);$i++){
-                                    if($return[$i]=='T'){// true false
+                                    if($return[$i]=='T'){
                                         $return2.=" ";
                                     }else{
                                         $return2.=$return[$i];
@@ -347,7 +358,7 @@
                                 $diff=(($return2-$pickup2)/60/60/24)+1;
                                 $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
                                 while($v=mysqli_fetch_array($Vehicles)){
-                                    if($v['Id']==$VehicleId){// true false
+                                    if($v['Id']==$VehicleId){
                                         $TotalPrice=$diff * $v['PricePerDay'];
                                         echo "<h3 style='color:green; font-size:25px;'>$".$TotalPrice."</h3>";
                                         break;

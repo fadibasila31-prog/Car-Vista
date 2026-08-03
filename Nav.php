@@ -29,8 +29,8 @@
 
     $RandomPassTimer=mysqli_query($con,"SELECT * FROM Users");
     while($timer=mysqli_fetch_array($RandomPassTimer)){
-        if($timer['StartTimeExpired']!=null ){// true false
-            if($timer['StartTimeExpired'] < $timer['EndTimeExpired']){ // true false
+        if($timer['StartTimeExpired']!=null ){
+            if($timer['StartTimeExpired'] < $timer['EndTimeExpired']){
                 mysqli_query($con, "UPDATE Users SET StartTimeExpired = NOW()");
             }
         }
@@ -113,7 +113,7 @@
         <nav id="Nav">
             <a href="HomePage.php">Home Page</a>
             <?php 
-            if(isset($_SESSION['Role'])){// true false
+            if(isset($_SESSION['Role'])){
                 if($_SESSION['Role']=="Manager"){
                     echo "<a href='Profile.php'>My Profile</a>
                     <a href='UserDetails.php'>Users Details</a>
@@ -122,7 +122,7 @@
                     <a href='ManagerVehicleManagement.php'>Vehicle Managment</a>
                     <a href='VehicleRentalHistory.php'>Vehicle Rental History</a>
                     <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
-                }else if($_SESSION['Role']=="Worker"){// true false
+                }else if($_SESSION['Role']=="Worker"){
                     echo"<a href='Profile.php'>My Profile</a>
                     <a href='VehiclesManagement.php'>Vehicles Details</a>
                     <a href='CustomerService.php'>Customer Service</a>
