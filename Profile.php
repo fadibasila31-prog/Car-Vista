@@ -10,10 +10,6 @@
     }
 
     if(isset($_POST['Delete'])){
-        $_SESSION['Delete']=true;
-    }
-
-    if(isset($_SESSION['Delete'])){
         echo "<div class='Css1'>
             <form method='POST'>
                 <label>Are You Sure You Want To Delete Your Account?</label>
@@ -21,7 +17,6 @@
                 <button type='submit' name='CancelDelete'>No</button>
             </form>
         </div>";
-        unset($_SESSION['Delete']);
     }
 
     if(isset($_POST['AcceptDelete'])){
@@ -206,7 +201,7 @@
         }
 
 
-        if(isset($_POST['BirthDay'])){
+        if(isset($_POST['BirthDay']) && trim($_POST['BirthDay']) != ""){
             $BirthDay=$_POST['BirthDay'];
     
             $birth=strtotime($BirthDay);
@@ -254,6 +249,7 @@
             body{
                 font-family: Arial;
                 margin: 0px;
+                margin-bottom: 60px;
             }
            .Css1{
                 position: fixed;
@@ -264,11 +260,36 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-            }
+            }-
             .Css1 label{
                 background-color: #ffffffb3;
                 border-radius: 10px; 
                 padding:5px 10px 5px 10px;           
+            }
+            #FormShowRents{
+                display:flex;
+                justify-content: center;
+                margin-top: 40px;
+                gap:40px;
+            }
+            .Css2{
+                display:inline-block;
+            }
+            .Css2 button{
+                font-weight: bold;
+                border: 2px solid transparent;
+                padding:20px 70px 20px 70px;
+                box-shadow: -5px 5px 10px black;
+                background-color: #c5c5c7;
+            }
+            .Css2:hover button{
+                border:2px solid black;
+            }
+            .Css2 h3{
+                display:inline;
+            }
+            .Css2:hover h3{
+                color: darkgoldenrod;
             }
             button[name="ChangeInformations"]{
                 display:flex;
@@ -304,7 +325,7 @@
                 display: flex;
                 justify-self: center;
                 border-spacing: 0px;
-                box-shadow: 0px 0px 40px cyan;
+                box-shadow: -5px 5px 10px black;
             }
             th{
                 width: 180px;
@@ -391,7 +412,7 @@
             }
             .Shadow{
                 background-color: white;
-                box-shadow: 0px 0px 30px black;
+                box-shadow: -5px 5px 10px black;
                 display: flex;
                 justify-self: center;
                 margin-top:70px;
@@ -476,9 +497,18 @@
                 <button type="submit" name="ChangeInformations">Change</button>
             </form>
         </div>
+
+        <form id="FormShowRents" method="POST">
+            <div class="Css2"><button type="submit" name="Soon"><h3>Soon</h3><br><br>Rental not started</button></div>
+            <div class="Css2"><button type="submit" name="Active"><h3>Active</h3><br><br>Rental Active</button></div>
+            <div class="Css2"><button type="submit" name="Finished"><h3>Finished</h3><br><br>Rental Finished</button></div>
+            <div class="Css2"><button type="submit" name="Canceled"><h3>Canceled</h3><br><br>Rental canceled</button></div>
+            <div class="Css2"><button type="submit" name="AllRents"><h3>All Rentals</h3><br><br>View all rentals</button></div>
+        </form>
+
         <table>
             <tr>
-                <th id="thLeft">Car/Van</th>
+                <th id="thLeft">Vehicle Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
@@ -488,8 +518,19 @@
                 <th id="thRight">Cancel Order</t>
             </tr>
             <?php
+                if(isset($_POST['Soon'])){
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Waiting'");
+                }else if(isset($_POST['Active'])){
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Active'");
+                }else if(isset($_POST['Finished'])){
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Finished'");
+                }else if(isset($_POST['Canceled'])){
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Canceled'");
+                }else{
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking");
+                }
+
                 $found=false;
-                $Booking=mysqli_query($con,"SELECT * FROM Booking");
                 while($b=mysqli_fetch_array($Booking)){
                     if($b['CustomerId']==$CustomerId){
                         $found=true;
@@ -508,7 +549,7 @@
                         <td><h1>".$b['UpdatedAt']."</h1></td>
                         <td><h1>".$b['TotalPrice']."</h1></td>
                         <td><h1>";
-                        if($b['Status']=='Confirmed'){
+                        if($b['Status']=='Waiting'){
                             echo "<form method='post'><input type='hidden' name='BookingId' value='".$b['BookingId']."'><button type='submit' name='Cancel'>Cancel</button></form>";
                         }else{
                             echo "-";

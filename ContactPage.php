@@ -82,7 +82,7 @@
                 padding-left:40px;
                 padding-bottom:40px;
                 border-radius:15px;
-                box-shadow: 0px 0px 10px blue;
+                box-shadow: -5px 5px 10px black;            
             }
             .Css2 form{
                 padding-top:10px;

@@ -1,159 +1,380 @@
  <?php
+    $message="";
+    $age=0;
     include "Nav.php";
     $con=OpenCon();
-    $message="";
-    if(isset($_POST['Login'])){
-        $pass=$_POST['Pass'];
-        $FullName=$_POST['FullName'];
-        $Fname="";
-        $Lname="";
-        for($i=0;$i<strlen($FullName);$i++){
-            if($FullName[$i]==" "){
-                for($j=$i+1;$j<strlen($FullName);$j++){
-                    $Lname.=$FullName[$j];
-                }
-
-                break;
-            }else{
-                $Fname.=$FullName[$i];
-            }
-        }
-
-        if(trim($pass)!="" && trim($Fname)!="" && trim($Lname)!=""){
-            $found=false;
-            $acc=mysqli_query($con,"SELECT * FROM Users");
-            while($a=mysqli_fetch_array($acc)){
-                if(strtolower(trim($Fname))==strtolower(trim($a['FirstName'])) && strtolower(trim($Lname))==strtolower(trim($a['LastName']))){
-                    $found=true;
-                    if($a['Blocked']==0 && $a['FailedTimes']<3){
-                        $Gmail=$a['Gmail'];
-                        if($pass==$a['Password1']){
-                            mysqli_query($con,"UPDATE Users SET FailedTimes=0,Blocked=0 Where Gmail='$Gmail'");
-                            $_SESSION['Gmail']=$Gmail;
-                            $_SESSION['UserId']=$a['Id'];
-                            $_SESSION['UserFullName']=$a['FirstName']." ".$a['LastName'];
-                            $_SESSION['Role']=$a['Role'];
-                            $_SESSION['HaveDriverLicense']=$a['HaveDriverLicense'];
-                            $date1=strtotime(date("Y-m-d"));
-                            $date2=strtotime($a['BirthDay']);
-                            $_SESSION['Age']=(int)(($date1-$date2)/60/60/24/365);
-                            header("Location:HomePage.php");
-                            exit();
-                        }else{
-                            $FailedTimes=2-$a['FailedTimes'];
-                            $message="Wrong password. You have ".$FailedTimes." attempts left";
-                            mysqli_query($con,"UPDATE Users SET FailedTimes=FailedTimes+1 Where Gmail='$Gmail'");
-                            $a['FailedTimes']++;
-                            if($a['FailedTimes']==3){
-                                $message="Your Account ".$a['FirstName']." ".$a['LastName']." locked after 3 failed attempts. Reset your password to continue.";
-                                mysqli_query($con,"UPDATE Users SET Blocked=1 Where Gmail='$Gmail'");
-                            }
-                        }
-                    }else{
-                        $message="Your Account ".$a['FirstName']." ".$a['LastName']." locked after 3 failed attempts. Reset your password to continue.";
-                    }
-                    break;
-                }
-            }
-            if(!$found){
-                $message="User Name not found.";
-            }
-        }else{
-            $message="Your Password or User Name is wrong.";
-        }
+    
+    if(isset($_SESSION['Age'])){
+        $age=$_SESSION['Age'];
     }
 
-    if($message!=""){ 
-        $_SESSION['LoginMessage']=$message;
+    if(isset($_SESSION['UserId'])){
+        if(!isset($_SESSION['CloseRating'])){
+            $CustomerId=$_SESSION['UserId'];
+            $RatingStatus=false;
+            $VehicleStatus="";
+            $VehicleId="";
+            $BookingId="";
+            $Rating=mysqli_query($con,"SELECT * FROM Booking");
+            while($R=mysqli_fetch_array($Rating)){
+                if($R['CustomerId']==$CustomerId){
+                    if($R['RatingStatus']=="Not Rated"){
+                        $RatingStatus=false;
+                        $VehicleStatus=$R['Status'];
+                        $VehicleId=$R['VehicleId'];
+                        $BookingId=$R['BookingId'];
+                    }else if($R['RatingStatus']=="Rated"){
+                        $RatingStatus=true;
+                        $VehicleStatus=$R['Status'];
+                        $VehicleId=$R['VehicleId'];
+                        $BookingId=$R['BookingId'];
+                    }
+                }
+            }
+
+            if(isset($_POST['CloseRating'])){
+                if(isset($_POST['DontShowAgain'])){
+                    mysqli_query($con,"UPDATE Booking SET RatingStatus='Skipped' WHERE BookingId='$BookingId'");
+                }else{
+                    $_SESSION['CloseRating']=true;
+                }
+                header("Location:Index.php");
+                exit();
+            }
+
+            if(isset($_POST['Submit'])){
+                if(isset($_POST['Rating'])){
+                    $rate=$_POST['Rating'];
+                    $UpadteRating="";
+                    $TotalRating="";
+                    $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
+                    while($v=mysqli_fetch_array($Vehicles)){
+                        if($v['Id']==$VehicleId){
+                            $UpadteRating=$v['Rating'];
+                            $TotalRating=$v['TotalRating'];
+                            $UpadteRating=(int)$UpadteRating;
+                            $TotalRating=(int)$TotalRating;
+                            break;
+                        }
+                    }
+
+                    if($TotalRating!="" && $UpadteRating!=""){
+                        if($rate=="1"){
+                            $rate=1;
+                            $TotalRating++;
+                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
+                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
+                        }else if($rate=="2"){
+                            $rate=2;
+                            $TotalRating++;
+                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
+                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
+                        }else if($rate=="3"){
+                            $rate=3;
+                            $TotalRating++;
+                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
+                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
+                        }else if($rate=="4"){
+                            $rate=4;
+                            $TotalRating++;
+                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
+                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
+                        }else{
+                            $rate=5;
+                            $TotalRating++;
+                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
+                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
+                        }   
+
+                        mysqli_query($con,"UPDATE Booking SET RatingStatus='Rated' WHERE BookingId='$BookingId'");
+                        header("Location:Index.php");
+                        exit();
+                    }
+                }else{
+                    $_SESSION['RatingErrorMessage']="Please select a rating before submitting";
+                    header("Location:Index.php");
+                    exit();
+                }
+            }
+
+            if(!$RatingStatus && $VehicleStatus=="Finished" && !isset($_SESSION['CloseRating'])){
+                echo "<div class='Css6'>
+                    <form method='POST'>
+                        <button type='submit' name='CloseRating'>x</button><br><br>";
+                        if(isset($_SESSION['RatingErrorMessage'])){
+                            echo "<h3>".$_SESSION['RatingErrorMessage']."</h3><br>";
+                            unset($_SESSION['RatingErrorMessage']);
+                        }
+                        echo"
+                        <label>How was your rental experience?<br>
+                        Please share your feedback and rate the vehicle you rented.</label><br>
+                        <input type='radio' name='Rating' value='1'>⭐<br>
+                        <input type='radio' name='Rating' value='2'>⭐⭐<br>
+                        <input type='radio' name='Rating' value='3'>⭐⭐⭐<br>
+                        <input type='radio' name='Rating' value='4'>⭐⭐⭐⭐<br>
+                        <input type='radio' name='Rating' value='5'>⭐⭐⭐⭐⭐<br><br>
+                        <input type='checkbox' name='DontShowAgain'>Dont Show This Again.<br>
+                        <button type='submit' name='Submit'>Submit</button>
+                    </form>
+                </div>";
+            }
+        }else{
+            unset($_SESSION['CloseRating']);
+        }
+        
+    }
+   
+    if(isset($_POST['Search'])){
+        if(isset($_POST['Type'])){
+            $Branch=$_POST['Branch'];
+            $_SESSION['VehicleType']=$_POST['Type'];
+            $pickup=strtotime($_POST['pickup']);
+            $return=strtotime($_POST['return']);
+            $gmail=$_SESSION['Gmail'];
+            if($Branch!=""){ 
+                if($return>$pickup){
+                    $_SESSION['Branch']=$Branch;
+                    $_SESSION['StartUse']=$_POST['pickup'];
+                    $_SESSION['EndUse']=$_POST['return'];
+                    header("Location:VehiclesPage.php");
+                    exit();
+                }else{
+                    $message="The return date cannot be before the pickup date";
+                }
+            }else{
+                $message="Please select a branch";
+            }
+        }else{
+            $message="Please select a vehicle type (Car or Van)";
+        }
     }
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Login</title>
         <meta charset="UTF-8">
         <style>
             body{
                 font-family: Arial;
-                background-color: #c5c5c7;
+                background: linear-gradient(to left,black 50%,gray 100%);
+                margin-bottom: 100px;
             }
-            .css1{
+            .Css1{
+                background-color: whitesmoke;
+                margin-top: 230px;
+                margin-right: 110px;
+                margin-left: 300px;
+                padding-top:15px;
+                padding-bottom:15px;
+                border-radius: 15px;
+                box-shadow: 0px 20px 40px seashell;
+            }
+            .Css2{               
+                margin-right: 100px;
+                margin-left: 100px;
+                background-color: #c5c5c7;
+                padding-bottom: 10px;
                 display: flex;
                 justify-content: center;
-                margin-top: 130px;
+                border-radius: 20px;
             }
-            .css2{
+            .Css2 input[type="radio"]{
+                display: none;
+            }
+            .Css2 input[type="radio"]:checked + img{
+                border-color:greenyellow ;
+                border-width: 5px;
+            }
+            .Pic img{
+                position: absolute;
+                top: 100px;
+                right: 110px;
+                width: 380px;
+                height: 120px;
+            }
+            .Css3{
+                display: flex;
+                align-items: center;
+            }
+            .Css4{
+                display: flex;
+                gap: 40px;
+            }
+            .Css5{
+                display:flex;
+                justify-content: space-between;
+                display: flex;
+            }
+            .Css6{
+                position: fixed;
+                top:0px;
+                width: 100%;
+                height: 100%;
+                background: #00000080;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .Css6 form{
                 background-color: white;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 100px;
-                border-bottom-left-radius: 100px;
-                border-bottom-right-radius: 10px;
-                box-shadow:10px 10px 100px;
-                width: 500px;
-                height: 400px;
-                text-align: center;
+                padding:20px;
+                border-radius: 10px;
+                border:3px solid blue;
             }
-            .css2 a{
-                text-decoration: none;
-                font-size: 20px;
-                padding:10px;
-                border:2px solid black;
-                border-radius: 5px;
-                background-color: #e9e9e9;
-                color:black;
-            }
-            .css2 a:hover{
-                border:2px solid blue;
-                color:blue;
-            }
-            input {
-                display: block;
-                margin-top: 15px;
-                font-size: 20px;
-                border-radius: 5px;
+            .Css6 label{
+                display: block;                
             }
             button{
                 cursor: pointer;
-                margin-top: 15px;
+            }
+            form img.Car{
+                width:120px;
+                height: 100px;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                border-color: black;
+                border-style: solid;  
+                border-width: 2px;  cursor: pointer;
+            }
+            form img.Van{
+                width:150px;
+                height: 100px;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+                border-color:black;
+                border-style: solid;
+                border-width: 2px;  
+                cursor: pointer;
+            }
+            h1{
                 font-size: 20px;
-                border-radius: 5px;
-            }
-            form{
-                margin-top:50px;
-            }
+                margin-bottom: 0px;
+            }  
             h2{
-               color: red; 
+                background-color: #feb4b4;
+                border-radius: 5px;
+                color:red;
+                font-size: 15px;
+                border:2px solid red;
+                margin-top: 10px;
+                margin-left: 50px;
+                padding:5px 10px 5px 10px;
             }
-            #LogIn{
+            h3{
+                color:red;
+                text-align: center;
+                padding:5px 10px 5px 10px;
+                background-color: #feb4b4;
+                border-radius: 5px;
+                border:2px solid red;
+            }
+            button[name="CloseRating"]{
+                margin-left: 400px;
+                border-radius: 15px;
+                font-weight: bold;
+            }
+            button[name="CloseRating"]:hover{
+                border-color: red;
+                color:red;
+            }
+            input[type="checkbox"]{
+                margin-top: 15px;
+            }
+            button[name="Submit"]{
+                margin-top:10px;
+                display:flex;
+                justify-self: center;
+            }
+            button[name="Submit"]:hover{
+                border-color: blue;
+                color:blue;
+            }
+            p{
+                color:white;
+                font-size: 20px;
+                font-weight: bold;
+                margin-top: 100px;
+                display:flex;
+                align-items: flex-start;
+                margin-left:50vh;;
+            }
+            #Search{
+                margin-top:30px;
+                margin-right: 10px;
+                border-radius: 10px;
+                font-size: 15px;
+                font-weight: bold;
+                padding-top:5px;
+                padding-bottom:5px;
                 padding-left: 15px;
-                padding-right:15px;
-            }      
-            #LogIn:hover{
+                padding-right: 15px;
+            }
+            #Search:hover{
                 border:2px solid blue;
                 color:blue;
             }
         </style>
     </head>
-    <body> 
-        <div class="css1">
-            <div class="css2">
-                <h1>Login</h1>
-                <center>
-                    <?php
-                        if(isset($_SESSION['LoginMessage'])){ 
-                            echo "<h2>".$_SESSION['LoginMessage']."</h2>";
-                            unset($_SESSION['LoginMessage']);
-                        }
-                    ?>
-                    <form method="post">
-                        <input type="text" name="FullName" placeholder="Full Name...." required>
-                        <input type="password" name="Pass" placeholder="Password...." required>
-                        <button id="LogIn" type="submit" name="Login">Login</button>
-                    </form>
-                </center><br><br>
-                    <a href="Signup.php">Sign up</a>
-                    <a href="ForgotPassword.php">Forgot Password</a>
+    <body>
+        <div class="Css1">
+            <div class="Pic">
+                <img src="Pictures/HomePageCar.png">
+            </div>
+            <div class="Css2">
+                <form method="post">
+                    <h1>Vehicle type (Car/Van):</h1>
+                    <div class="Css3">
+                        <label>
+                            <input type="radio" name="Type" value="Car"> 
+                            <img src="Pictures/Car.png" class="Car">
+                        </label>
+                        <label>
+                            <input type="radio" name="Type" value="Van" >
+                            <img src="Pictures/Van.jpg" class="Van">
+                        </label>
+                        <?php         
+                            if($message!=""){echo "<h2>".$message."</h2>";}
+                        ?>
+                    </div>
+                    <div class="Css4">
+                        <div>
+                        <h1>Pickup Branch:</h1>
+                        <select name="Branch" required>
+                            <option value="">-</option>
+                            <?php
+                            $arrlocations=[];
+                            $locations=mysqli_query($con,"SELECT * FROM Vehicle");
+                            while($L=mysqli_fetch_array($locations)){
+                                $found=false;
+                                for($i=0;$i<count($arrlocations);$i++){
+                                    if($arrlocations[$i]==$L['Branch']){
+                                        $found=true;
+                                    }
+                                }
+                                if(!$found){
+                                    $arrlocations[]=$L['Branch'];
+                                    echo "<option value='".$L['Branch']."'>".$L['Branch']."</option>";
+                                }
+                                
+                            }
+                            ?>
+                        </select>
+                        </div>
+                        <div>
+                            <h1>Pickup date:</h1>
+                            <input type="date" min="<?php echo date('Y-m-d',strtotime('+1 day'));?>" name="pickup" required>
+                        </div>
+                        <div>
+                            <h1>Return date:</h1>
+                            <input type="date" min="<?php echo date('Y-m-d',strtotime('+2 day'));?>" name="return" required>
+                        </div>
+                    </div>
+                    
+                    <button id="Search" type="submit" name="Search">Search</button>
+                </form>
             </div>
         </div>
+        
+        <p>CarVista makes renting a car or van simple, convenient, and reliable. Choose your vehicle type, <br>pickup location, and rental dates to find the best vehicle for your journey. Explore our available<br> vehicles and enjoy an easy and comfortable rental experience from start to finish.</p>
     </body>
 </html>

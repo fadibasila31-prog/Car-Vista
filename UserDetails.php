@@ -383,7 +383,7 @@
                 display: flex;
                 justify-self: center;
                 border-spacing: 0px;
-                box-shadow: 0px 0px 40px cyan;            
+                box-shadow: -5px 5px 10px black;
             }
             th{
               color:white;
@@ -431,7 +431,6 @@
             #AddUser:hover{
                 color:blue;
                 border:2px solid blue;
-                box-shadow:0px 0px 10px blue;
             }
             #thLeft{
                 border-top-left-radius:10px;

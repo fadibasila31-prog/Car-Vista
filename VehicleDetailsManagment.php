@@ -53,8 +53,33 @@
                 justify-content: center;
                 align-items: center;
             }
+            .Css5{
+                display: flex;
+                justify-self: center;
+                margin-top: 50px;
+                margin-bottom:100px;
+            }
+            .Css5 table{
+                border-spacing: 0px;
+                box-shadow: -7px 7px 10px black;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                background-color: #dcdede;
+            }
+            .Css5 th{
+                border:2px solid black ;
+                width:150px;
+                padding-top:5px;
+                padding-bottom:5px;
+            }
+            .Css5 td{
+                border:2px solid black;
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom:10px;
+            }
             .Shadow{
-                box-shadow: 0 0 20px black;
+                box-shadow: -7px 7px 10px black;
                 border-radius: 15px;
                 padding-left: 10px;
                 padding-right: 10px;
@@ -65,17 +90,23 @@
                 border:5px black solid;
             }
             h1{
-                background-color: cyan;
+                background-color: whitesmoke;
                 margin-right: 250px;
                 border:2px solid black;
                 border-radius: 5px;
                 font-size: 20px;
             }
+            h2{
+                background-color: aquamarine;
+                border:2px solid green;
+                border-radius: 10px;
+                color:green;
+                padding:5px 10px 5px 10px;
+            }
             span{
                 font-size:15px;
                 font-weight: bold;
             }
-
             #logo{
                 height: 80px;
                 width: 100px;
@@ -122,6 +153,12 @@
                 text-align: center;
                 padding-left: 5px;
                 padding-right:5px;
+            }
+            #Leftth{
+                border-top-left-radius: 10px;
+            }
+            #Rightth{
+                border-top-right-radius: 10px;
             }
         </style>
     </head>
@@ -307,6 +344,32 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class='Css5'>";
+                                    $arr=[];
+                                    $Booking=mysqli_query($con,"SELECT * FROM Booking");
+                                    while($b=mysqli_fetch_array($Booking)){
+                                        if($b['VehicleId']==$v['Id'] && ($b['Status']=="Active" || $b['Status']=="Waiting")){
+                                            $arr[]=$b;
+                                        }
+                                    }
+
+                                    if(count($arr)!=0){
+                                        echo "<table>
+                                        <th id='Leftth'>Start Date</th>
+                                        <th>End Date</th>
+                                        <th id='Rightth'>Status</th>";
+                                        foreach($arr as $a){
+                                            echo "<tr>
+                                            <td>".$a['StartDate']."</td>
+                                            <td>".$a['EndDate']."</td>
+                                            <td>".$a['Status']."</td>
+                                            </tr>";
+                                        }
+                                        echo "</table>";
+                                    }else{
+                                        echo "<h2>This vehicle is available and ready for rental</h2>";
+                                    }
+                                echo"</div>
                             </div>";
                         break;
                     }

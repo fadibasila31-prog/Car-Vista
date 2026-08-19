@@ -17,6 +17,15 @@
         $caps=0;
         $digits=0;
 
+        $_SESSION['SignUpFname']=$_POST['Fname'];
+        $_SESSION['SignUpLname']=$_POST['Lname'];
+        $_SESSION['SignUpGmail']=$_POST['Gmail'];
+        $_SESSION['SignUpBirthDay']=$_POST['BirthDay'];
+        $_SESSION['SignUpPass1']=$_POST['Pass1'];
+        $_SESSION['SignUpPass2']=$_POST['Pass2'];
+        $_SESSION['SignUpPhoneNumber']=$_POST['PhoneNumber'];
+        $_SESSION['SignUpIDNumber']=$_POST['IDNumber'];
+        $_SESSION['SignUpHaveDriverLicense']=$_POST['HaveDriverLicense'];
         for($i=0;$i<strlen($PhoneNumber);$i++){
             if(($i==0 && $PhoneNumber[$i]!='0') || ($i==1 && $PhoneNumber[$i]!='5') || ($i==2 && ($PhoneNumber[$i]=='9' || $PhoneNumber[$i]=='6'))){
                 $isValid=false;
@@ -88,6 +97,7 @@
                 }
             }   
             if(!$created){
+                session_destroy();
                 mysqli_query($con,"INSERT INTO Users (FirstName,LastName,Gmail,IdNumber,Password,Password1,HaveDriverLicense,Blocked,FailedTimes,BirthDay,PhoneNumber,Role) 
                 VALUE ('$Fname','$Lname','$email','$IdNumber','$pass1','$pass1','$HaveDriverLicense',0,0,'$BirthDay','$PhoneNumber','Customer')");
                 header("Location:Index.php");
@@ -108,7 +118,8 @@
                 background-color: #c5c5c7;
                 display: flex;
                 justify-content: center;
-                margin-top:70px ;
+                margin-top:70px;
+                margin-bottom:70px;
             }
             .css1{
                 background-color: #aeaeb6;
@@ -122,6 +133,14 @@
             h1{
                 text-align: center;
                 text-decoration: underline;
+            }
+            h2{
+                color:red;
+                background-color: #fbc2c2;
+                font-size:20px;
+                padding:5px 10px 5px 10px;
+                border:2px solid red;
+                border-radius: 10px;
             }
             label{
                 display: block;
@@ -178,25 +197,25 @@
             ?>
             <form method="post">
                 <label>First Name:</label>
-                <input type="text" name="Fname" placeholder="First Name...." required>
+                <input type="text" name="Fname" placeholder="First Name...." <?php if(isset($_SESSION['SignUpFname'])){ echo "value='".$_SESSION['SignUpFname']."'";} ?> required>
                 <label>Last Name:</label>
-                <input type="text" name="Lname" placeholder="Last Name...." required>
+                <input type="text" name="Lname" placeholder="Last Name...." <?php if(isset($_SESSION['SignUpLname'])){ echo "value='".$_SESSION['SignUpLname']."'";} ?> required>
                 <label>Gmail:</label>
-                <input type="email" name="Gmail" placeholder="Gmail...." required>
+                <input type="email" name="Gmail" placeholder="Gmail...." <?php if(isset($_SESSION['SignUpGmail'])){ echo "value='".$_SESSION['SignUpGmail']."'";} ?> required>
                 <label>ID Number:</label>
-                <input type="text" name="IDNumber" placeholder="ID Number...." required>                
+                <input type="text" name="IDNumber" placeholder="ID Number...." <?php if(isset($_SESSION['SignUpIDNumber'])){ echo "value='".$_SESSION['SignUpIDNumber']."'";} ?> required>                
                 <label>Birth Day:</label>
-                <input type="date" name="BirthDay"  max="<?php echo date("Y-m-d") ?>" required>
+                <input type="date" name="BirthDay"  max="<?php echo date("Y-m-d") ?>" <?php if(isset($_SESSION['SignUpBirthDay'])){ echo "value='".$_SESSION['SignUpBirthDay']."'";} ?> required>
                 <label>Passowrd:</label>
-                <input type="password" name="Pass1" placeholder="Password...." required>
+                <input type="password" name="Pass1" placeholder="Password...." <?php if(isset($_SESSION['SignUpPass1'])){ echo "value='".$_SESSION['SignUpPass1']."'";} ?> required>
                 <label>Confirm Password:</label>
-                <input type="password" name="Pass2" placeholder="Confirm Pssword...." required>
+                <input type="password" name="Pass2" placeholder="Confirm Pssword...." <?php if(isset($_SESSION['SignUpPass2'])){ echo "value='".$_SESSION['SignUpPass2']."'";} ?> required>
                 <label>Phone Number:</label>
-                <input type="text" name="PhoneNumber" placeholder="Phone Number...." required>
+                <input type="text" name="PhoneNumber" placeholder="Phone Number...." <?php if(isset($_SESSION['SignUpPhoneNumber'])){ echo "value='".$_SESSION['SignUpPhoneNumber']."'";} ?> required>
                 <label>Have Driver License:</label>
                 <div class="HaveDriverLicense">
-                    <div><input type="radio" name="HaveDriverLicense" value="Yes" required>Yes</div>
-                    <div><input type="radio" name="HaveDriverLicense" value="No">No</div>
+                    <div><input type="radio" name="HaveDriverLicense" value="Yes" <?php if(isset($_SESSION['SignUpHaveDriverLicense']) && $_SESSION['SignUpHaveDriverLicense']=="Yes"){echo "checked";} ?> required>Yes</div>
+                    <div><input type="radio" name="HaveDriverLicense" value="No" <?php if(isset($_SESSION['SignUpHaveDriverLicense']) && $_SESSION['SignUpHaveDriverLicense']=="No"){echo "checked";} ?>>No</div>
                 </div>
                 <button type="submit" name="Signup">Sign up</button>
             </form><br>

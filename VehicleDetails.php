@@ -11,7 +11,6 @@
         exit();
     }else if(isset($_POST['GoBack'])){
         unset($_SESSION['VehicleId']);
-        unset($_SESSION['Branch']);
         header("Location: VehiclesPage.php");
         exit();
     }
@@ -25,18 +24,20 @@
             font-family: Arial;
             margin: 0px;
             margin-top: 30px;
+            margin-bottom: 100px;
         }
         .Css1{
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin-top:70px; 
         }
         .Css2{
             background-color: #c5c5c7;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0px 0px 50px black;
+            box-shadow: -10px 10px 10px black;
         }
         .Css2 img{
             width: 370px;
@@ -133,6 +134,11 @@
             display: flex;
             gap: 30px;
         }
+        .Css13{
+            display: flex;
+            align-items: center;
+            gap: 200px;
+        }
         p{
             display: inline;
             font-weight: bold;
@@ -142,11 +148,16 @@
             display: flex;
             gap:5px;
         }
+        
+        h1{
+            font-size: 25px;
+        }
         </style>
     </head>
     <body>
         <div class="Css1">
             <div class="Css2">
+                <div class="Css13">
                 <form method="POST">
                     <button type="submit" name="GoBack"><-- Go Back</button>
                 </form>
@@ -154,7 +165,18 @@
                     $cars=mysqli_query($con,"SELECT * FROM Vehicle");
                     while($c=mysqli_fetch_array($cars)){
                         if($c['Id']==$CarId){
-                            echo "<div class='Css4'>
+                            echo "<h1>";
+                            if($c['Rating']!=0){
+                                echo"Rating: ";
+                                for($i=0;$i<$c['Rating'];$i++){
+                                    echo "⭐";
+                                }   
+                            }else{
+                                echo "No ratings yet";
+                            }
+                            echo"</h1>
+                            </div>
+                            <div class='Css4'>
                                     <img src='Pictures/".$c['Image']."'>
                                     <div class='Css3'>
                                             <div><p>".$c['VehicleName']."</p></div>

@@ -2,7 +2,7 @@
     session_start();
     if(isset($_POST['Logout'])){
         session_destroy();
-        header("Location:HomePage.php");
+        header("Location:Index.php");
         exit();
     }
     include "DB_Connection.php";
@@ -19,9 +19,9 @@
         $now2=date("Y-m-d H:i");
         $BookingId=$s['BookingId'];
         if($Start<=$now && $now<=$End){
-            mysqli_query($con,"UPDATE Booking SET Status='In Use' WHERE BookingId='$BookingId' AND StartDate<='$now2' AND EndDate>='$now2'");
+            mysqli_query($con,"UPDATE Booking SET Status='Active' WHERE BookingId='$BookingId' AND StartDate<='$now2' AND EndDate>='$now2'");
         }else if($now<$Start){
-            mysqli_query($con,"UPDATE Booking SET Status='Confirmed' WHERE BookingId='$BookingId' AND StartDate>'$now2'");
+            mysqli_query($con,"UPDATE Booking SET Status='Waiting' WHERE BookingId='$BookingId' AND StartDate>'$now2'");
         }else if($now>$End){
             mysqli_query($con,"UPDATE Booking SET Status='Finished' WHERE BookingId='$BookingId' AND EndDate<'$now2'");                    
         }
@@ -51,18 +51,18 @@
                 top:0px;
                 right: 0px;
                 left:0px;
+                z-index:1;
                 display: flex;                
                 background-color: gray;
             }
             #Nav a{
                 text-decoration: none;
                 color:black;
-                margin-top: 10px;
-                margin-left: 7px;
-                margin-bottom: 10px;
                 padding-left: 10px;
                 padding-right: 10px;
-                font-size: 20px;
+                padding-top:3px;
+                margin-left: 10px;
+                font-size: 18px;
                 border:2px solid black;
                 border-radius: 10px;
                 background-color: white;
@@ -78,66 +78,82 @@
                 right: 10px;
                 top:0px;
             }
-            #Nav form{
-                margin-top: 10px;
-                margin-left: 10px;
-            }
-            #Nav button{
+            button[name="Logout"]{
                 border:2px solid black;
                 border-radius: 10px;
                 font-size: 20px;
+                margin-left: 10px;
             }
-            #Nav button:hover{
+            button[name="Logout"]:hover{
                 color:blue;
                 border:2px solid blue;
+            }
+            .MenuTag{
+                margin-left:10px;
+                padding:5px 10px 5px 10px;
+                font-weight: bold;
+                font-size: 30px;
+                color:white;
             }
             button{
                 cursor:pointer;
             }
+            .Menu:hover .MenuOpened{
+                margin-left: 0px;
+                transition: 1s;
+                padding-right:10px;
+            }
+            .MenuOpened{
+                display: flex;
+                flex-direction: column;
+                gap:8px;
+                background-color: gray;
+                height: 100vh;
+                width:200px;
+                margin-left: -210px;
+                padding-top: 10px;
+                padding-bottom:10px;
+                padding-right:10px;
+                transition: margin-left 1s;
+            }
         </style>
     </head>
     <body>
-        <?php 
-        $RentTime=mysqli_query($con,"SELECT * FROM Booking");
-        while($RT=mysqli_fetch_array($RentTime)){
-            $Now=strtotime("Y-M-d:TH:i");
-            $GetCar=strtotime($RT['StartDate']);
-            $ReturnCar=strtotime(($RT['EndDate']));
-            if($Now>=$GetCar && $Now<=$ReturnCar){
-                mysqli_query($con,"UPDATE Booking SET Status='InUse'");
-            }else if($Now>$ReturnCar){
-                mysqli_query($con,"UPDATE Booking SET Status='Finished'");
-            }
-        }
-        ?>
         <nav id="Nav">
-            <a href="HomePage.php">Home Page</a>
-            <?php 
-            if(isset($_SESSION['Role'])){
-                if($_SESSION['Role']=="Manager"){
-                    echo "<a href='Profile.php'>My Profile</a>
-                    <a href='UserDetails.php'>Users Details</a>
-                    <a href='VehiclesManagement.php'>Vehicles Details</a>
-                    <a href='CustomerService.php'>Customer Service</a>
-                    <a href='ManagerVehicleManagement.php'>Vehicle Managment</a>
-                    <a href='VehicleRentalHistory.php'>Vehicle Rental History</a>
-                    <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
-                }else if($_SESSION['Role']=="Worker"){
-                    echo"<a href='Profile.php'>My Profile</a>
-                    <a href='VehiclesManagement.php'>Vehicles Details</a>
-                    <a href='CustomerService.php'>Customer Service</a>
-                    <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
-                }else{
-                      echo"<a href='Profile.php'>My Profile</a>
-                      <a href='ContactPage.php'>Customer Supprot</a>
-                    <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
-                }
-            }else{
-                echo "<a href='Index.php'>Login</a>
-                <a href='VehiclesPage.php'>Vehicles</a>";
-            }
-            ?>
+            <div class="Menu">
+                <div class="MenuTag">☰</div>
+                <div class="MenuOpened">
+                    <a href="Index.php">Home Page</a>
+                    <a href='VehiclesPage.php'>Vehicles</a>
+                    <a href="QuickSearch.php">Quick Search</a>
+                    <?php 
+                        if(isset($_SESSION['Role'])){
+                            if($_SESSION['Role']=="Manager"){
+                                echo "<a href='Profile.php'>My Profile</a>
+                                <a href='Graph.php'>Graph</a>
+                                <a href='UserDetails.php'>Users Details</a>
+                                <a href='VehiclesManagement.php'>Vehicles Details</a>
+                                <a href='CustomerService.php'>Customer Service</a>
+                                <a href='ManagerVehicleManagement.php'>Vehicle Management</a>
+                                <a href='VehicleRentalHistory.php'>Vehicle Rental History</a>
+                                <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
+                            }else if($_SESSION['Role']=="Worker"){
+                                echo"<a href='Profile.php'>My Profile</a>
+                                <a href='VehiclesManagement.php'>Vehicles Details</a>
+                                <a href='CustomerService.php'>Customer Service</a>
+                                <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
+                            }else{
+                                echo"<a href='Profile.php'>My Profile</a>";
+                                echo "<a href='ContactPage.php'>Customer Support</a>
+                                <form method='post'><button type='submit' name='Logout'>Logout</button></form>";
+                            }
+                        }else{
+                            echo "<a href='Login.php'>Login</a>";
+                        }
+                    ?>
+                </div>
+            </div>
             <img src="Pictures/CarVistaLogo">
-        </nav>    
+        </nav>
     </body>
 </html>

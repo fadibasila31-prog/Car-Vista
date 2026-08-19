@@ -37,7 +37,7 @@
                 border-radius: 15px;
                 padding:10px;
                 background-color:#f0f0f0;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 1); 
+                box-shadow: -5px 5px 10px black; 
            }
             .Css1 td:hover{
                 transform: scale(1.08) ;

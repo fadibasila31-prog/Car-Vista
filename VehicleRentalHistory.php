@@ -49,19 +49,20 @@
             body{
                 font-family:arial;
                 margin-top:80px;
+                margin-bottom:80px;
             }
             .Css1{
                 display: flex;
                 padding-top:10px ;
-            }a
-            .nav form button{
+            }
+            button[name="Search"]{
                 border-radius: 10px;
                 border:2px solid black;
-                margin-top: 15px;
+                margin-top: 20px;
                 padding-left: 10px;
                 padding-right: 10px;
             }
-            form button:hover{
+            button[name="Search"]:hover{
                 color:blue;
                 border:2px solid blue;
             }
@@ -105,7 +106,7 @@
                 display: flex;
                 justify-self: center;
                 border-spacing: 0px;
-                box-shadow: 0px 0px 20px cyan;
+                box-shadow: -5px 5px 10px black;
             }
             th{
                 width: 180px;

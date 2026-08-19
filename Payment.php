@@ -7,6 +7,7 @@
     $branch=$_SESSION['Branch'];
     $return2="";
     $pickup2="";
+    
 
     if(isset($_SESSION['StartUse'])){
         $pickup=$_SESSION['StartUse'];
@@ -36,6 +37,8 @@
         if($return2 > $pickup2){
             $_SESSION['StartUse']=$_POST['pickup'];
             $_SESSION['EndUse']=$_POST['return'];
+            header("Location:Payment.php");
+            exit();
         }else{
             $message="The return date cannot be before the pickup date";
         }
@@ -49,9 +52,13 @@
             }else{
                 $PN=$_POST['PhoneNumber'];
                 $CN=$_POST['CardNumber'];
+                $_SESSION['PN']=$PN;
+                $_SESSION['CN']=$CN;
+                $_SESSION['CVV']=$_POST['CVV'];
+                $_SESSION['Location']=$_POST['Location'];
                 $isSameNumber=false;
                 $InvalCardNumber=false;
-                $InUse=false;
+                $Active=false;
                 $pickup2=strtotime($pickup);
                 $return2=strtotime($return);
 
@@ -59,20 +66,26 @@
                 while($b=mysqli_fetch_array($Booking)){
                     if($b['VehicleId']==$VehicleId){
                         if(($pickup2>=strtotime($b['StartDate']) && $pickup2<=strtotime($b['EndDate'])) || ($return2>=strtotime($b['StartDate']) && $return2<=strtotime($b['EndDate']))){
-                            $InUse=true;
+                            $Active=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
                         }else if($pickup2<strtotime($b['StartDate']) && $return2>strtotime($b['EndDate'])){
-                            $InUse=true;
+                            $Active=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
                         }
                     }
                 }
 
-                if(!$InUse){
-                   $Users=mysqli_query($con,"SELECT * FROM Users");
-                   while($u=mysqli_fetch_array($Users)){
+                if(!$Active){
+
+                    $age=0;
+                    if(isset($_SESSION['Age'])){
+                        $age=$_SESSION['Age'];
+                    }
+
+                    $Users=mysqli_query($con,"SELECT * FROM Users");
+                    while($u=mysqli_fetch_array($Users)){
                         if($u['Id']==$CustomerId){
                             if($u['PhoneNumber']==$PN){
                                 $isSameNumber=true;
@@ -82,7 +95,7 @@
                    }
 
                     for($i=0;$i<strlen($CN);$i++){
-                        if(!($CN[$i]>=0 && $CN[$i]<=9)){
+                        if(!($CN[$i]>='0' && $CN[$i]<='9')){
                             $InvalCardNumber=true;
                             break;
                         }
@@ -91,45 +104,45 @@
                     
 
                     if($isSameNumber==false){
-                        $message="Check You'r Number Again.";
+                        $message="The phone number does not match the phone number registered to your account.";
+                    }else if($age<18){
+                        $message="You must be at least 18 years old to rent a vehicle.";
                     }else if($InvalCardNumber || strlen($CN)!=16){
-                        $message="Write your Card Number Again.";
+                        $message="The card number must contain exactly 16 digits.";
+                    }else if(!isset($_SESSION['Location']) || $_SESSION['Location']=="-"){
+                        $message="Please select a pickup location.";
+                    }else if(!isset($_SESSION['StartUse']) || !isset($_SESSION['EndUse'])){
+                        $message="Please select both pickup and return dates.";
                     }else{
                         $to=$gmail;
                         $message2="";
                         $subject = "Car Rental Booking Confirmation";
                         $pickup2="";
                         $return2="";
-                
+
                         $pickup2=strtotime($pickup);
                         $return2=strtotime($return);
+                        
+                        $GotDiscount=false;
+                        if(isset($_SESSION['BirthDay'])){
+                            $BD=$_SESSION['BirthDay'];
+                            if($pickup2<=$BD && $return2>=$BD){
+                                $GotDiscount=true;
+                            }
+                        }
+
                         $diff=(($return2-$pickup2)/60/60/24)+1;
                         $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($v=mysqli_fetch_array($Vehicles)){
                             if($v['Id']==$VehicleId){
                                 $TotalPrice=$diff * $v['PricePerDay'];
+                                if($GotDiscount){
+                                    $TotalPrice=$TotalPrice*0.90;
+                                }
                                 break;
                             }
                         }
             
-                        $pickup2="";
-                        $return2="";
-                    
-                        for($i=0;$i<strlen($pickup);$i++){
-                            if($pickup[$i]=='T'){
-                                $pickup2.=" ";
-                            }else{
-                                $pickup2.=$pickup[$i];
-                            }
-                        }
-
-                        for($i=0;$i<strlen($return);$i++){
-                            if($return[$i]=='T'){
-                                $return2.=" ";
-                            }else{
-                                $return2.=$return[$i];
-                            }
-                        }
 
                         $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($v=mysqli_fetch_array($Vehicles)){
@@ -148,12 +161,24 @@
                                         Email: ".$gmail."
                                         Vehicle: ".$v['VehicleBrand']." ".$v['VehicleName']."
                                         Vehicle Type: ".$v['VehicleType']."
-                                        Pickup Branch: ".$branch."
-                                        Pickup Date & Time: ".$pickup2."
-                                        Return Date & Time: ".$return2."
-                                        Price Per Day: $".$v['PricePerDay']."
-                                        Total Amount Paid: $".$TotalPrice."
+                                        Pickup Branch: ".$branch;
+                                        if(isset($_SESSION['Location'])){
+                                            $message2.="Location: ".$_SESSION['Location'];
+                                        }
+                                        $message2.= "Pickup Date & Time: ".$pickup."
+                                        Return Date & Time: ".$return."
+                                        Price Per Day: $".$v['PricePerDay'];
 
+                                        if($GotDiscount){
+                                            $Subtotal = $diff * $v['PricePerDay'];
+                                            $Discount = $Subtotal * 0.10;
+                                            $message2 .= "
+                                            Subtotal: $".$Subtotal."
+                                            Birthday Discount (10%): -$".$Discount;
+                                        }
+
+                                        $message2.="
+                                        Total Amount Paid: $".$TotalPrice."
                                         Please arrive at the pickup branch on time and bring:
                                         - Your driver's license.
                                         - A valid photo ID.
@@ -162,8 +187,7 @@
                                         If you need to cancel your reservation, you can do so through your account by visiting the Rental History page on our website.
 
                                         Thank you for choosing our Car Rental Service.
-                                        We wish you a safe and enjoyable journey!
-                                        ";
+                                        We wish you a safe and enjoyable journey!";
                                     }
                                 }
                             }
@@ -172,12 +196,12 @@
                         $header="From: fadibasila31@gmail.com";
                         $retval=mail($to,$subject,$message2,$header);
                         if($retval){
-                            mysqli_query($con,"INSERT INTO Booking (CustomerId,	VehicleId,StartDate,EndDate,Status,CreatedAt,UpdatedAt,TotalPrice) 
-                            value ($CustomerId,$VehicleId,'$pickup','$return','Confirmed',NOW(),NOW(),$TotalPrice)");
-                            header("Location: HomePage.php");
+                            mysqli_query($con,"INSERT INTO Booking (CustomerId,	VehicleId,StartDate,EndDate,Status,CreatedAt,UpdatedAt,TotalPrice,RatingStatus) 
+                            value ($CustomerId,$VehicleId,'$pickup','$return','Waiting',NOW(),NOW(),$TotalPrice,'Not Rated')");
+                            header("Location: Index.php");
                             exit();
                         }else{
-                        $message="Try again.";
+                        $message="The booking confirmation could not be sent. Please try again.";
                         }
                     }
                 }
@@ -194,6 +218,7 @@
                 font-family: Arial;
                 margin: 0px;
                 margin-top: 150px;
+                margin-bottom: 100px;
                 background-color: #adacac;
             }
             .Css1{
@@ -210,7 +235,7 @@
                 padding-bottom:10px;
                 background-color: white;
                 border-radius: 10px;
-                box-shadow:0px 0px 30px seashell;
+                box-shadow:-10px 10px 20px black;
             }
             .Css3 button{
                 border-radius: 5px;
@@ -271,6 +296,7 @@
         </style>
     </head>
     <body>
+        <?php if($message!=""){echo "<h4>".$message."</h4>";} ?>
         <div class="Css1">
             <div class="Css2">
                 <div class="Css3">
@@ -279,6 +305,21 @@
                         $cars=mysqli_query($con,"SELECT * FROM Vehicle");
                         while($car=mysqli_fetch_array($cars)){
                             if($car['Id']==$VehicleId){
+                                if($car['Rating']!=0){
+                                    echo"Rating: ";
+                                    for($i=0;$i<$car['Rating'];$i++){
+                                        echo "⭐";
+                                    }   
+                                }else{
+                                    echo "No ratings yet";
+                                }
+                                echo"<br>
+                                Branch: ".$_SESSION['Branch']."<br>";
+                                if(!isset($_SESSION['Location']) || $_SESSION['Location']=="-"){
+                                    echo "<h4>Please Select a Location</h4>";
+                                }else{
+                                    echo "Location: ".$_SESSION['Location']."<br>";
+                                }
                                 echo "Vehicle Type: ".$car['VehicleType']."<br>
                                 Vehicle Brand: ".$car['VehicleBrand']."<br>
                                 Vehicle Name:".$car['VehicleName']."<br>
@@ -305,21 +346,42 @@
                         }
                     ?>
                 </div>
+                
                 <div class="Css3">
                     <form method="post">
-                        <?php if($message!=""){echo "<h4>".$message."</h4>";} ?>
                         <h1>Payment & Booking</h1><br>
-                        <label><input type="tel" name="PhoneNumber" placeholder="Phone Number...." required></label>
-                        <label><input type="text" name="CardNumber" placeholder="Card Number...." required></label>
-                        <label><input type="tel" name="CVV" pattern="[0-9]{3,4}" placeholder="CVV..." required></label>
+                        <label><input type="tel" name="PhoneNumber" placeholder="Phone Number...." <?php if(isset($_SESSION['PN'])){$PN=$_SESSION['PN']; echo "value='$PN'";}?> required></label>
+                        <label><input type="text" name="CardNumber" placeholder="Card Number...." <?php if(isset($_SESSION['CN'])){$CN=$_SESSION['CN']; echo "value='$CN'";}?> required></label>
+                        <label><input type="tel" name="CVV" pattern="[0-9]{3,4}" placeholder="CVV..." <?php if(isset($_SESSION['CVV'])){$CVV=$_SESSION['CVV']; echo "value='$CVV'";}?> required></label><br><br>
+                        <?php
+                            if(isset($_SESSION['Branch'])){
+                                echo "<label>Pick up Location:</label>
+                                <select name='Location' required>
+                                    <option value='-'>-</option>";
+                                    if($_SESSION['Branch']=="Haifa"){
+                                        echo "<option value='CarmelCenter' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="CarmelCenter"){echo "selected";} echo ">Carmel Center</option>
+                                        <option value='Hadar' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Hadar"){echo "selected";} echo ">Hadar</option>
+                                        <option value='RamatAlon' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="RamatAlon"){echo "selected";} echo ">Ramat Alon</option>";
+                                    }else if($_SESSION['Branch']=="Tel Aviv"){
+                                        echo "<option value='Dizengoff' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Dizengoff"){echo "selected";} echo ">Dizengoff</option>
+                                        <option value='Rothschild' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Rothschild"){echo "selected";} echo ">Rothschild</option>
+                                        <option value='Jaffa' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Jaffa"){echo "selected";} echo ">Jaffa</option>";
+                                    }else if($_SESSION['Branch']=="Jerusalem"){
+                                        echo "<option value='CityCenter' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="CityCenter"){echo "selected";} echo ">City Center</option>
+                                        <option value='Talpiot' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Talpiot"){echo "selected";} echo ">Talpiot</option>
+                                        <option value='Malha' "; if(isset($_SESSION['Location']) && $_SESSION['Location']=="Malha"){echo "selected";} echo ">Malha</option>";
+                                    }
+                                echo "</select>";
+                            }
+                        ?>
                         <button type="submit" name="Pay">Pay</button>
                     </form>
                     
                     <form method="post">
-                        <h2>Pickup date and time:</h2>
-                        <input type="datetime-local" min="<?php echo date('Y-m-d\TH:i',strtotime('+1 day'));?>" name="pickup" required>
-                        <h2>Return date and time:</h2>
-                        <input type="datetime-local" min="<?php echo date('Y-m-d\TH:i',strtotime('+2 day'));?>" name="return" required>
+                        <h2>Change Pickup date:</h2>
+                        <input type="date" min="<?php echo date('Y-m-d',strtotime('+1 day'));?>" name="pickup" required>
+                        <h2>Change Return date:</h2>
+                        <input type="date" min="<?php echo date('Y-m-d',strtotime('+2 day'));?>" name="return" required>
                         <button type="submit" name="ChangeDates">Change Dates</button>
                     </form>
                     <a href="VehicleDetails.php"><-- Go Back</a>
