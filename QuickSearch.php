@@ -49,7 +49,6 @@
             $_SESSION['QuickSearchGearBox']=$_POST['GearBox'];
             $_SESSION['Q4']=true;
             unset($_SESSION['Q3']);
-            $_SESSION['Q4']=true;
             header("Location: QuickSearch.php");
             exit();            
         }
@@ -73,7 +72,7 @@
         }
     }else if(isset($_POST['Q4Prev'])){
         unset($_SESSION['Q4']);
-        $_SESSION['Q2']=true;
+        $_SESSION['Q3']=true;
         header("Location: QuickSearch.php");
         exit();
     }
@@ -153,11 +152,10 @@
         exit();
     }
 
-
     if(isset($_SESSION['Q2'])){
         echo "<div class='Css1'>
             <form method='POST'>
-                <label>What type of driving will you be doing?</label>
+                <label>Got it, a ".$_SESSION['QuickSearchVehicleType']." it is! Where are you planning to drive it On-road or <br>off-road adventures?</label>
                 <div>
                     <input type='radio' name='DriveStyle' value='OnRoad' "; if(isset($_SESSION['QuickSearchDriveStyle']) && $_SESSION['QuickSearchDriveStyle']=="OnRoad"){echo " checked";} echo">OnRoad
                     <input type='radio' name='DriveStyle' value='OffRoad' "; if(isset($_SESSION['QuickSearchDriveStyle']) && $_SESSION['QuickSearchDriveStyle']=="OffRoad"){echo " checked";} echo" >OffRoad
@@ -171,7 +169,7 @@
     }else if(isset($_SESSION['Q3'])){
         echo "<div class='Css1'>
             <form method='POST'>
-                <label>What type of Gear Box do you prefer?</label>
+                <label>Perfect, ".$_SESSION['QuickSearchDriveStyle']." ".$_SESSION['QuickSearchVehicleType']." locked in. Do you prefer an Automatic or a Manual transmission?</label>
                 <div>
                     <input type='radio' name='GearBox' value='Automatic' "; if(isset($_SESSION['QuickSearchGearBox']) && $_SESSION['QuickSearchGearBox']=="Automatic"){echo " checked";} echo">Automatic
                     <input type='radio' name='GearBox' value='Manual' "; if(isset($_SESSION['QuickSearchGearBox']) && $_SESSION['QuickSearchGearBox']=="Manual"){echo " checked";} echo" >Manual
@@ -188,7 +186,7 @@
                 if($message!=""){
                     echo "<div class='Message'>".$message."</div>";
                 }
-                echo "<label>How many people will be traveling?</label>
+                echo "<label>An ".$_SESSION['QuickSearchGearBox']." ".$_SESSION['QuickSearchVehicleType']." is a solid choice. How many people will be joining you for this trip?</label>
                 <input type='number' name='Seats'"; if(isset($_SESSION['QuickSearchSeats'])){$QuickSearchSeats=$_SESSION['QuickSearchSeats']; echo" value='$QuickSearchSeats'";}echo">
                 <div class='Css3'>
                     <button type='submit' name='Q4Prev'>Prev</button>
@@ -202,7 +200,7 @@
                 echo "<div class='Message'>".$message."</div><br>";
             }
             echo "<form method='POST'>
-                <label>Pick up Branch:</label>
+                <label>Awesome, travelling with a group of ".$_SESSION['QuickSearchSeats'].". Which branch would you like to pick up your vehicle from?</label>
                 <select name='Branch' required>
                     <option value='-'>-</option>";
                     foreach($arr as $a){
@@ -225,7 +223,7 @@
                 echo "<div class='Message'>".$message."</div><br>";
             }
             echo "<form method='POST'>
-                <label>Pick up Location:</label>
+                <label>Perfect choice with the ".$_SESSION['QuickSearchBranch']." branch. Which specific location inside ".$_SESSION['QuickSearchBranch']." works best for you?</label>
                 <select name='Location' required>
                     <option value='-'>-</option>";
                     if($_SESSION['Branch']=="Haifa"){
@@ -255,7 +253,7 @@
             }
             echo "<form method='POST'>
                 <div>
-                    <label>Pickup date:</label>
+                    <label>We're almost ready to hit the road! You're set at ".$_SESSION['QuickSearchLocation'].". What are your pickup and return dates?<br><br>Pickup Date:</label>
                     <input type='date' min='".date('Y-m-d',strtotime('+1 day'))."' name='pickup'"; if(isset($_SESSION['QuickSearchPickup'])){$QuickSearchPickup=$_SESSION['QuickSearchPickup']; echo "value='$QuickSearchPickup'";} echo">
                 </div>
                 <div>
@@ -271,7 +269,7 @@
     }else{
         echo "<div class='Css1'>
             <form method='POST'>
-                <label>What type of car do you prefer?</label>
+                <label>Hey there! Let’s find your ideal ride. Are you looking for a Car or a Van today?</label>
                 <div>
                     <input type='radio' name='VehicleType' value='Car' "; if(isset($_SESSION['QuickSearchVehicleType']) && $_SESSION['QuickSearchVehicleType']=="Car"){echo " checked";} echo" required>Car
                     <input type='radio' name='VehicleType' value='Van' "; if(isset($_SESSION['QuickSearchVehicleType']) && $_SESSION['QuickSearchVehicleType']=="Van"){echo " checked";} echo" >Van
@@ -343,6 +341,9 @@
                 background-color: #f7b7b7;
                 text-align: center;
                 padding:5px 10px 5px 10px;
+            }
+            input[name="Seats"]{
+                font-size:15px;
             }
         </style>
     </head>

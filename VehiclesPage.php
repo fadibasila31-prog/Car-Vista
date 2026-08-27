@@ -39,11 +39,10 @@
                 overflow: auto;
             }
             .Css3 button{
-                margin-top: 70px;
                 padding-left:10px;
                 padding-right:10px;
                 font-size: 25px;
-                font-style:italic;
+                font-style:italic;  
                 font-weight: bold;
                 background-color: yellow;
                 border-radius: 10px;
@@ -54,6 +53,22 @@
                 color:blue;
                 border:2px solid blue;
                 background-color: white;
+            }
+            .Css3 a{
+                text-align: center;
+                margin-top: 50px;
+                background-color: #f4f3f3;
+                border-radius: 15px;
+                font-size: 17px;
+                border:2px black solid;
+                text-decoration: none;
+                padding:5px 10px 5px 10px;
+                color:black;
+                font-weight: bold;
+            }
+            .Css3 a:hover{
+                border:2px solid blue;
+                color:blue;
             }
             .Css4{
                 display: flex;
@@ -106,9 +121,6 @@
                 margin-left: 10px;
                 margin-top: 20px;
             }
-            .Css8{
-                width: 15%;
-            }
             .Css9{
                 display: flex;
             }
@@ -144,9 +156,6 @@
             select{
                 margin-top: 15px;
             }
-            button{
-                cursor: pointer;
-            }
             h1{
                 font-size: 20px;
                 margin-bottom: 0px;   
@@ -167,19 +176,13 @@
                 margin-top: 60px;
                 font-size: 25px;
                 font-style: italic;
+                display: inline-block;
+                padding: 3px 7px 3px 7px;
             }
             h4{
                 color: red;
             }
             h5{
-                text-align: center;
-                margin-top: 50px;
-                background-color: #f4f3f3;
-                border-radius: 10px;
-                font-size: 17px;
-                border:2px black solid;
-            }
-            h6{
                 display: inline;
                 margin-left: 40px;
                 font-size: 20px;
@@ -270,7 +273,7 @@
                     $searching.=" AND GearBox='$GB'";
                 }
             }else{
-                $seats="";
+                $GB="";
             }
 
             if(isset($_SESSION['VehicleType'])){
@@ -586,7 +589,7 @@
                         echo "<tr><td><img src='Pictures/".$c['Image']."'> 
                         <div class='Css7'>
                             <div>
-                                <h6>";
+                                <h5>";
                                     if($c['Rating']!=0){
                                         for($i=0;$i<$c['Rating'];$i++){
                                             echo "⭐";
@@ -594,7 +597,7 @@
                                     }else{
                                         echo "No ratings yet";
                                     }
-                                echo"</h6>
+                                echo"</h5>
                                 <div class='Css9'>
                                     <div>
                                         <h2>".$c['VehicleBrand']."</h2>
@@ -645,7 +648,7 @@
                                     echo"</p>
                                 </div>
                         <div><p>HP ".$c['HorsePower']."</p></div></div></div>
-                        <div class='Css8'><h3>$".$c['PricePerDay']."/day</h3>";
+                        <div><h3>$".$c['PricePerDay']."/day</h3><br><br><br>";
                         $CarId2=$c['Id'];
                         if(isset($_SESSION['UserId'])){
                             echo"<form method='post'>
@@ -653,7 +656,7 @@
                                 <button type='submit' name='select'>select</button>
                             </form></div></td></tr>";
                         }else{
-                            echo "<h5>you have to Login</h5>";
+                            echo "<a href='Login.php'>you have to Login</a>";
                         }
                     }
                 }else{

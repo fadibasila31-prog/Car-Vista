@@ -18,20 +18,23 @@
         $now=time();
         $now2=date("Y-m-d H:i");
         $BookingId=$s['BookingId'];
-        if($Start<=$now && $now<=$End){
-            mysqli_query($con,"UPDATE Booking SET Status='Active' WHERE BookingId='$BookingId' AND StartDate<='$now2' AND EndDate>='$now2'");
-        }else if($now<$Start){
-            mysqli_query($con,"UPDATE Booking SET Status='Waiting' WHERE BookingId='$BookingId' AND StartDate>'$now2'");
-        }else if($now>$End){
-            mysqli_query($con,"UPDATE Booking SET Status='Finished' WHERE BookingId='$BookingId' AND EndDate<'$now2'");                    
+        if($s['Status']!="Canceled"){
+            if($Start<=$now && $now<=$End){
+                mysqli_query($con,"UPDATE Booking SET Status='Active' WHERE BookingId='$BookingId' AND StartDate<='$now2' AND EndDate>='$now2'");
+            }else if($now<$Start){
+                mysqli_query($con,"UPDATE Booking SET Status='Waiting' WHERE BookingId='$BookingId' AND StartDate>'$now2'");
+            }else if($now>$End){
+                mysqli_query($con,"UPDATE Booking SET Status='Finished' WHERE BookingId='$BookingId' AND EndDate<'$now2'");                    
+            }
         }
     }
 
     $RandomPassTimer=mysqli_query($con,"SELECT * FROM Users");
     while($timer=mysqli_fetch_array($RandomPassTimer)){
         if($timer['StartTimeExpired']!=null ){
+            $Id=$timer['Id'];
             if($timer['StartTimeExpired'] < $timer['EndTimeExpired']){
-                mysqli_query($con, "UPDATE Users SET StartTimeExpired = NOW()");
+                mysqli_query($con, "UPDATE Users SET StartTimeExpired = NOW() WHERE Id=$Id");
             }
         }
     }

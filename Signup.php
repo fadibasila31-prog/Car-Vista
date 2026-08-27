@@ -21,8 +21,6 @@
         $_SESSION['SignUpLname']=$_POST['Lname'];
         $_SESSION['SignUpGmail']=$_POST['Gmail'];
         $_SESSION['SignUpBirthDay']=$_POST['BirthDay'];
-        $_SESSION['SignUpPass1']=$_POST['Pass1'];
-        $_SESSION['SignUpPass2']=$_POST['Pass2'];
         $_SESSION['SignUpPhoneNumber']=$_POST['PhoneNumber'];
         $_SESSION['SignUpIDNumber']=$_POST['IDNumber'];
         $_SESSION['SignUpHaveDriverLicense']=$_POST['HaveDriverLicense'];
@@ -64,7 +62,7 @@
             $message="Please Enter Your Name.";
         }else if(!$isValid2 || trim(strlen($IdNumber))!=9){
             $message="Please Enter Your ID Number Again.";
-        }else if(trim(strlen($pass1))<6 || trim(strlen($pass2))<6){
+        }else if(trim(strlen($pass1))<6 || strlen($pass2)<6){
             $message="Your Password must be at least 6 chars/digits.";
         }else if($pass1 != $pass2){
             $message="Confirm your Password again.";
@@ -207,9 +205,9 @@
                 <label>Birth Day:</label>
                 <input type="date" name="BirthDay"  max="<?php echo date("Y-m-d") ?>" <?php if(isset($_SESSION['SignUpBirthDay'])){ echo "value='".$_SESSION['SignUpBirthDay']."'";} ?> required>
                 <label>Passowrd:</label>
-                <input type="password" name="Pass1" placeholder="Password...." <?php if(isset($_SESSION['SignUpPass1'])){ echo "value='".$_SESSION['SignUpPass1']."'";} ?> required>
+                <input type="password" name="Pass1" placeholder="Password...." required>
                 <label>Confirm Password:</label>
-                <input type="password" name="Pass2" placeholder="Confirm Pssword...." <?php if(isset($_SESSION['SignUpPass2'])){ echo "value='".$_SESSION['SignUpPass2']."'";} ?> required>
+                <input type="password" name="Pass2" placeholder="Confirm Pssword...." required>
                 <label>Phone Number:</label>
                 <input type="text" name="PhoneNumber" placeholder="Phone Number...." <?php if(isset($_SESSION['SignUpPhoneNumber'])){ echo "value='".$_SESSION['SignUpPhoneNumber']."'";} ?> required>
                 <label>Have Driver License:</label>

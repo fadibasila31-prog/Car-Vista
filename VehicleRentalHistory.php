@@ -6,8 +6,11 @@
     $StartDate="";
     $EndDate="";
     $Vehicle="";
+    $Fname="";
+    $Lname="";
     $Search="";
     $Search2="";
+    $Search3="";
     $found=false;
     if(isset($_POST['Search'])){
 
@@ -20,10 +23,23 @@
             $StartDate=$_POST['StartDate'];
         }
 
+        if(isset($_POST['Fname']) && trim($_POST['Fname'])!=""){
+            $Fname=$_POST['Fname'];
+            if(isset($_POST['Lname']) && trim($_POST['Lname'])!=""){
+                $Lname=$_POST['Lname'];
+                $Search3="WHERE FirstName='$Fname' OR LastName='$Lname'";
+            }else{
+                $Search3="WHERE FirstName='$Fname'";
+            }
+        }else if(isset($_POST['Lname']) && trim($_POST['Lname'])!=""){
+            $Lname=$_POST['Lname'];
+            $Search3="WHERE LastName='$Lname'";
+        }
+
         if(isset($_POST['EndDate']) && $_POST['EndDate']!=""){
             $EndDate=$_POST['EndDate'];
             if($StartDate!=""){
-                if(strtotime($StartDate)>=strtotime($EndDate)){
+                if(strtotime($StartDate)>strtotime($EndDate)){
                     $message.="The end date must be after the start date.";
                 }
             }else{
@@ -55,6 +71,10 @@
                 display: flex;
                 padding-top:10px ;
             }
+            .Css2{
+                display: flex;
+                gap:10px;
+            }
             button[name="Search"]{
                 border-radius: 10px;
                 border:2px solid black;
@@ -66,11 +86,21 @@
                 color:blue;
                 border:2px solid blue;
             }
+            button[name="Reset"]{
+                border-radius: 10px;
+                border:2px solid black;
+                margin-top: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            button[name="Reset"]:hover{
+                color:blue;
+                border:2px solid blue;
+            }
             .nav{
-                margin-left: 400px;
-                margin-right: 400px;   
-                padding-top: 10px;
-                padding-bottom: 10px; 
+                margin-left: 180px;
+                margin-right: 180px;   
+                padding:10px 20px 10px 20px; 
                 border-radius: 20px;            
                 background-color: #cfcecefd;
             }
@@ -162,23 +192,34 @@
             <form method="POST">
                 <div class="Css1">
                     <label>
-                        <input type="radio" name="VehicleType" value="Car">
+                        <input type="radio" name="VehicleType" value="Car" <?php if($Vehicle=="Car"){echo "checked";} ?>>
                         <span id="Car">Car</span>    
                     </label>
                     <label>
-                        <input type="radio" name="VehicleType" value="Van">
+                        <input type="radio" name="VehicleType" value="Van" <?php if($Vehicle=="Van"){echo "checked";} ?>>
                         <span id="Van">Van</span> 
                     </label>
                 </div>
                 <div>
+                    <label>First Name:</label>
+                    <input type="text" name="Fname" <?php if($Fname!=""){echo "value='$Fname'";} ?>>
+                </div>
+                <div>
+                    <label>Last Name:</label>
+                    <input type="text" name="Lname" <?php if($Lname!=""){echo "value='$Lname'";} ?>>
+                </div>
+                <div>
                     <label id="DateCss">Start Date:</label>
-                    <input type="datetime-local" name="StartDate">
+                    <input type="datetime-local" name="StartDate" <?php if($StartDate!=""){echo "value='$StartDate'";} ?>>
                 </div>
                 <div>
                     <label id="DateCss">End Date:</label>
-                    <input type="datetime-local" name="EndDate">
+                    <input type="datetime-local" name="EndDate" <?php if($EndDate!=""){echo "value='$EndDate'";} ?>>
                 </div>
-                <button type="submit" name="Search">Search</button>
+                <div class="Css2">
+                    <button type="submit" name="Search">Search</button>
+                    <button type="submit" name="Reset">Reset</button>
+                </div>
             </form>
         </nav>
         <?php 
@@ -189,6 +230,7 @@
         ?>
         <table>
             <th id="thLeft">Vehicle ID</th>
+            <th>Full Name</th>
             <th>Vehicle Type</th>
             <th>Number Plate</th>
             <th>Vehicle Brand</th>
@@ -196,31 +238,61 @@
             <th>End Date</th>
             <th id="thRight">Status</th>
             <?php
-                $Booking=mysqli_query($con,"SELECT * FROM Booking $Search2");
-                while($b=mysqli_fetch_array($Booking)){
-                    echo "<tr>";
+                if($Search3==""){
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking $Search2");
+                    while($b=mysqli_fetch_array($Booking)){
                         $VehiclesRentalHistory=mysqli_query($con,"SELECT * FROM Vehicle $Search");
                         while($v=mysqli_fetch_array($VehiclesRentalHistory)){
                             if($v['Id']==$b['VehicleId']){
                                 $found=true;
-                                echo"<td><h1>".$v['Id']."</h1></td>
-                                <td><h1>".$v['VehicleType']."</h1></td>
+                                echo"<tr><td><h1>".$v['Id']."</h1></td>";
+                                $Users=mysqli_query($con,"SELECT * FROM Users");
+                                while($u=mysqli_fetch_array($Users)){
+                                    if($b['CustomerId']==$u['Id']){
+                                        echo "<td><h1>".$u['FirstName']." ".$u['LastName']."</h1></td>";
+                                    }
+                                }
+                                echo"<td><h1>".$v['VehicleType']."</h1></td>
                                 <td><h1>".$v['NumberPlate']."</h1></td>
                                 <td><h1>".$v['VehicleBrand']."</h1></td>
                                 <td><h1>".$b['StartDate']."</h1></td>
                                 <td><h1>".$b['EndDate']."</h1></td>
-                                <td><h1>".$b['Status']."</h1></td>";
+                                <td><h1>".$b['Status']."</h1></td></tr>";
                                 break;
                             }
                         }
-                    echo "</tr>";
+                    }
+                }else{
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking $Search2");
+                    while($b=mysqli_fetch_array($Booking)){
+                        $Users=mysqli_query($con,"SELECT * FROM Users $Search3");
+                        while($u=mysqli_fetch_array($Users)){
+                            if($b['CustomerId']==$u['Id']){
+                                $VehiclesRentalHistory=mysqli_query($con,"SELECT * FROM Vehicle $Search");
+                                while($v=mysqli_fetch_array($VehiclesRentalHistory)){
+                                    if($v['Id']==$b['VehicleId']){
+                                        $found=true;
+                                        echo"<tr><td><h1>".$v['Id']."</h1></td>
+                                        <td><h1>".$u['FirstName']." ".$u['LastName']."</h1></td>
+                                        <td><h1>".$v['VehicleType']."</h1></td>
+                                        <td><h1>".$v['NumberPlate']."</h1></td>
+                                        <td><h1>".$v['VehicleBrand']."</h1></td>
+                                        <td><h1>".$b['StartDate']."</h1></td>
+                                        <td><h1>".$b['EndDate']."</h1></td>
+                                        <td><h1>".$b['Status']."</h1></td></tr>";
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             ?>
         </table>
         <?php
             if(!$found){
-                echo "<br><h2>Vehicle Not Found</h2>";
+                echo "<br><h2>Rental Not Found</h2>";
             }
         ?>
     </body>

@@ -49,6 +49,7 @@
                             $EndTime=date("Y-m-d H:i:s",strtotime("+5 minutes"));
                             mysqli_query($con,"UPDATE Users SET Password='$RandPass',StartTimeExpired='$StartTime',EndTimeExpired='$EndTime' WHERE Gmail='$gmail'");
                             header("Location: UpdatePassword.php");
+                            exit();
                         }else{
                             $message="<h2>Something Went Wrong, try again.</h2>";
                         }

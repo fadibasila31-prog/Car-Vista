@@ -30,6 +30,10 @@
     $VId="";
     $message="";
     $message2="";
+    $message3="";
+    $Update="";
+    $cnt=0;
+
     if(isset($_POST['AddVehicle'])){
         if(isset($_POST['VehicleId'])){
             if(trim($_POST['VehicleId'])!=""){
@@ -277,31 +281,39 @@
                         if(isset($_POST['VehicleBrand']) && $_POST['VehicleBrand']!=""){
                             if(trim($_POST['VehicleBrand'])!=""){
                                 $VehicleBrand=$_POST['VehicleBrand'];
+                                $Update="VehicleBrand='$VehicleBrand'";
+                                $cnt++;
                             }else{
                                 $message.="<h2>You Cant Change To Empty Vehicle Brand</h2>\n";
                             }
-                        }else{
-                            $VehicleBrand=$c['VehicleBrand'];
                         }
 
                         if(isset($_POST['Color']) && $_POST['Color']!=""){
                             if(trim($_POST['Color'])!=""){
                                 $Color=$_POST['Color'];
+                                if($cnt==0){
+                                    $Update="Color='$Color'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , Color='$Color'";
+                                }
                             }else{
                                 $message.="<h2>You Cant Change To Empty Vehicle Color</h2>\n";
                             }
-                        }else{
-                            $Color=$c['Color'];
                         }
 
                         if(isset($_POST['VehicleName']) && $_POST['VehicleName']!=""){
                             if(trim($_POST['VehicleName'])!=""){
                                 $VehicleName=$_POST['VehicleName'];
+                                if($cnt==0){
+                                    $Update="VehicleName='$VehicleName'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , VehicleName='$VehicleName'";
+                                }
                             }else{
                                 $message.="<h2>You Cant Change To Empty Vehicle Name</h2>\n";
                             }
-                        }else{
-                            $VehicleName=$c['VehicleName'];
                         }
 
                         if(isset($_POST['NumberPlat']) && $_POST['NumberPlat']!=""){
@@ -318,87 +330,135 @@
 
                                 if($found2){
                                     $message.="<h2>You Already Have This Vehicle Number Plate</h2>\n";
-                                }                                                                
+                                }else {
+                                    if($cnt==0){
+                                        $Update="NumberPlate='$NumberPlate'";
+                                        $cnt++;
+                                    }else{
+                                        $Update.=" , NumberPlate='$NumberPlate'";
+                                    }
+                                }                                                             
                             }else{
                                 $message.="<h2>You Cant Change To Empty Vehicle Number Plate</h2>\n";
                             }
-                        }else{
-                            $NumberPlate=$c['NumberPlate'];
                         }
 
                         if(isset($_POST['PricePerDay']) && trim($_POST['PricePerDay'])!=""){
                             $PricePerDay=$_POST['PricePerDay'];
                             if($PricePerDay<=0){
                                 $message.="<h2>Price Must Be Greater Than 0</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="PricePerDay='$PricePerDay'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , PricePerDay='$PricePerDay'";
+                                }
                             }
-                        }else{
-                            $PricePerDay=$c['PricePerDay'];
                         }
 
                         if(isset($_POST['Seats']) && trim($_POST['Seats'])!=""){
                             $Seats=$_POST['Seats'];
                             if($Seats<=1){
                                 $message.="<h2>Must Be At Least 2 Seats</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="Seats='$Seats'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , Seats='$Seats'";
+                                }
                             }
-                        }else{
-                            $Seats=$c['Seats'];
                         }
 
                         if(isset($_POST['Doors']) && trim($_POST['Doors'])!=""){
                             $Doors=$_POST['Doors'];
                             if($Doors<=1){
                                 $message.="<h2>Must Be At Least 2 Doors</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="Doors='$Doors'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , Doors='$Doors'";
+                                }
                             }
-                        }else{
-                            $Doors=$c['Doors'];
                         }
 
                         if(isset($_POST['Miles']) && trim($_POST['Miles'])!=""){
                             $Miles=$_POST['Miles'];
                             if($Miles<0){
                                 $message.="<h2>Vehicle Miles Cant Be Lower Than 0</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="Miles='$Miles'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , Miles='$Miles'";
+                                }
                             }
-                        }else{
-                            $Miles=$c['Miles'];
                         }
 
                         if(isset($_POST['HorsePower']) && trim($_POST['HorsePower'])!=""){
                             $HorsePower=$_POST['HorsePower'];
                             if($HorsePower<=0){
                                 $message.="<h2>Horse Power Must Be Greater Than 0</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="HorsePower='$HorsePower'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , HorsePower='$HorsePower'";
+                                }
                             }
-                        }else{
-                            $HorsePower=$c['HorsePower'];
                         }
 
                         if(isset($_POST['MaxSpeed']) && trim($_POST['MaxSpeed'])!=""){
                             $MaxSpeed=$_POST['MaxSpeed'];
                             if($MaxSpeed<=0){
                                 $message.="<h2>Max Speed Must Be Greater Than 0</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="MaxSpeed='$MaxSpeed'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , MaxSpeed='$MaxSpeed'";
+                                }
                             }
-                        }else{
-                            $MaxSpeed=$c['MaxSpeed'];
                         }
 
                         if(isset($_POST['TankSize']) && trim($_POST['TankSize'])!=""){
                             $TankSize=$_POST['TankSize'];
                             if($TankSize<10){
                                 $message.="<h2>Tank Size Must Be At Least 10 Liters</h2>\n";
+                            }else{
+                                if($cnt==0){
+                                    $Update="TankSize='$TankSize'";
+                                    $cnt++;
+                                }else{
+                                    $Update.=" , TankSize='$TankSize'";
+                                }
                             }
-                        }else{
-                            $TankSize=$c['TankSize'];
                         }
 
                         if(isset($_POST['VehicleType'])){
                             $VehicleType=$_POST['VehicleType'];
-                        }else{
-                            $VehicleType=$c['VehicleType'];
+                            if($cnt==0){
+                                $Update="VehicleType='$VehicleType'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleType='$VehicleType'";
+                            }
                         }
 
                         if(isset($_POST['GearBox'])){
                             $GearBox=$_POST['GearBox'];
-                        }else{
-                            $GearBox=$c['GearBox'];
+                            if($cnt==0){
+                                $Update="GearBox='$GearBox'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , GearBox='$GearBox'";
+                            }
                         }
 
                         if(isset($_POST['DriveStyle'])){
@@ -407,14 +467,23 @@
                             }else{
                                 $DriveStyle=0;
                             }
-                        }else{
-                            $DriveStyle=$c['DriveStyle'];
+
+                            if($cnt==0){
+                                $Update="DriveStyle='$DriveStyle'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , DriveStyle='$DriveStyle'";
+                            }
                         }
 
                         if(isset($_POST['EnergyType'])){
                             $EnergyType=$_POST['EnergyType'];
-                        }else{
-                            $EnergyType=$c['EnergyType'];
+                            if($cnt==0){
+                                $Update="EnergyType='$EnergyType'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , EnergyType='$EnergyType'";
+                            }
                         }
 
                         if(isset($_POST['Convertible'])){
@@ -423,14 +492,23 @@
                             }else{
                                 $Convertible=0;
                             }
-                        }else{
-                            $Convertible=$c['Convertible'];
+
+                            if($cnt==0){
+                                $Update="Convertible='$Convertible'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , Convertible='$Convertible'";
+                            }
                         }
 
                         if(isset($_POST['Branch'])){
                             $Branch=$_POST['Branch'];
-                        }else{
-                            $Branch=$c['Branch'];
+                            if($cnt==0){
+                                $Update="Branch='$Branch'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , Branch='$Branch'";
+                            }
                         }
 
                         if(isset($_POST['AirConditioner'])){
@@ -439,68 +517,107 @@
                             }else{
                                 $AirConditioner=0;
                             }
-                        }else{
-                            $AirConditioner=$c['AirConditioner'];
+
+                            if($cnt==0){
+                                $Update="AirConditioner='$AirConditioner'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , AirConditioner='$AirConditioner'";
+                            }
                         }
 
                         if(isset($_POST['DriveType'])){
                             $DriveType=$_POST['DriveType'];
-                        }else{
-                            $DriveType=$c['DriveType'];
+                            if($cnt==0){
+                                $Update="DriveType='$DriveType'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , DriveType='$DriveType'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleImage']['name'])){
                             $VehicleImage=$_FILES['VehicleImage']['name'];
                             $VehicleImage=time()."_".$VehicleImage;
                             move_uploaded_file($_FILES['VehicleImage']['tmp_name'],"Pictures/$VehicleImage");
-                        }else{
-                            $VehicleImage=$c['Image'];
+
+                            if($cnt==0){
+                                $Update="Image='$VehicleImage'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , Image='$VehicleImage'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleInside1']['name'])){
                             $InteriorImage1=$_FILES['VehicleInside1']['name'];
                             $InteriorImage1=time()."_".$InteriorImage1;
                             move_uploaded_file($_FILES['VehicleInside1']['tmp_name'],"Pictures/$InteriorImage1");
-                        }else{
-                            $InteriorImage1=$c['VehicleInside1'];
+
+                            if($cnt==0){
+                                $Update="VehicleInside1='$InteriorImage1'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleInside1='$InteriorImage1'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleInside2']['name'])){
                             $InteriorImage2=$_FILES['VehicleInside2']['name'];
                             $InteriorImage2=time()."_".$InteriorImage2;
                             move_uploaded_file($_FILES['VehicleInside2']['tmp_name'],"Pictures/$InteriorImage2");
-                        }else{
-                            $InteriorImage2=$c['VehicleInside2'];
+
+                            if($cnt==0){
+                                $Update="VehicleInside2='$InteriorImage2'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleInside2='$InteriorImage2'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleInside3']['name'])){
                             $InteriorImage3=$_FILES['VehicleInside3']['name'];
                             $InteriorImage3=time()."_".$InteriorImage3;
                             move_uploaded_file($_FILES['VehicleInside3']['tmp_name'],"Pictures/$InteriorImage3");
-                        }else{
-                            $InteriorImage3=$c['VehicleInside3'];
+
+                            if($cnt==0){
+                                $Update="VehicleInside3='$InteriorImage3'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleInside3='$InteriorImage3'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleInside4']['name'])){
                             $InteriorImage4=$_FILES['VehicleInside4']['name'];
                             $InteriorImage4=time()."_".$InteriorImage4;
                             move_uploaded_file($_FILES['VehicleInside4']['tmp_name'],"Pictures/$InteriorImage4");
-                        }else{
-                            $InteriorImage4=$c['VehicleInside4'];
+
+                            if($cnt==0){
+                                $Update="VehicleInside4='$InteriorImage4'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleInside4='$InteriorImage4'";
+                            }
                         }
 
                         if(!empty($_FILES['VehicleLogo']['name'])){
                             $VehicleLogo=$_FILES['VehicleLogo']['name'];
                             $VehicleLogo=time()."_".$VehicleLogo;
                             move_uploaded_file($_FILES['VehicleLogo']['tmp_name'],"Pictures/$VehicleLogo");
-                        }else{
-                            $VehicleLogo=$c['VehicleLogo'];
+                            
+                            if($cnt==0){
+                                $Update="VehicleLogo='$VehicleLogo'";
+                                $cnt++;
+                            }else{
+                                $Update.=" , VehicleLogo='$VehicleLogo'";
+                            }
                         }
 
 
-                        if($message==""){
-                            mysqli_query($con,"UPDATE Vehicle SET VehicleType='$VehicleType' , NumberPlate='$NumberPlate' , VehicleBrand='$VehicleBrand' , Image='$VehicleImage' , PricePerDay='$PricePerDay' , GearBox='$GearBox' , Seats='$Seats' , Doors='$Doors' , DriveStyle='$DriveStyle' ,Miles='$Miles' , Color='$Color' , Convertible='$Convertible' , EnergyType='$EnergyType' 
-                            , HorsePower='$HorsePower' , VehicleName='$VehicleName' , MaxSpeed='$MaxSpeed' , DriveType='$DriveType' , TankSize='$TankSize' , AirConditioner='$AirConditioner' , VehicleInside1='$InteriorImage1' , VehicleInside2='$InteriorImage2' , VehicleInside3='$InteriorImage3' , VehicleInside4='$InteriorImage4' , VehicleLogo='$VehicleLogo' WHERE Id='$VId'");
+                        if($message=="" && $Update!=""){
+                            mysqli_query($con,"UPDATE Vehicle SET $Update WHERE Id='$VId'");
+                            $message2="<h3>Vehicle Changed Successfully</h3>\n";
                         }
                         break;
                     }
@@ -510,7 +627,7 @@
                     $message="<h2>Vehicle ID Not Found!!!</h2>";
                 }
         }else{
-            $message.="<h2>You Have To Enter Vehicle ID, You Can Check It In Vehicles Details Page</h2>\n";
+            $message3="<h2>You Have To Enter Vehicle ID, You Can Check It In Vehicles Details Page</h2>\n";
         }
     }else if(isset($_POST['Delete'])){
         if(isset($_POST['VehicleId']) && trim($_POST['VehicleId'])!=""){
@@ -524,17 +641,22 @@
                 }
 
                 if($found){
-                    $Deleted=mysqli_query($con,"DELETE FROM Vehicle WHERE Id=$VId");
-                    if($Deleted){
-                        $message2.="<h3>Vehicle Deleted Successful</h3>\n";
+                    $DeleteFromBooking=mysqli_query($con,"DELETE FROM Booking WHERE VehicleId=$VId");
+                    if($DeleteFromBooking){
+                        $Deleted=mysqli_query($con,"DELETE FROM Vehicle WHERE Id=$VId");
+                        if($Deleted){
+                            $message2="<h3>Vehicle Deleted Successful</h3>\n";
+                        }else{
+                            $message3.="<h2>Vehicle didnt Deleted try again</h2>\n";
+                        }
                     }else{
-                        $message.="<h2>Vehicle didnt Deleted try again</h2>\n";
+                        $message3.="<h2>Vehicle didnt Deleted try again</h2>\n";
                     }
                 }else{
-                    $message.="<h2>Vehicle ID is didnt found</h2>\n";
+                    $message3.="<h2>Vehicle ID is didnt found</h2>\n";
                 }
         }else{
-            $message="<h2>You Have To Enter Vehicle ID, You Can Check It In Vehicles Details Page</h2>";
+            $message3="<h2>You Have To Enter Vehicle ID, You Can Check It In Vehicles Details Page</h2>";
         }
     }
 
@@ -544,6 +666,10 @@
         exit(); 
     }else if($message2!=""){
         $_SESSION['successfulMessage']=$message2;
+        header("Location: ManagerVehicleManagement.php");
+        exit(); 
+    }else if($message3!=""){
+        $_SESSION['FailedMessage']=$message3;
         header("Location: ManagerVehicleManagement.php");
         exit(); 
     }
@@ -597,8 +723,13 @@
                 border-radius: 10px;
                 margin-bottom: 20px;
             }
+            .FailedMessage{
+                background-color: #e49696;
+                border: 5px red solid;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
             .successfulMessagecss{
-                height: 200px;
                 background-color: #9eeaa3;
                 border: 5px green solid;
                 border-radius: 10px;
@@ -677,6 +808,9 @@
                 }else if(isset($_SESSION['successfulMessage'])){
                     echo "<div class='successfulMessagecss'>".$_SESSION['successfulMessage']."</div>";
                     unset($_SESSION['successfulMessage']);
+                }else if(isset($_SESSION['FailedMessage'])){
+                    echo "<div class='FailedMessage'>".$_SESSION['FailedMessage']."</div>";
+                    unset($_SESSION['FailedMessage']);
                 }
             ?>
             <form method="POST" enctype="multipart/form-data">
@@ -685,49 +819,49 @@
                         <div class="Css4">
                             <div>
                                 <label>Vehicle Brand:</label>
-                                <input type="text" name="VehicleBrand" >
+                                <input type="text" name="VehicleBrand" <?php if($VehicleBrand!=""){echo "value='$VehicleBrand'";} ?>>
                             </div>
                             <div>
                                 <label>Color:</label>
-                                <input type="text" name="Color" >
+                                <input type="text" name="Color" <?php if($Color!=""){echo "value='$Color'";} ?>>
                             </div>
                             <div>
                                 <label>Vehicle Name:</label>
-                                <input type="text" name="VehicleName" >
+                                <input type="text" name="VehicleName" <?php if($VehicleName!=""){echo "value='$VehicleName'";} ?>>
                             </div>
                             <div>
                                 <label>Number Plate:</label>
-                                <input type="text" name="NumberPlat" >
+                                <input type="text" name="NumberPlat" <?php if($NumberPlate!=""){echo "value='$NumberPlate'";} ?>>
                             </div> 
                             <div>
                                 <label>Price Per Day:</label>
-                                <input type="number" name="PricePerDay" >
+                                <input type="number" name="PricePerDay" <?php if($PricePerDay!=""){echo "value='$PricePerDay'";} ?>>
                             </div>
                             <div>
                                 <label>Seats:</label>
-                                <input type="number" name="Seats" >
+                                <input type="number" name="Seats" <?php if($Seats!=""){echo "value='$Seats'";} ?>>
                             </div>
                         </div>
                         <div class="Css4">
                             <div>
                                 <label>Doors:</label>
-                                <input type="number" name="Doors" >
+                                <input type="number" name="Doors" <?php if($Doors!=""){echo "value='$Doors'";} ?>>
                             </div>
                             <div>
                                 <label>Miles:</label>
-                                <input type="number" name="Miles" >
+                                <input type="number" name="Miles" <?php if($Miles!=""){echo "value='$Miles'";} ?>>
                             </div>
                             <div>
                                 <label>Horse Power:</label>
-                                <input type="number" name="HorsePower" >
+                                <input type="number" name="HorsePower" <?php if($HorsePower!=""){echo "value='$HorsePower'";} ?>>
                             </div>
                             <div>
                                 <label>Max Speed:</label>
-                                <input type="number" name="MaxSpeed" >
+                                <input type="number" name="MaxSpeed" <?php if($MaxSpeed!=""){echo "value='$MaxSpeed'";} ?>>
                             </div>
                             <div>
                                 <label>Tank Size:</label>
-                                <input type="number" name="TankSize" >
+                                <input type="number" name="TankSize" <?php if($TankSize!=""){echo "value='$TankSize'";} ?>>
                             </div>
                         </div>
                     </div>
@@ -735,51 +869,51 @@
                         <div class="Css5">
                             <div>
                                 <label>Vehicle Type:</label>
-                                <input type="radio" name="VehicleType" value="Car" >Car
-                                <input type="radio" name="VehicleType" value="Van">Van
+                                <input type="radio" name="VehicleType" value="Car" <?php if($VehicleType=="Car"){echo "checked";} ?>>Car
+                                <input type="radio" name="VehicleType" value="Van" <?php if($VehicleType=="Van"){echo "checked";} ?>>Van
                             </div>
                             <div>
                                 <label>Gear Box:</label>
-                                <input type="radio" name="GearBox" value="Automatic" >Automatic
-                                <input type="radio" name="GearBox" value="Manual">Manual
+                                <input type="radio" name="GearBox" value="Automatic" <?php if($GearBox=="Automatic"){echo "checked";} ?>>Automatic
+                                <input type="radio" name="GearBox" value="Manual" <?php if($GearBox=="Manual"){echo "checked";} ?>>Manual
                             </div>
                             <div>
                                 <label>Drive Style:</label>
-                                <input type="radio" name="DriveStyle" value="OffRoad" >OffRoad
-                                <input type="radio" name="DriveStyle" value="OnRoad">OnRoad
+                                <input type="radio" name="DriveStyle" value="OffRoad" <?php if($DriveStyle=="OffRoad"){echo "checked";} ?>>OffRoad
+                                <input type="radio" name="DriveStyle" value="OnRoad" <?php if($DriveStyle=="OnRoad"){echo "checked";} ?>>OnRoad
                             </div>
                         </div>
                         <div class="Css5">
                             <div>
                                 <label>Energy Type:</label>
-                                <input type="radio" name="EnergyType" value="Gas" >Gas
-                                <input type="radio" name="EnergyType" value="Electric">Electric
-                                <input type="radio" name="EnergyType" value="Hybrid">Hybrid
+                                <input type="radio" name="EnergyType" value="Gas" <?php if($EnergyType=="Gas"){echo "checked";} ?>>Gas
+                                <input type="radio" name="EnergyType" value="Electric" <?php if($EnergyType=="Electric"){echo "checked";} ?>>Electric
+                                <input type="radio" name="EnergyType" value="Hybrid" <?php if($EnergyType=="Hybrid"){echo "checked";} ?>>Hybrid
                             </div>
                             <div>
                                 <label>Convertible:</label>
-                                <input type="radio" name="Convertible" value="Yes" >Yes
-                                <input type="radio" name="Convertible" value="No">No
+                                <input type="radio" name="Convertible" value="Yes" <?php if($Convertible==1){echo "checked";} ?>>Yes
+                                <input type="radio" name="Convertible" value="No" <?php if($Convertible==0){echo "checked";} ?>>No
                             </div>
                             <div>
                                 <label>Branch:</label>
-                                <input type="radio" name="Branch" value="Haifa" >Haifa
-                                <input type="radio" name="Branch" value="Tel-Aviv">Tel-Aviv
-                                <input type="radio" name="Branch" value="Rama">Jerusalem
-                            </div>                                    
+                                <input type="radio" name="Branch" value="Haifa" <?php if($Branch=="Haifa"){echo "checked";} ?>>Haifa
+                                <input type="radio" name="Branch" value="Tel-Aviv" <?php if($Branch=="Tel-Aviv"){echo "checked";} ?>>Tel-Aviv
+                                <input type="radio" name="Branch" value="Jerusalem" <?php if($Branch=="Jerusalem"){echo "checked";} ?>>Jerusalem
+                            </div>
                         </div>
                         <div class="Css5">
                             <div>
                                 <label>Air Conditioner:</label>
-                                <input type="radio" name="AirConditioner" value="Yes" >Yes
-                                <input type="radio" name="AirConditioner" value="No">No
+                                <input type="radio" name="AirConditioner" value="Yes" <?php if($AirConditioner==1){echo "checked";} ?>>Yes
+                                <input type="radio" name="AirConditioner" value="No" <?php if($AirConditioner==0){echo "checked";} ?>>No
                             </div>
                             <div>
                                 <label>Drive Type:</label>
-                                <input type="radio" name="DriveType" value="FWD" >FWD(Front-Wheel Drive)
-                                <input type="radio" name="DriveType" value="RWD">RWD(Rear-Wheel Drive)
-                                <input type="radio" name="DriveType" value="AWD">AWD(All-Wheel Drive)
-                                <input type="radio" name="DriveType" value="4WD">4WD(Four-Wheel Drive)
+                                <input type="radio" name="DriveType" value="FWD" <?php if($DriveType=="FWD"){echo "checked";} ?>>FWD(Front-Wheel Drive)
+                                <input type="radio" name="DriveType" value="RWD" <?php if($DriveType=="RWD"){echo "checked";} ?>>RWD(Rear-Wheel Drive)
+                                <input type="radio" name="DriveType" value="AWD" <?php if($DriveType=="AWD"){echo "checked";} ?>>AWD(All-Wheel Drive)
+                                <input type="radio" name="DriveType" value="4WD" <?php if($DriveType=="4WD"){echo "checked";} ?>>4WD(Four-Wheel Drive)
                             </div>
                         </div>
                         <div class="Css5">
@@ -813,7 +947,7 @@
                         <div class="Css5">
                             <div>
                                 <input type="number" name="VehicleId" placeholder="Enter Vehicle ID to change or Delete...">
-                                <button id="ChangeButton" type="submit" name="Change">Change</button>
+                                <button id="ChangeButton" type="submit" name="Change" <?php if($VId!=""){echo "value='$VId'";} ?>>Change</button>
                             </div>
                             <button id="DeleteButton" type="submit" name="Delete">Delete</button>
                             <button id="AddVehicleButton" type="submit" name="AddVehicle">Add Vehicle</button>

@@ -9,6 +9,8 @@
     $message1="";
     $message2="";
     $message3="";
+    $message4="";
+    $arr=[];
 
 
     if(isset($_POST['AddManager'])){
@@ -59,7 +61,10 @@
             }
 
             for($i=0;$i<strlen($Gmail);$i++){
-                if($Gmail[$i]=='@'){
+                if(($Gmail[$i]=='@' || $Gmail[$i]==" ") && $i==0){
+                    $message1.="<br>Please Check you'r Gmail Again.";
+                    break;
+                }else if($Gmail[$i]=='@'){
                     for($j=$i;$j<strlen($Gmail);$j++){
                         $email.=$Gmail[$j];
                     }
@@ -99,7 +104,7 @@
                 }
             }
             
-            if($caps==0 || $digits<2){
+            if($caps==0 || $digits<2 || strlen($Pass1)<=6){
                 $message1.="<br>your password must have at least 1 Big char and 2 digits number and be more than 6 characters.";
             }else if($Pass1!=$Pass2){
                 $message1.="<br>Please Confirm you'r Password Again.";
@@ -327,6 +332,79 @@
             }
         }
     }
+
+
+    if(isset($_POST['SearchUser'])){
+        $search="";
+        $cnt=0;
+
+        if(isset($_POST['Fname']) && trim($_POST['Fname'])!=""){
+            $Fname=$_POST['Fname'];
+            $search="WHERE FirstName='$Fname'";
+            $cnt++;
+        }
+
+        if(isset($_POST['Lname']) && trim($_POST['Lname'])!=""){
+            $Lname=$_POST['Lname'];
+            if($cnt==0){
+                $search="WHERE LastName='$Lname'";
+                $cnt++;
+            }else{
+                $search.=" AND LastName='$Lname'";
+            }
+        }
+
+        if(isset($_POST['Gmail']) && trim($_POST['Gmail'])!=""){
+            $Gmail=$_POST['Gmail'];
+            if($cnt==0){
+                $search="WHERE Gmail='$Gmail'";
+                $cnt++;
+            }else{
+                $search.=" AND Gmail='$Gmail'";
+            }
+        }
+
+        if(isset($_POST['IdNumber']) && trim($_POST['IdNumber'])!=""){
+            $IdNumber=$_POST['IdNumber'];
+            if($cnt==0){
+                $search="WHERE IdNumber='$IdNumber'";
+                $cnt++;
+            }else{
+                $search.=" AND IdNumber='$IdNumber'";
+            }
+        }
+
+        if(isset($_POST['PhoneNum']) && trim($_POST['PhoneNum'])!=""){
+            $PhoneNum=$_POST['PhoneNum'];
+            if($cnt==0){
+                $search="WHERE PhoneNumber='$PhoneNum'";
+                $cnt++;
+            }else{
+                $search.=" AND PhoneNumber='$PhoneNum'";
+            }
+        }
+
+        if(isset($_POST['BirthDay']) && trim($_POST['BirthDay'])!=""){
+            $BirthDay=$_POST['BirthDay'];
+            if($cnt==0){
+                $search="WHERE BirthDay='$BirthDay'";
+                $cnt++;
+            }else{
+                $search.=" AND BirthDay='$BirthDay'";
+            }
+        }
+        
+        if($search!=""){
+            $SearchUser=mysqli_query($con,"SELECT * FROM Users $search");
+            while($s=mysqli_fetch_array($SearchUser)){
+                $arr[]=$s;
+            }
+
+            if(count($arr)==0){
+                $message4="No users found";
+            }
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -457,21 +535,18 @@
     </head>
     <body>
         <div class="Css1">
-           
             <nav>
                 <a href="#addManager">Add Manager</a>
                 <a href="#addWorker">Add Worker</a>
                 <a href="#addCustomer">Add Customer</a>
+                <a href="#SearchUser">Search User</a>
                 <a href="#ManagersDetails">Managers Details</a>
                 <a href="#WorkersDetails">Workers Details</a>
                 <a href="#CustomersDetails">Customers Details</a>
             </nav>
             <div id="addManager"></div><br>
-            <h1>Add Manager 
-                <?php 
-                    if($message1!="")echo "<h2>".$message1."</h2>";
-                ?>
-            </h1>
+            <h1>Add Manager </h1>
+            <?php if($message1!="")echo "<h2>".$message1."</h2>";?>
 
             <form method="POST">
                 <div class="Css2">
@@ -486,12 +561,12 @@
                 </div>
                 <button id="AddUser" type="submit" name="AddManager">Add Manager</button>
             </form><hr>
+
+
             <div id="addWorker"></div><br>
-            <h1>Add Worker 
-                <?php 
-                    if($message2!="")echo "<h2>".$message2."</h2>";
-                ?>
-            </h1>
+            <h1>Add Worker</h1>
+            <?php if($message2!="")echo "<h2>".$message2."</h2>";?>
+
             <form method="POST">
                 <div class="Css2">
                     <div><label>First Name:</label><input type="text" name="Fname" placeholder="First Name...." required></div>
@@ -510,12 +585,12 @@
                 </div>
                 <button id="AddUser" type="submit" name="AddWorker">Add Worker</button>
             </form><hr>
+
+
             <div id="addCustomer"></div><br>
-            <h1>Add Customer 
-                <?php 
-                    if($message3!="")echo "<h2>".$message3."</h2>";
-                ?>
-            </h1>
+            <h1>Add Customer</h1>
+            <?php if($message3!="")echo "<h2>".$message3."</h2>";?>
+
             <form method="POST">
                 <div class="Css2">
                     <div><label>First Name:</label><input type="text" name="Fname" placeholder="First Name...." required></div>
@@ -534,6 +609,54 @@
                 </div>
                 <button id="AddUser" type="submit" name="AddCustomer">Add Customer</button>
             </form><hr>
+
+
+            <div id="SearchUser"></div><br>
+            <h1>Search User</h1> 
+            <?php 
+                if($message4!="")echo "<h2>".$message4."</h2>";
+            ?>
+            <form method="POST">
+                <div class="Css2">
+                    <div><label>First Name:</label><input type="text" name="Fname" placeholder="First Name...."></div>
+                    <div><label>Last Name:</label><input type="text" name="Lname" placeholder="Last Name...."></div>
+                    <div><label>Gmail:</label><input type="email" name="Gmail" placeholder="Gmail...."></div>
+                    <div><label>Id Number:</label><input type="text" name="IdNumber" placeholder="Id Number...."></div>
+                    <div><label>Phone Number:</label><input type="text" name="PhoneNum" placeholder="Phone Number...."></div>
+                    <div><label>Birth Day:</label><input type="date" name="BirthDay" max="<?php echo date('Y-m-d') ?>"></div>
+                </div>
+                <button id="AddUser" type="submit" name="SearchUser">Search</button>
+            </form>
+            <?php
+                if($message4=="" && count($arr)!=0){
+                    echo"<table>
+                        <tr>
+                            <th id='thLeft'>Full Name</th>
+                            <th>Gmail</th>
+                            <th>ID Number</th>
+                            <th>Birth Day</th>
+                            <th>Phone Number</th>
+                            <th>Role</th>
+                            <th id='thRight'>Details</th>
+                        </tr>";
+
+                        foreach($arr as $a){
+                            echo "<tr>
+                                <td><h3>".$a['FirstName']." ".$a['LastName']."</h3></td>
+                                <td><h3>".$a['Gmail']."</h3></td>
+                                <td><h3>".$a['IdNumber']."</h3></td>
+                                <td><h3>".$a['BirthDay']."</h3></td>
+                                <td><h3>".$a['PhoneNumber']."</h3></td>
+                                <td><h3>".$a['Role']."</h3></td>
+                                <td><form method='post'><input type='hidden' name='UserId' value='".$a['Id']."'><button id='MoreDetails' type='submit' name='MoreDetails'>More Details</form></td>
+                            </tr>";
+                        }
+                        echo "</table>";
+                }
+            ?>
+            <hr>
+
+
             <div id="ManagersDetails"></div><br>
             <h1>Managers</h1>
             <table>
@@ -560,6 +683,8 @@
                     }
                 ?>
             </table><hr>
+
+
             <div id="WorkersDetails"></div><br>
             <h1>Workers</h1>
             <table>
@@ -575,7 +700,7 @@
                     $Workers=mysqli_query($con,"SELECT * FROM Users");
                     while($w=mysqli_fetch_array($Workers)){
                         if($w['Role']=="Worker"){
-                            echo "<tr><td><h3>".$w['FirstName']." ".$w['LastName']."</td>
+                            echo "<tr><td><h3>".$w['FirstName']." ".$w['LastName']."</h3></td>
                             <td><h3>".$w['Gmail']."</h3></td>
                             <td><h3>".$w['IdNumber']."</h3></td>
                             <td><h3>".$w['BirthDay']."</h3></td>
@@ -586,6 +711,8 @@
                     }
                 ?>
             </table><hr>
+
+
             <div id="CustomersDetails"></div><br>
             <h1>Customers</h1>
             <table>

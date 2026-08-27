@@ -195,11 +195,11 @@
                 <form method="POST">
                     <div class="Css4">
                         <label>
-                            <input type="radio" name="Type" value="Car">
+                            <input type="radio" name="Type" value="Car" <?php if($Type=="Car") echo "checked"; ?>>
                             <span id="Car">Car</span>
                         </label>
                         <label>
-                            <input type="radio" name="Type" value="Van">
+                            <input type="radio" name="Type" value="Van" <?php if($Type=="Van") echo "checked"; ?>>
                             <span id="Van">Van</span>
                         </label>
                     </div>
@@ -236,11 +236,11 @@
                     </div>
                     <div class="Css4">
                         <label>
-                            <input type="radio" name="GearBox" value="Automatic">
+                            <input type="radio" name="GearBox" value="Automatic" <?php if($GB=="Automatic") echo "checked"; ?>>
                             <span id="Automatic">Automatic</span>
                         </label>
                         <label>
-                            <input type="radio" name="GearBox" value="Manual">
+                            <input type="radio" name="GearBox" value="Manual" <?php if($GB=="Manual") echo "checked"; ?>>
                             <span id="Manual">Manual</span>
                         </label>
                     </div>
@@ -280,7 +280,7 @@
             <table>
                 <tr>
                 <?php
-                    $colums=0;
+                    $columns=0;
                     $found=false;
 
                     $Vehicles=mysqli_query($con,"SELECT * FROM Vehicle $search");
@@ -301,10 +301,10 @@
                                 <h2>Vehicle Type: ".$v['VehicleType']."</h2>
                                 <form method='post'><input type='hidden' name='VehicleId' value='".$v['Id']."'><button id='MoreDetails' type='submit' name='VehicleDetaild'>More Details</button></form>
                         </td>";
-                        $colums++;
-                        if($colums==4){
+                        $columns++;
+                        if($columns==4){
                             echo "</tr><tr>";
-                            $colums=0;
+                            $columns=0;
                         }
                     }     
                     

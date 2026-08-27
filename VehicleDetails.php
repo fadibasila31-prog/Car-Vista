@@ -201,7 +201,7 @@
                                         if($c['AirConditioner']==1){
                                             echo "<div class='CarDetails'><div><p>A/C </p></div><img src='Pictures/AC'></div>";
                                         }
-                                    echO"
+                                    echo"
                                     </div>
                                     <div class='Css12'>
                                     <div><p>";

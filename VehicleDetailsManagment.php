@@ -86,9 +86,6 @@
                 padding-bottom: 10px;                
                 background-color: #c5c5c7;
             }       
-            td{
-                border:5px black solid;
-            }
             h1{
                 background-color: whitesmoke;
                 margin-right: 250px;
@@ -111,18 +108,6 @@
                 height: 80px;
                 width: 100px;
                 border:2px solid black;
-            }
-            #Brand{
-                font-weight: bold;
-                font-size: 18px;
-            }
-            #NumberPlate{
-                font-weight: bold;
-                border:3px black solid;
-                border-radius: 5px;
-                padding:2px;
-                padding-left: 5px;
-                padding-right:5px;
             }
             #VehicleInside{
                 height: 170px;
@@ -218,7 +203,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        <table>
+                                        </table>
 
 
                                         <h1>Pricing & Efficiency</h1>

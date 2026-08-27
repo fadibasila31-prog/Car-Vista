@@ -237,7 +237,7 @@
                 $retval=mail($to,$subject,$message2,$header);
 
                 if($retval){
-                    mysqli_query($con,"UPDATE Referense SET Conversation='$message2' WHERE ReferenceId='$ReferenseId'");
+                    mysqli_query($con,"UPDATE Referense SET Conversation=`$message2` WHERE ReferenceId='$ReferenseId'");
                     $_SESSION['Message']="<h3>Message sent successfully.</h3>";
                     header("Location: CustomerService.php");
                     exit();
@@ -263,6 +263,7 @@
                 font-family: Arial;
                 margin: 0px;
                 background-color: #c5c5c7;
+                margin-bottom:50px;
             }
             .Css1{
                 margin-top: 100px;
@@ -278,7 +279,7 @@
                 text-decoration: none;
                 border:2px black solid;
                 cursor: pointer;
-                background-color: #c6c2c2;
+                background-color: #efefef;
                 font-size: 20px;
                 color:black;
                 border-radius: 5px;
@@ -548,7 +549,7 @@
                             <td id='Conversation'><textarea>".$arr[$i]['Conversation']."</textarea></td>
                             <td id='Textarea'>";
                             if($arr[$i]['Status']==1){
-                                echo "<form method='POST'><div class='Css2'><textarea name='MessageReplay'></textarea><input type='hidden' name='ReferenceId' value='".$arr[$i]['ReferenceId']."'><button type='submit' name='SendReply'>Send Reply</button></div></form>";
+                                echo "<form method='POST'><div class='Css2'><textarea name='MessageReplay'></textarea><input type='hidden' name='ReferenceId' value='".$arr[$i]['ReferenceId']."'><button id='SendReply' type='submit' name='SendReply'>Send Reply</button></div></form>";
                             }else{
                                 echo "<div class='CssClosed'>Closed</div>";
                             }

@@ -65,11 +65,11 @@
                 $Booking=mysqli_query($con,"SELECT * FROM Booking");
                 while($b=mysqli_fetch_array($Booking)){
                     if($b['VehicleId']==$VehicleId){
-                        if(($pickup2>=strtotime($b['StartDate']) && $pickup2<=strtotime($b['EndDate'])) || ($return2>=strtotime($b['StartDate']) && $return2<=strtotime($b['EndDate']))){
+                        if((($pickup2>=strtotime($b['StartDate']) && $pickup2<=strtotime($b['EndDate'])) || ($return2>=strtotime($b['StartDate']) && $return2<=strtotime($b['EndDate']))) && $b['Status']!="Canceled"){
                             $Active=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
-                        }else if($pickup2<strtotime($b['StartDate']) && $return2>strtotime($b['EndDate'])){
+                        }else if($pickup2<strtotime($b['StartDate']) && $return2>strtotime($b['EndDate']) && $b['Status']!="Canceled"){
                             $Active=true;
                             $message .= "Someone has already booked this vehicle for the selected dates. Please choose different dates.";
                             break;
@@ -123,11 +123,69 @@
                         $pickup2=strtotime($pickup);
                         $return2=strtotime($return);
                         
-                        $GotDiscount=false;
+                        $BD="";
                         if(isset($_SESSION['BirthDay'])){
                             $BD=$_SESSION['BirthDay'];
-                            if($pickup2<=$BD && $return2>=$BD){
+                        }
+
+                        $PickupYear=(int)date("Y",strtotime($pickup));
+                        $ReturnYear=(int)date("Y",strtotime($return));
+                        $PickupMonth=(int)date("m",strtotime($pickup));
+                        $ReturnMonth=(int)date("m",strtotime($return));
+                        $PickupDay=(int)date("d",strtotime($pickup));
+                        $ReturnDay=(int)date("d",strtotime($return));
+                        $BDMonth="";
+                        $BDDay="";
+
+                        if($BD!=""){
+                            $BDMonth=(int)date("m",strtotime($BD));
+                            $BDDay=(int)date("d",strtotime($BD));
+                        }
+                        
+                        $GotDiscount=false;
+
+                        if($BD!=""){
+                            if($PickupYear==$ReturnYear){
+                                if($PickupMonth==$ReturnMonth){
+                                    if($PickupDay<=$BDDay && $ReturnDay>=$BDDay){
+                                        $GotDiscount=true;
+                                    }
+                                }else{
+                                    if($PickupMonth<$BDMonth && $ReturnMonth>$BDMonth){
+                                        $GotDiscount=true;
+                                    }else if($PickupMonth==$BDMonth){
+                                        if($PickupDay<=$BDDay){
+                                            $GotDiscount=true;
+                                        }
+                                    }else if($ReturnMonth==$BDMonth){
+                                        if($ReturnDay>=$BDDay){
+                                            $GotDiscount=true;
+                                        }
+                                    }
+                                }
+                            }else if($PickupYear+2<=$ReturnYear){
                                 $GotDiscount=true;
+                            }else{
+                                if($PickupMonth==$ReturnMonth){
+                                    if($PickupDay<=$BDDay && $ReturnDay>=$BDDay){
+                                        $GotDiscount=true;
+                                    }
+                                }
+                                if($PickupMonth==$BDMonth){
+                                    if($PickupDay<=$BDDay){
+                                        $GotDiscount=true;
+                                    }
+                                }else if($PickupMonth<$BDMonth){
+                                    $GotDiscount=true;
+                                }
+                                
+                                if($ReturnMonth==$BDMonth){
+                                    if($ReturnDay>=$BDDay){
+                                        $GotDiscount=true;
+                                    }
+                                }else if($ReturnMonth>$BDMonth){
+                                    $GotDiscount=true;
+                                }
                             }
                         }
 
@@ -198,6 +256,9 @@
                         if($retval){
                             mysqli_query($con,"INSERT INTO Booking (CustomerId,	VehicleId,StartDate,EndDate,Status,CreatedAt,UpdatedAt,TotalPrice,RatingStatus) 
                             value ($CustomerId,$VehicleId,'$pickup','$return','Waiting',NOW(),NOW(),$TotalPrice,'Not Rated')");
+                            unset($_SESSION['PN']);
+                            unset($_SESSION['CVV']);
+                            unset($_SESSION['CN']);
                             header("Location: Index.php");
                             exit();
                         }else{

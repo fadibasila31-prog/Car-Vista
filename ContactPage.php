@@ -37,10 +37,10 @@
                     header("Location:ContactPage.php");
                     exit();
                 }else{
-                    $message="Please Write you'r problem agian";
+                    $message="Please enter your message";
                 }
             }else{
-                $message="Please Write Subject of you'r problem";
+                $message="Please enter the subject of your inquiry";
             }
         
         }else{
@@ -156,8 +156,8 @@
                 <form method="post">
                     <label>Subject:</label>
                     <input type="text" name="subject" required>
-                    <label>Write your Prolem here:</label>
-                    <textarea name="Problem" placeholder="Write here...." required></textarea>
+                    <label>Write your inquiry:</label>
+                    <textarea name="Problem" placeholder="Write your message here...." required></textarea>
                     <button id="SendButton" type="submit" name="send">Send</button>
                 </form>
                 <?php }else{ ?>

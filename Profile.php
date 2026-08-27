@@ -6,7 +6,7 @@
     
     if(isset($_POST['Cancel'])){
         $BookingId=$_POST['BookingId'];
-        mysqli_query($con,"UPDATE Booking SET Status='Canceled' Where BookingId='$BookingId'");
+        mysqli_query($con,"UPDATE Booking SET Status='Canceled' Where BookingId='$BookingId' AND CustomerId=$CustomerId AND Status='Waiting'");
     }
 
     if(isset($_POST['Delete'])){
@@ -20,9 +20,9 @@
     }
 
     if(isset($_POST['AcceptDelete'])){
-        mysqli_query($con,"DELETE FROM Users WHERE Id='$CustomerId'");
         mysqli_query($con,"DELETE FROM Booking WHERE CustomerId='$CustomerId'");
         mysqli_query($con,"DELETE FROM Referense WHERE CustomerId='$CustomerId'");
+        mysqli_query($con,"DELETE FROM Users WHERE Id='$CustomerId'");
         session_destroy();
         header("Location:HomePage.php");
         exit();
@@ -37,49 +37,37 @@
         $BirthDay="";
         $PhoneNumber="";
         $HaveDriverLicense="";
+        $Update="";
         $isValid=true;
+        $cnt=0;
 
-        if(isset($_POST['FirstName']) && trim($_POST['FirstName'])!=""){
+
+        if((isset($_POST['FirstName']) && trim($_POST['FirstName'])!="") && (isset($_POST['LastName']) && trim($_POST['LastName'])!="")){
             $Fname=$_POST['FirstName'];
-
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if(strtolower($u['FirstName'])==strtolower($Fname)){
-                    $message.="This User Name is already exist\n";
-                    $isValid=false;
-                    break;
-                }
-            }
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $Fname=$u['FirstName'];
-                    break;
-                }
-            }
-        }
-
-        if(isset($_POST['LastName']) && trim($_POST['LastName'])!=""){
             $Lname=$_POST['LastName'];
-
             $Users=mysqli_query($con,"SELECT * FROM Users");
             while($u=mysqli_fetch_array($Users)){
-                if(strtolower($u['LastName'])==strtolower($Lname)){
+                if(strtolower($u['FirstName'])==strtolower($Fname) && strtolower($u['LastName'])==strtolower($Lname)){
                     $message.="This User Name is already exist\n";
                     $isValid=false;
                     break;
                 }
-            }            
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $Lname=$u['LastName'];
-                    break;
-                }
             }
+
+            if($isValid){
+                $Update="FirstName='$Fname' , LastName='$Lname'";
+                $cnt++;
+            }
+        } else if(isset($_POST['FirstName']) && trim($_POST['FirstName'])!=""){
+            $Fname=$_POST['FirstName'];
+            $Update="FirstName='$Fname'";
+            $cnt++;
+        }else if(isset($_POST['LastName']) && trim($_POST['LastName'])!=""){
+            $Lname=$_POST['LastName'];
+            $Update="LastName='$Lname'";
+            $cnt++;
         }
+
 
         if(isset($_POST['Gmail']) && trim($_POST['Gmail'])!=""){
             $Gmail=$_POST['Gmail'];
@@ -88,7 +76,7 @@
             for($i=0;$i<strlen($Gmail);$i++){
                 if($Gmail[$i]=='@' && $i!=0){
                     for($j=$i;$j<strlen($Gmail);$j++){
-                        $GmailTest.=$Gmail;
+                        $GmailTest.=$Gmail[$j];
                     }
                     if($GmailTest!="@gmail.com"){
                         $message.="check gmail\n";
@@ -111,22 +99,24 @@
                     }
                 }  
             }
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $Gmail=$u['Gmail'];
-                    break;
+
+            if($isValid){
+                if($cnt==0){
+                    $Update="Gmail='$Gmail'";
+                    $cnt++;
+                }else{
+                    $Update.=" , Gmail='$Gmail'";
                 }
             }
         }
+
 
         if(isset($_POST['IDNumber']) && trim($_POST['IDNumber'])!=""){
             $IdNumber=$_POST['IDNumber'];
 
             for($i=0;$i<strlen($IdNumber);$i++){
                 if(!($IdNumber[$i]>='0' && $IdNumber[$i]<='9')){
-                    $message.="check id again";
+                    $message.="ID Must Be Only Digits.";
                     $isValid=false;
                     break;
                 }
@@ -142,22 +132,24 @@
                     }
                 }  
             }
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $IdNumber=$u['IdNumber'];
-                    break;
+
+            if($isValid){
+                if($cnt==0){
+                    $Update="IdNumber='$IdNumber'";
+                    $cnt++;
+                }else{
+                    $Update.=" , IdNumber='$IdNumber'";
                 }
             }
         }
+
 
         if(isset($_POST['PhoneNumber']) && trim($_POST['PhoneNumber'])!=""){
             $PhoneNumber=$_POST['PhoneNumber'];
 
             for($i=0;$i<strlen($PhoneNumber);$i++){
                 if(!($PhoneNumber[$i]>='0' && $PhoneNumber[$i]<='9')){
-                    $message.="check id again";
+                    $message.="Phone Number Must Be Only Digits.";
                     $isValid=false;
                     break;
                 }
@@ -173,35 +165,89 @@
                     }
                 }  
             }
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $PhoneNumber=$u['PhoneNumber'];
-                    break;
+
+            if($isValid){
+                if($cnt==0){
+                    $Update="PhoneNumber='$PhoneNumber'";
+                    $cnt++;
+                }else{
+                    $Update.=" , PhoneNumber='$PhoneNumber'";
                 }
             }
         }
 
-
-        if(isset($_POST['HaveDriverLicense'])){
+        if(isset($_POST['HaveDriverLicense']) && (isset($_POST['BirthDay']) && trim($_POST['BirthDay']) != "")){
             if($_POST['HaveDriverLicense']=="Yes"){
                 $HaveDriverLicense=1;
-            }else{
+            }else if($_POST['HaveDriverLicense']=="No"){
                 $HaveDriverLicense=0;
-            }            
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $HaveDriverLicense=$u['HaveDriverLicense'];
-                    break;
+            }
+
+            $BirthDay=$_POST['BirthDay'];
+            $birth=strtotime($BirthDay);
+            $today=strtotime(date("Y-m-d"));
+            $age=(int)(($today-$birth)/60/60/24/365);
+            $_SESSION['Age']=$age;
+
+            if($age<18 && $HaveDriverLicense==1){
+                $HaveDriverLicense=0;
+            }
+
+            if($cnt==0){
+                $Update="BirthDay='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+                $cnt++;
+            }else{
+                $Update.=" , BirthDay='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+            }
+        }else if(isset($_POST['HaveDriverLicense'])){
+            if($_POST['HaveDriverLicense']=="Yes"){
+                $HaveDriverLicense=1;
+                $DriverLicense=mysqli_query($con,"SELECT * FROM Users");
+                while($DL=mysqli_fetch_array($DriverLicense)){
+                    if($DL['Id']==$CustomerId){
+                        $BirthDay=$DL['BirthDay'];
+                        break;
+                    }
+                }
+                $birth=strtotime($BirthDay);
+                $today=strtotime(date("Y-m-d"));
+                $age=(int)(($today-$birth)/60/60/24/365);
+                
+                if($age<18 && $HaveDriverLicense==1){
+                    $HaveDriverLicense=0;
+                }
+
+                if($cnt==0){
+                    $Update="HaveDriverLicense='$HaveDriverLicense'";
+                    $cnt++;
+                }else{
+                    $Update.=" , HaveDriverLicense='$HaveDriverLicense'";
+                }
+            }else if($_POST['HaveDriverLicense']=="No"){
+                $HaveDriverLicense=0;
+                if($cnt==0){
+                    $Update="HaveDriverLicense='$HaveDriverLicense'";
+                    $cnt++;
+                }else{
+                    $Update.=" , HaveDriverLicense='$HaveDriverLicense'";
                 }
             }
-        }
-
-
-        if(isset($_POST['BirthDay']) && trim($_POST['BirthDay']) != ""){
+            
+            if($cnt==0){
+                if($HaveDriverLicense==0){
+                    $Update="Birthday='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+                }else{
+                    $Update="HaveDriverLicense=$HaveDriverLicense";
+                }
+                $cnt++;
+            }else{
+                if($HaveDriverLicense==0){
+                    $Update.=" , Birthday='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+                }else{
+                    $Update.=" , HaveDriverLicense=$HaveDriverLicense";
+                }
+            }
+        }else if(isset($_POST['BirthDay']) && trim($_POST['BirthDay']) != ""){
             $BirthDay=$_POST['BirthDay'];
     
             $birth=strtotime($BirthDay);
@@ -210,29 +256,42 @@
             $age=(int)(($today-$birth)/60/60/24/365);
 
             $_SESSION['Age']=$age;
-            if($age<18 && $HaveDriverLicense==1){
-                $message="You must be at least 18 years old to have a driver license.";
+            if($HaveDriverLicense==""){
+                $DriverLicense=mysqli_query($con,"SELECT * FROM Users");
+                while($DL=mysqli_fetch_array($DriverLicense)){
+                    if($DL['Id']==$CustomerId){
+                        $HaveDriverLicense=$DL['HaveDriverLicense'];
+                        break;
+                    }
+                }
             }
-        
+
             if($age<18 && $HaveDriverLicense==1){
                 $HaveDriverLicense=0;
-            }  
-        }else{
-            $Users=mysqli_query($con,"SELECT * FROM Users");
-            while($u=mysqli_fetch_array($Users)){
-                if($u['Id']==$CustomerId){
-                    $BirthDay=$u['BirthDay'];
-                    break;
+            }
+
+            if($cnt==0){
+                if($HaveDriverLicense==0){
+                    $Update="Birthday='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+                }else{
+                    $Update="Birthday='$BirthDay'";
+                }
+                $cnt++;
+            }else{
+                if($HaveDriverLicense==0){
+                    $Update.=" , Birthday='$BirthDay' , HaveDriverLicense=$HaveDriverLicense";
+                }else{
+                    $Update.=" , Birthday='$BirthDay'";
                 }
             }
         }
 
    
-        if($isValid){
-            mysqli_query($con,"UPDATE Users SET FirstName='$Fname' , LastName='$Lname' , Gmail='$Gmail' , IdNumber='$IdNumber' , HaveDriverLicense='$HaveDriverLicense' , BirthDay='$BirthDay' , PhoneNumber='$PhoneNumber' WHERE Id=$CustomerId");
-        }else{
+        if($isValid && $Update!=""){
+            mysqli_query($con,"UPDATE Users SET $Update WHERE Id=$CustomerId");
+        }else if($message!=""){
             $_SESSION['ChangeDetailsMessage']=$message;
-            header("Location: UserRental.php");
+            header("Location: Profile.php");
             exit();
         }
 
@@ -519,43 +578,41 @@
             </tr>
             <?php
                 if(isset($_POST['Soon'])){
-                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Waiting'");
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Waiting' AND CustomerId=$CustomerId");
                 }else if(isset($_POST['Active'])){
-                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Active'");
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Active' AND CustomerId=$CustomerId");
                 }else if(isset($_POST['Finished'])){
-                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Finished'");
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Finished' AND CustomerId=$CustomerId");
                 }else if(isset($_POST['Canceled'])){
-                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Canceled'");
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE Status='Canceled' AND CustomerId=$CustomerId");
                 }else{
-                    $Booking=mysqli_query($con,"SELECT * FROM Booking");
+                    $Booking=mysqli_query($con,"SELECT * FROM Booking WHERE CustomerId=$CustomerId");
                 }
 
                 $found=false;
                 while($b=mysqli_fetch_array($Booking)){
-                    if($b['CustomerId']==$CustomerId){
-                        $found=true;
-                        $CarId=$b['VehicleId'];
-                        $Cars=mysqli_query($con,"SELECT * FROM Vehicle");
-                        while($c=mysqli_fetch_array($Cars)){
-                            if($c['Id']==$CarId){
-                                echo "<tr><td><h1>".$c['VehicleName']."</h1></td>";
-                                break;
-                            }
+                    $found=true;
+                    $CarId=$b['VehicleId'];
+                    $Cars=mysqli_query($con,"SELECT * FROM Vehicle");
+                    while($c=mysqli_fetch_array($Cars)){
+                        if($c['Id']==$CarId){
+                            echo "<tr><td><h1>".$c['VehicleName']."</h1></td>";
+                            break;
                         }
-                        echo "<td><h1>".$b['StartDate']."</h1></td>
-                        <td><h1>".$b['EndDate']."</h1></td>
-                        <td><h1>".$b['Status']."</h1></td>
-                        <td><h1>".$b['CreatedAt']."</h1></td>
-                        <td><h1>".$b['UpdatedAt']."</h1></td>
-                        <td><h1>".$b['TotalPrice']."</h1></td>
-                        <td><h1>";
-                        if($b['Status']=='Waiting'){
-                            echo "<form method='post'><input type='hidden' name='BookingId' value='".$b['BookingId']."'><button type='submit' name='Cancel'>Cancel</button></form>";
-                        }else{
-                            echo "-";
-                        }
-                        echo "</h1></td></tr>";
                     }
+                    echo "<td><h1>".$b['StartDate']."</h1></td>
+                    <td><h1>".$b['EndDate']."</h1></td>
+                    <td><h1>".$b['Status']."</h1></td>
+                    <td><h1>".$b['CreatedAt']."</h1></td>
+                    <td><h1>".$b['UpdatedAt']."</h1></td>
+                    <td><h1>".$b['TotalPrice']."</h1></td>
+                    <td><h1>";
+                    if($b['Status']=='Waiting'){
+                        echo "<form method='post'><input type='hidden' name='BookingId' value='".$b['BookingId']."'><button type='submit' name='Cancel'>Cancel</button></form>";
+                    }else{
+                        echo "-";
+                    }
+                    echo "</h1></td></tr>";
                 }
             ?>
         </table>

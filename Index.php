@@ -1,33 +1,24 @@
  <?php
     $message="";
-    $age=0;
     include "Nav.php";
     $con=OpenCon();
-    
-    if(isset($_SESSION['Age'])){
-        $age=$_SESSION['Age'];
-    }
 
     if(isset($_SESSION['UserId'])){
         if(!isset($_SESSION['CloseRating'])){
             $CustomerId=$_SESSION['UserId'];
-            $RatingStatus=false;
+            $RatingStatus=true;
             $VehicleStatus="";
             $VehicleId="";
             $BookingId="";
-            $Rating=mysqli_query($con,"SELECT * FROM Booking");
+            $Rating=mysqli_query($con,"SELECT * FROM Booking WHERE CustomerId='$CustomerId'");
             while($R=mysqli_fetch_array($Rating)){
                 if($R['CustomerId']==$CustomerId){
-                    if($R['RatingStatus']=="Not Rated"){
+                    if($R['RatingStatus']=="Not Rated" && $R['Status']=="Finished"){
                         $RatingStatus=false;
                         $VehicleStatus=$R['Status'];
                         $VehicleId=$R['VehicleId'];
                         $BookingId=$R['BookingId'];
-                    }else if($R['RatingStatus']=="Rated"){
-                        $RatingStatus=true;
-                        $VehicleStatus=$R['Status'];
-                        $VehicleId=$R['VehicleId'];
-                        $BookingId=$R['BookingId'];
+                        break;
                     }
                 }
             }
@@ -43,7 +34,7 @@
             }
 
             if(isset($_POST['Submit'])){
-                if(isset($_POST['Rating'])){
+                if(isset($_POST['Rating'])  ){
                     $rate=$_POST['Rating'];
                     $UpadteRating="";
                     $TotalRating="";
@@ -59,33 +50,9 @@
                     }
 
                     if($TotalRating!="" && $UpadteRating!=""){
-                        if($rate=="1"){
-                            $rate=1;
-                            $TotalRating++;
-                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
-                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
-                        }else if($rate=="2"){
-                            $rate=2;
-                            $TotalRating++;
-                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
-                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
-                        }else if($rate=="3"){
-                            $rate=3;
-                            $TotalRating++;
-                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
-                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
-                        }else if($rate=="4"){
-                            $rate=4;
-                            $TotalRating++;
-                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
-                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
-                        }else{
-                            $rate=5;
-                            $TotalRating++;
-                            $UpadteRating=(int)(($UpadteRating+$rate)/$TotalRating);
-                            mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
-                        }   
-
+                        $rate=(int)$rate;
+                        $UpadteRating=(int)(($UpadteRating*$TotalRating+$rate)/++$TotalRating);
+                        mysqli_query($con,"UPDATE Vehicle SET Rating='$UpadteRating' , TotalRating='$TotalRating' WHERE Id='$VehicleId'");
                         mysqli_query($con,"UPDATE Booking SET RatingStatus='Rated' WHERE BookingId='$BookingId'");
                         header("Location:Index.php");
                         exit();
@@ -130,7 +97,6 @@
             $_SESSION['VehicleType']=$_POST['Type'];
             $pickup=strtotime($_POST['pickup']);
             $return=strtotime($_POST['return']);
-            $gmail=$_SESSION['Gmail'];
             if($Branch!=""){ 
                 if($return>$pickup){
                     $_SESSION['Branch']=$Branch;

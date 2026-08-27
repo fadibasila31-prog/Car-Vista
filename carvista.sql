@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 19, 2026 at 12:41 PM
+-- Generation Time: Aug 27, 2026 at 12:58 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -52,7 +52,7 @@ INSERT INTO `booking` (`BookingId`, `CustomerId`, `VehicleId`, `StartDate`, `End
 (1, 3, 15, '2026-08-28', '2026-09-10', 'Waiting', '2026-08-19 08:03:05', '2026-08-19 08:03:05', 2520.00, 'Not Rated'),
 (2, 1, 1, '2025-08-28', '2025-09-10', 'Finished', '2026-08-19 08:18:23', '2026-08-19 08:18:23', 2100.00, 'Rated'),
 (3, 1, 12, '2025-12-17', '2025-12-24', 'Finished', '2026-08-19 08:28:41', '2026-08-19 08:28:41', 3040.00, 'Rated'),
-(4, 2, 6, '2026-08-21', '2026-09-03', 'Waiting', '2026-08-19 09:35:13', '2026-08-19 09:35:13', 3220.00, 'Not Rated'),
+(4, 2, 6, '2026-08-21', '2026-09-03', 'Active', '2026-08-19 09:35:13', '2026-08-19 09:35:13', 3220.00, 'Not Rated'),
 (5, 5, 16, '2026-10-28', '2027-01-08', 'Waiting', '2026-08-19 09:37:36', '2026-08-19 09:37:36', 26280.00, 'Not Rated'),
 (6, 7, 11, '2024-08-20', '2024-09-08', 'Finished', '2026-08-19 09:39:44', '2026-08-19 09:39:44', 6400.00, 'Rated');
 
@@ -74,21 +74,22 @@ CREATE TABLE IF NOT EXISTS `referense` (
   `HandledBy` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`ReferenceId`),
   KEY `CustomerId` (`CustomerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `referense`
 --
 
 INSERT INTO `referense` (`ReferenceId`, `CustomerId`, `Subject`, `Conversation`, `Status`, `Created`, `LastUpdated`, `HandledBy`) VALUES
-(1, 3, 'Payment problem', 'Customer cannot complete payment for reservation.', 1, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Worker'),
-(2, 8, 'Vehicle question', 'Customer asked about available SUV vehicles.', 1, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Worker'),
-(3, 3, 'Cancel booking', 'Customer requested cancellation of booking.', 1, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Manager'),
-(4, 7, 'Wrong date', 'Customer selected incorrect rental dates.', 0, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Worker'),
-(5, 4, 'Account problem', 'Customer cannot login to account.', 1, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Manager'),
-(6, 5, 'Vehicle damage report', 'Customer reported a problem with returned vehicle.', 0, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Manager'),
-(7, 6, 'Reservation details', 'Customer needs more information about reservation.', 1, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Worker'),
-(8, 3, 'General question', 'Customer asked about rental conditions.', 0, '2026-08-01 18:41:54', '2026-08-01 18:41:54', 'Manager');
+(1, 3, 'Payment issue', '[20-08-2026 10:15]John Smith: I tried to complete the payment for my reservation, but the payment was not processed.\r\n[20-08-2026 10:22]Bahaa Bader: Hello John, I will check the payment details and get back to you.\r\n[20-08-2026 10:30]John Smith: Thank you. I will wait for your response.', 1, '2026-08-01 18:41:54', '2026-08-20 10:30:00', 'Worker'),
+(2, 8, 'Vehicle information', '[20-08-2026 11:05]James Anderson: I would like to know if you have an SUV available for my rental dates.\r\n[20-08-2026 11:12]Bahaa Bader: Hello James, we currently have several SUV vehicles available. I can help you find one that matches your requirements.\r\n[20-08-2026 11:18]James Anderson: I am looking for a vehicle for four passengers. Thank you.', 1, '2026-08-01 18:41:54', '2026-08-20 11:18:00', 'Worker'),
+(3, 3, 'Cancel reservation', '[20-08-2026 12:40]John Smith: I would like to cancel my current vehicle reservation. Could you please tell me if there is a cancellation fee?\n[20-08-2026 12:48]Fadi Basila: Hello John, I will check your reservation and the cancellation conditions.\n[20-08-2026 13:02]John Smith: Thank you. Please let me know when you have more information.', 0, '2026-08-01 18:41:54', '2026-08-20 13:02:00', 'Manager'),
+(4, 7, 'Change rental dates', '[19-08-2026 14:10]David Taylor: I selected the wrong rental dates when making my reservation. I would like to change them if possible.\r\n[19-08-2026 14:18]Bahaa Bader: I can help you with that. Please provide the correct pickup and return dates.\r\n[19-08-2026 14:25]David Taylor: I would like to change the pickup date to 28-08-2026 and the return date to 05-09-2026.', 0, '2026-08-01 18:41:54', '2026-08-19 14:25:00', 'Worker'),
+(5, 4, 'Login problem', '[20-08-2026 15:30]Emily Johnson: I am unable to log in to my account even though I am using my correct password.\r\n[20-08-2026 15:38]Fadi Basila: Hello Emily, I will check your account status and see what is causing the problem.\r\n[20-08-2026 15:47]Emily Johnson: Okay, thank you for your help.', 1, '2026-08-01 18:41:54', '2026-08-20 15:47:00', 'Manager'),
+(6, 5, 'Vehicle condition', '[19-08-2026 16:05]Michael Brown: I noticed a problem with the vehicle after returning it. I would like to report the issue.\r\n[19-08-2026 16:14]Fadi Basila: Thank you for letting us know. Please provide more details about the problem you noticed.\r\n[19-08-2026 16:25]Michael Brown: There is a small issue with the rear door. I noticed it when I returned the vehicle.', 0, '2026-08-01 18:41:54', '2026-08-19 16:25:00', 'Manager'),
+(7, 6, 'Reservation information', '[21-08-2026 09:20]Sarah Wilson: I would like to confirm the details of my reservation, including the pickup location and rental dates.\r\n[21-08-2026 09:28]Bahaa Bader: Your reservation is registered in the system. The pickup location and rental dates are available in your reservation details.\r\n[21-08-2026 09:35]Sarah Wilson: Great, thank you for the information.', 1, '2026-08-01 18:41:54', '2026-08-21 09:35:00', 'Worker'),
+(8, 3, 'Rental conditions', '[18-08-2026 13:40]John Smith: Could you please explain the requirements for renting a vehicle?\r\n[18-08-2026 13:48]Fadi Basila: You need a valid driving license and the required identification documents. The rental conditions also depend on the selected vehicle.\r\n[18-08-2026 13:55]John Smith: Thank you. That answers my question.', 1, '2026-08-01 18:41:54', '2026-08-18 13:55:00', 'Manager'),
+(9, 3, 'Change reservation', '[21-08-2026 18:10]John Smith: I would like to change the vehicle in my current reservation. Is it possible to select another vehicle?\n[21-08-2026 18:16]Bahaa Bader: Hello John, I will check which vehicles are available for your reservation dates.\n[21-08-2026 18:24]John Smith: Thank you. I would prefer a vehicle with an automatic gearbox if one is available.', 0, '2026-08-21 18:27:39', '2026-08-21 18:24:00', 'Worker');
 
 -- --------------------------------------------------------
 
@@ -123,14 +124,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`Id`, `FirstName`, `LastName`, `Gmail`, `IdNumber`, `Password`, `Password1`, `Password2`, `Password3`, `HaveDriverLicense`, `Blocked`, `FailedTimes`, `BirthDay`, `PhoneNumber`, `Role`, `StartTimeExpired`, `EndTimeExpired`) VALUES
-(1, 'Fadi', 'Basila', 'fadibasila31@gmail.com', '123456789', 'Fadi123', 'Fadi123', 'Fadi1234', 'Fadi12345', 1, 0, 0, '2000-01-01', '0505773735', 'Manager', '2026-08-01 22:54:35', '2026-08-01 22:38:32'),
-(2, 'Bahaa', 'Bader', 'bahaab100705@gmail.com', '987654321', 'Bahaa123', 'Bahaa123', 'Bahaa1234', 'Bahaa12345', 1, 0, 0, '2004-08-26', '0504785962', 'Worker', '2026-08-01 22:54:35', NULL),
-(3, 'John', 'Smith', 'john.smith@gmail.com', '152478596', 'Johnsmith123', 'Johnsmith123', 'Johnsmith1234', 'Johnsmith12345', 1, 0, 0, '0000-00-00', '0501111111', 'Customer', '2026-08-01 22:54:35', NULL),
-(4, 'Emily', 'Johnson', 'emily.johnson@gmail.com', '234567891', 'Emilyjohnson123', 'Emilyjohnson123', 'Emilyjohnson1234', 'Emilyjohnson12345', 0, 1, 3, '2000-07-25', '0502222222', 'Customer', '2026-08-01 22:54:35', NULL),
-(5, 'Michael', 'Brown', 'michael.brown@gmail.com', '345678912', 'Michaelbrown123', 'Michaelbrown123', 'Michaelbrown1234', 'Michaelbrown12345', 1, 0, 0, '1995-11-03', '0503333333', 'Customer', '2026-08-01 22:54:35', NULL),
-(6, 'Sarah', 'Wilson', 'sarah.wilson@gmail.com', '456789123', 'Sarahwilson123', 'Sarahwilson123', 'Sarahwilson1234', 'Sarahwilson12345', 0, 0, 0, '1999-02-18', '0504444444', 'Customer', '2026-08-01 22:54:35', NULL),
-(7, 'David', 'Taylor', 'david.taylor@gmail.com', '567891234', 'Davidtaylor123', 'Davidtaylor123', 'Davidtaylor1234', 'Davidtaylor12345', 1, 0, 0, '1988-09-30', '0505555555', 'Customer', '2026-08-01 22:54:35', NULL),
-(8, 'James', 'Anderson', 'james.anderson@gmail.com', '678912345', 'Jamesanderson123', 'Jamesanderson123', 'Jamesanderson1234', 'Jamesanderson12345', 1, 1, 3, '1985-12-05', '0506666666', 'Customer', '2026-08-01 22:54:35', NULL);
+(1, 'Fadi', 'Basila', 'fadibasila31@gmail.com', '123456789', 'Fadi123', 'Fadi123', 'Fadi1234', 'Fadi12345', 1, 0, 0, '2000-01-01', '0505773735', 'Manager', '2026-08-21 18:30:02', '2026-08-21 18:28:45'),
+(2, 'Bahaa', 'Bader', 'bahaab100705@gmail.com', '987654321', 'Bahaa123', 'Bahaa123', 'Bahaa1234', 'Bahaa12345', 1, 0, 0, '2004-08-26', '0504785962', 'Worker', '2026-08-21 18:30:02', NULL),
+(3, 'John', 'Smith', 'john.smith@gmail.com', '152478596', 'Johnsmith123', 'Johnsmith123', 'Johnsmith1234', 'Johnsmith12345', 1, 0, 0, '2000-06-24', '0501111111', 'Customer', '2026-08-21 18:30:02', NULL),
+(4, 'Emily', 'Johnson', 'emily.johnson@gmail.com', '234567891', 'Emilyjohnson123', 'Emilyjohnson123', 'Emilyjohnson1234', 'Emilyjohnson12345', 0, 1, 3, '2000-07-25', '0502222222', 'Customer', '2026-08-21 18:30:02', NULL),
+(5, 'Michael', 'Brown', 'michael.brown@gmail.com', '345678912', 'Michaelbrown123', 'Michaelbrown123', 'Michaelbrown1234', 'Michaelbrown12345', 1, 0, 0, '1995-11-03', '0503333333', 'Customer', '2026-08-21 18:30:02', NULL),
+(6, 'Sarah', 'Wilson', 'sarah.wilson@gmail.com', '456789123', 'Sarahwilson123', 'Sarahwilson123', 'Sarahwilson1234', 'Sarahwilson12345', 0, 0, 0, '1999-02-18', '0504444444', 'Customer', '2026-08-21 18:30:02', NULL),
+(7, 'David', 'Taylor', 'david.taylor@gmail.com', '567891234', 'Davidtaylor123', 'Davidtaylor123', 'Davidtaylor1234', 'Davidtaylor12345', 1, 0, 0, '1988-09-30', '0505555555', 'Customer', '2026-08-21 18:30:02', NULL),
+(8, 'James', 'Anderson', 'james.anderson@gmail.com', '678912345', 'Jamesanderson123', 'Jamesanderson123', 'Jamesanderson1234', 'Jamesanderson12345', 1, 1, 3, '1985-12-05', '0506666666', 'Customer', '2026-08-21 18:30:02', NULL);
 
 -- --------------------------------------------------------
 
