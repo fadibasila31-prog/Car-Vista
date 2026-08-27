@@ -142,6 +142,6 @@
             }
 
             CloseCon($con);
-            ?>
+        ?>
     </body>
 </html>

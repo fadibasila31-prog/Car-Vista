@@ -76,7 +76,6 @@
                 </tr>
                 <tr>
                     <?php
-                        
                         if(isset($_SESSION['UserDetails'])){
                             $UD=$_SESSION['UserDetails'];
                             $Inf=mysqli_query($con,"SELECT * FROM Users");
