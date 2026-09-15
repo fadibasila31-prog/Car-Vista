@@ -264,8 +264,8 @@
 
     
         if($message==""){
-            mysqli_query($con,"INSERT INTO Vehicle (VehicleType,NumberPlate,VehicleBrand,Image,PricePerDay,GearBox,Seats,Doors,DriveStyle,Miles,Color,Convertible,EnergyType,HorsePower,VehicleName,MaxSpeed,DriveType,TankSize,AirConditioner,VehicleInside1,VehicleInside2,VehicleInside3,VehicleInside4,VehicleLogo) 
-            values ('$VehicleType','$NumberPlate','$VehicleBrand','$VehicleImage','$PricePerDay','$GearBox','$Seats','$Doors','$DriveStyle','$Miles','$Color','$Convertible','$EnergyType','$HorsePower','$VehicleName','$MaxSpeed','$DriveType','$TankSize','$AirConditioner','$InteriorImage1','$InteriorImage2','$InteriorImage3','$InteriorImage4','$VehicleLogo')");
+            mysqli_query($con,"INSERT INTO Vehicle (VehicleType,NumberPlate,VehicleBrand,Image,PricePerDay,GearBox,Seats,Doors,DriveStyle,Miles,Color,Convertible,EnergyType,HorsePower,VehicleName,MaxSpeed,DriveType,TankSize,AirConditioner,VehicleInside1,VehicleInside2,VehicleInside3,VehicleInside4,Branch,VehicleLogo,TotalRating,Rating) 
+            values ('$VehicleType','$NumberPlate','$VehicleBrand','$VehicleImage','$PricePerDay','$GearBox','$Seats','$Doors','$DriveStyle','$Miles','$Color','$Convertible','$EnergyType','$HorsePower','$VehicleName','$MaxSpeed','$DriveType','$TankSize','$AirConditioner','$InteriorImage1','$InteriorImage2','$InteriorImage3','$InteriorImage4','$Branch','$VehicleLogo',0,0)");
             $message2="<h3>Vehicle Added Successful</h3>";
         }
 
