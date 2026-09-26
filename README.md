@@ -1,28 +1,30 @@
 # Car-Vista
 
-Car-Vista is a web-based vehicle browsing and search application developed using PHP and MySQL.
+Car-Vista is a web-based car and van rental application developed using PHP and MySQL.
 
-The project provides a web interface for displaying and searching for vehicle information, with PHP used for application logic and MySQL used for database management.
+The project provides a web interface for browsing available cars and vans, viewing vehicle information, and interacting with rental-related functionality through a PHP-based application connected to a MySQL database.
 
 ## Features
 
-### 🚗 Vehicle Browsing
+### 🚗 Cars & Vans Rental
 
+- Browse available cars and vans
 - Display vehicle information
-- Browse available vehicles
 - View vehicle details
+- Support rental-related functionality
 
 ### 🔎 Vehicle Search
 
-- Search for vehicles
+- Search for available cars and vans
 - Retrieve vehicle information from the database
-- Display search results through the web interface
+- Display relevant vehicle information through the web interface
 
 ### 🗄️ Database Integration
 
 - MySQL database
 - PHP-based database interaction
 - Store and retrieve vehicle information
+- Connect the web application with the database
 
 ### 🌐 Web Interface
 
@@ -69,10 +71,11 @@ MySQL Database
 1. The user opens the Car-Vista web application.
 2. PHP pages provide the application's user interface.
 3. HTML and CSS are implemented within the PHP pages to structure and style the interface.
-4. The user can browse and search for vehicles.
-5. PHP processes the application requests.
-6. PHP communicates with the MySQL database to retrieve vehicle information.
-7. The requested information is displayed through the web interface.
+4. The user can browse available cars and vans.
+5. The user can search for vehicles and view their information.
+6. PHP processes the application requests.
+7. PHP communicates with the MySQL database.
+8. The relevant vehicle information is retrieved and displayed through the web interface.
 
 ## Running the Project Locally
 
@@ -110,6 +113,7 @@ Car-Vista was developed as a personal/academic web development project to practi
 - MySQL database integration
 - Server-side programming
 - Database-driven applications
+- Building a car and van rental web application
 
 ## Project Type
 
