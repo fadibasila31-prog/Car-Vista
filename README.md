@@ -1,45 +1,42 @@
 # Car-Vista
 
-A web-based vehicle browsing and search application developed using PHP and MySQL.
+Car-Vista is a web-based vehicle browsing and search application developed using PHP and MySQL.
 
-The project allows users to view vehicle information and search for vehicles through a web interface connected to a MySQL database.
+The project provides a web interface for displaying and searching for vehicle information, with PHP used for application logic and MySQL used for database management.
 
 ## Features
 
-🚗 Vehicle Browsing
+### 🚗 Vehicle Browsing
 
 - Display vehicle information
 - Browse available vehicles
 - View vehicle details
 
-🔎 Vehicle Search
+### 🔎 Vehicle Search
 
 - Search for vehicles
 - Retrieve vehicle information from the database
 - Display search results through the web interface
 
-🗄️ Database Integration
+### 🗄️ Database Integration
 
 - MySQL database
 - PHP-based database interaction
 - Store and retrieve vehicle information
 
-🌐 Web Interface
+### 🌐 Web Interface
 
-- HTML-based user interface
-- CSS styling
-- Server-side functionality using PHP
+- PHP-based web pages
+- HTML and CSS implemented within PHP pages
+- Dynamic content generated using PHP
 
 ## Technology Stack
 
-### Frontend
-
-- HTML
-- CSS
-
-### Backend
+### Web Development
 
 - PHP
+- HTML
+- CSS
 
 ### Database
 
@@ -51,44 +48,31 @@ The project allows users to view vehicle information and search for vehicles thr
 
 ## Architecture
 
-The application follows a simple web application architecture:
+The application follows a simple PHP and MySQL web application architecture:
 
 ```text
 User
   │
   ▼
-Web Interface
-HTML / CSS
+PHP Web Pages
+HTML + CSS
   │
   ▼
-PHP Backend
+PHP Application Logic
   │
   ▼
 MySQL Database
 ```
 
-## Project Structure
-
-```text
-Car-Vista/
-│
-├── PHP files
-├── HTML pages
-├── CSS files
-├── Database files
-└── README.md
-```
-
-> The exact file structure may vary depending on the project version.
-
 ## How It Works
 
 1. The user opens the Car-Vista web application.
-2. The application displays vehicle information.
-3. The user can search for vehicles.
-4. PHP processes the application requests.
-5. PHP communicates with the MySQL database.
-6. The requested vehicle information is displayed through the web interface.
+2. PHP pages provide the application's user interface.
+3. HTML and CSS are implemented within the PHP pages to structure and style the interface.
+4. The user can browse and search for vehicles.
+5. PHP processes the application requests.
+6. PHP communicates with the MySQL database to retrieve vehicle information.
+7. The requested information is displayed through the web interface.
 
 ## Running the Project Locally
 
@@ -110,7 +94,7 @@ Make sure you have:
 5. Import the project's MySQL database if a database file is included in the repository.
 6. Open the project through the local WAMP server.
 
-For example:
+Example:
 
 ```text
 http://localhost/Car-Vista/
@@ -118,14 +102,14 @@ http://localhost/Car-Vista/
 
 ## Project Purpose
 
-This project was developed to practice:
+Car-Vista was developed as a personal/academic web development project to practice:
 
 - PHP programming
-- Web development
+- Web application development
+- HTML and CSS
 - MySQL database integration
-- Frontend development
-- Backend development
-- Building a complete web application
+- Server-side programming
+- Database-driven applications
 
 ## Project Type
 
